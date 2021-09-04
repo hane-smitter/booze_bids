@@ -1,3 +1,4 @@
+import { Container, Grid } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
@@ -13,8 +14,18 @@ const Products = () => {
     return (
         <>
             <h1>Products</h1>
-            <Product/>
-            <Product/>
+            <Container>
+                {/* <div className={classes.mainContainer}>
+                    {[...Array(10)].map(() => (<Product/>))}
+                </div> */}
+                <Grid container justify="space-around" alignItems="stretch" spacing={6}>
+                        {[...Array(10)].map(() => (
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Product/>
+                            </Grid>
+                        ))}
+                </Grid>
+            </Container>
         </>
     );
 }
