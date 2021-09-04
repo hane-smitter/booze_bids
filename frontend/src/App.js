@@ -37,7 +37,7 @@ const App = () => {
                     <Grid container justify="center">
                         <Banner />
                     </Grid>
-                        <Typography variant="h2" className={classes.heading}>Current Auctions</Typography>
+                        {/* <Typography variant="h2" className={classes.heading}>Current Auctions</Typography> */}
                             <Products/>
                     {/* <Grid container justify="space-between" alignItems="stretch" spacing="3">
                          <Grid item xs={12} sm={4}>
