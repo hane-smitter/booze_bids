@@ -16,4 +16,8 @@ export default makeStyles((theme) => ({
   actionDiv: {
     textAlign: 'center',
   },
+  center: {
+    display: 'grid',
+    placeItems: 'center'
+  }
 }));

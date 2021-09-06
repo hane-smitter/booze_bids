@@ -2,7 +2,6 @@ import React from "react";
 import {
   AppBar,
   Typography,
-  Box,
   useMediaQuery,
   Toolbar,
   IconButton,
@@ -14,7 +13,7 @@ import {
   Grid,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
-import { Home } from "@material-ui/icons";
+import HomeIcon from "@material-ui/icons/Home";
 
 import useStyles from './styles';
 import Logo from '../../images/booze_bids_logo.png';
@@ -68,7 +67,7 @@ const Nav = () => {
       >
         <MenuItem onClick={handleMenuClose}>
           <ListItemIcon>
-            <Home />
+            <HomeIcon />
           </ListItemIcon>
           <Link href="#">Home</Link>
         </MenuItem>

@@ -57,5 +57,6 @@ export default makeStyles({
   },
   inputWrapper: {
     marginBlock: '15px',
+    width: '100%'
   }
 });

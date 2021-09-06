@@ -1,53 +1,26 @@
-import React , { useEffect } from 'react';
-import { 
-    Container,
-    Grow,
-    Grid,
-    Typography
-} from '@material-ui/core';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from "react-router-dom";
 
-import { useDispatch } from 'react-redux';
-
-import { getProducts } from './actions/products';
-import Users from './components/Users/Users.js';
-import Form from './components/Form/Form.js';
-import Navbar from './components/Nav';
-import Banner from './components/Banners/Home/Home';
-import avatar from './images/logo192.png';
-import useStyles from './styles';
-import Products from './components/Products/Products';
+import Home from "./components/Home";
+import Form from './components/Form/Form';
+import Faqs from './components/Faqs';
+import PastBids from './components/PastBids';
 
 const App = () => {
-    
-
-    const classes = useStyles();
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(getProducts());
-    }, [dispatch]);
-
-    
-
-    return (
-        <Container maxidth="lg">
-            <Navbar/>
-            <Grow in>
-                <Container maxwidth="sm">
-                    <Grid container justify="center">
-                        <Banner />
-                    </Grid>
-                        <Typography variant="h2" className={classes.heading}>Current Auctions</Typography>
-                            <Products/>
-                    {/* <Grid container justify="space-between" alignItems="stretch" spacing="3">
-                         <Grid item xs={12} sm={4}>
-                            <Form/>
-                        </Grid> 
-                    </Grid> */}
-                </Container>
-            </Grow>
-        </Container>
-    );
-}
+  return (
+    <Router>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/faqs" component={Faqs} />
+        <Route path="/pastbids" component={PastBids} />
+        <Route path="/product/create" component={Form} />
+      </Switch>
+    </Router>
+  );
+};
 
 export default App;

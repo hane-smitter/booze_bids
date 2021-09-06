@@ -36,7 +36,7 @@ const Product = () => {
                 <TextField variant="outlined" placeholder="for example 237" fullWidth/>
             </div>
             <div className={classes.inputWrapper}>
-                <TextField variant="outlined" placeholder="your phone number" fullWidth />
+                <TextField variant="outlined" type="number" placeholder="your phone number" fullWidth />
             </div>
             <Button variant="contained" color='primary' fullWidth>Place your bid</Button>
         </CardActions>

@@ -1,12 +1,11 @@
+import { CREATE, READ, UPDATE, DELETE } from "../actionTypes";
+
 export default (products = [], action) => {
-    // if(action.type === 'CREATE') {
-    //     return ...
-    // }
     switch (action.type) {
-        case 'FETCH ALL':
-            return action.payload;
-        case 'CREATE':
-            return products;
+        case READ:
+            return action.payload.products;
+        case CREATE:
+            return [...products, action.payload.product];
         default:
             return products;
     }
