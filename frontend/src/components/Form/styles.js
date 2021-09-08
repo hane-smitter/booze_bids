@@ -21,4 +21,9 @@ export default makeStyles((theme) => ({
   buttonSubmit: {
     marginBottom: 10,
   },
+  errorBox: {
+    border: 'solid 2px rgba(252, 80, 80, .87)',
+    backgroundColor: 'rgba(255, 186, 186, .6)',
+    color: '#d8000c'
+  }
 }));

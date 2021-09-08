@@ -1,8 +1,9 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import useStyles from './styles';
 import { createProduct } from '../../actions/products';
+import { unsetErr } from '../../actions/errors';
 
 const Form = () => {
     const initialState = {
@@ -13,8 +14,15 @@ const Form = () => {
     }
     const [formval, setFormval] = React.useState(initialState);
     const dispatch = useDispatch();
-
+    const err = useSelector((state) => state.app.err);
     const classes = useStyles();
+
+    useEffect(() => {
+        return () => {
+            dispatch(unsetErr());
+        }
+    }, []);
+
     const onChangeFileHandler = event => {
         setFormval({...formval, productimg: event.target.files[0]});
     }
@@ -32,7 +40,18 @@ const Form = () => {
         <div>
         <form onSubmit={handleSubmit} style={{ marginInline: 'auto', width: 'fit-content' }} encType="multipart/form-data">
             <h3>Product Upload</h3>
-            <label>product name</label>
+            
+            {err.length > 0 ? (
+                <div className={classes.errorBox}>
+                    <ul>
+                        {err.map((error) => (
+                            <li>{error.msg}</li>
+                        ))}
+                    </ul>
+                </div>
+            ) : null}
+
+            <label>product name</label> 
             <input type="text" name="name" value={formval.name} onChange={event => setFormval({...formval, name: event.target.value})}/>
             <br/>
             <label>product brand</label>

@@ -6,7 +6,7 @@ import Product from "./Product/Product";
 import useStyles from "./styles";
 
 const Products = () => {
-  const products = useSelector((state) => state.products);
+  const products = useSelector((state) => state.app.products);
   const classes = useStyles();
 
   console.log("products from redux store");
@@ -17,7 +17,7 @@ const Products = () => {
       {products.length < 1 ? (
         <Paper variant="outlined" className={classes.center}>
           <Typography variant="h5" color="textSecondary" align="center">
-            Sorry! no Products are available!!
+            Sorry! No Products are available!!
           </Typography>
         </Paper>
       ) : (
@@ -29,7 +29,7 @@ const Products = () => {
         >
           {products.map((product) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
-              <Product />
+              <Product product={product} />
             </Grid>
           ))}
         </Grid>

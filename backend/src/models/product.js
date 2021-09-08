@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const productSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, 'You need to provide a name'],
         trim: true,
         lowercase: true
     }, 
