@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { validationResult } from 'express-validator';
 
-import Product from '../models/product.js';
+import Product from '../models/Product.js';
 
 export const getProducts = async (req, res) => {
     try {

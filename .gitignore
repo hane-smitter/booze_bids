@@ -2,3 +2,4 @@
 #ignore environments
 *.env-cmdrc
 *.env
+*.bak
