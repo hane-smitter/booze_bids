@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -12,10 +13,11 @@ import {
   Typography
 } from '@material-ui/core';
 
-import useStyles from './styles';
+import useStyles from '../styles';
 
 const ProductCard = ({ product, ...rest }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
   return (
     <Card className={classes.root}>
         <CardHeader
@@ -39,17 +41,17 @@ const ProductCard = ({ product, ...rest }) => {
         </CardActionArea>
         <Divider />
         <CardActions className = {classes.flexWrap}>
-            <Typography variant="body2" color="textSecondary" component="p">
-                Place your bid
-                Bid costs only 30/= Enter your lowest unique bid amount and phone number then standby to pay via Mpesa
-            </Typography>
-            <div className={classes.inputWrapper}>
-                <TextField variant="outlined" placeholder="for example 237" fullWidth/>
-            </div>
-            <div className={classes.inputWrapper}>
-                <TextField variant="outlined" type="number" placeholder="your phone number" fullWidth />
-            </div>
-            <Button variant="contained" color='primary' fullWidth>Place your bid</Button>
+            <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={_ => {
+                    console.log('creATE bid btn clicked!!');
+                    navigate('createbid', { state: product });
+                }}
+            >
+                Create bid
+            </Button>
         </CardActions>
     </Card>
   );

@@ -4,16 +4,17 @@ const ProductBidDetailSchema = mongoose.Schema({
     bidPrice: Number,
     targetAmount: Number,
     startTime: {
-        type: DateTime,
-        default: new DateTime()
+        type: Date,
+        default: Date.now()
     },
     endTime: {
-        type: DateTime,
-        default: new DateTime()
+        type: Date,
+        default: Date.now()
     }, 
     product: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'Product'
     }
 }, {timestamps: true});
 

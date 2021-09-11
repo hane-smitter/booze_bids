@@ -8,3 +8,4 @@ export const createProduct = (body) => axios.post(url, body, {
             'Content-Type': 'multipart/form-data',
         }
 });
+export const createProductBid = body => axios.post(`${url}/bid/create`, body);

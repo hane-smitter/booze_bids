@@ -2,14 +2,15 @@ import fs from 'fs';
 import { validationResult } from 'express-validator';
 
 import Product from '../models/Product.js';
+import ProductBidDetail from '../models/ProductBidDetail.js';
 
 export const getProducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().populate('productbids');
         res.json(products);
     } catch (err) {
         console.log(err);
-        res.status(500).json({err: "server experienced issues!"});
+        res.status(500).json({err: [{error: "Server is temporarily down!"}]});
     }
 }
 
@@ -45,6 +46,36 @@ export const createProduct = async (req, res) => {
             console.log('Uploaded file deleted successfully!');
         });
         console.log(err);
-        res.status(400).json({err: err.message});
+        res.status(400).json({err: [{error: err.message}]});
+    }
+}
+
+export const getBidProducts = async (req, res) => {
+    try {
+        const productBids = await ProductBidDetail.find().populate('product');
+        res.json(productBids);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({err: [{error: "Server is temporarily down!"}]});
+    }
+}
+
+export const createProductBid = async(req, res) => {
+    const errors = validationResult(req);
+    console.log("req.body");
+    console.log(req.body);
+    if (!errors.isEmpty()) {
+        res.status(422).json({ err: errors.array()});
+        return;
+    }
+    try {
+        const bidProduct = new ProductBidDetail(req.body);
+        console.log('bid product');
+        console.log(bidProduct);
+        await bidProduct.save();
+        res.status(201).json({bidProduct});
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({err: [{error: err.message}]});
     }
 }

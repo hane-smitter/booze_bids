@@ -1,4 +1,7 @@
-import { body } from "express-validator";
+import { default as validator } from "express-validator";
+import { default as mongoose } from "mongoose";
+
+const { body } = validator;
 
 export const validate = (method) => {
   switch (method) {
@@ -14,8 +17,12 @@ export const validate = (method) => {
           .exists({ checkFalsy: true }),
         body("cost")
           .trim()
+          .exists({ checkFalsy: true })
+          .withMessage('Price of the product is required')
+          .bail()
           .isNumeric({ no_symbols: true })
-          .exists({ checkFalsy: true }),
+          .withMessage('Product price is not valid')
+          .bail(),
         body("category")
           .trim()
           .optional() /* .isIn(['category1', 'category2']) */,
@@ -23,6 +30,39 @@ export const validate = (method) => {
           .trim()
           .optional(),
       ];
+    }
+    case "createProductBid": {
+      return [
+        body("product")
+          .exists({ checkFalsy: true })
+          .withMessage("product id is required")
+          .bail()
+          .custom(value => {
+            return mongoose.isValidObjectId(value);
+          }).withMessage("Invalid id"),
+        body("bidPrice")
+          .exists({ checkFalsy: true })
+          .withMessage('Bid price must be provided')
+          .bail()
+          .isNumeric({ no_symbols: true })
+          .withMessage('Bid Price is not valid')
+          .bail(),
+        body("targetAmount")
+          .exists({ checkFalsy: true })
+          .withMessage('Target Amount must be provided')
+          .bail()
+          .isNumeric({ no_symbols: true })
+          .withMessage('Target Amount is not valid')
+          .bail(),
+        body("startTime")
+          .exists({ checkFalsy: true })
+          .withMessage("product bid start time is required")
+          .bail(),
+        body("endTime")
+          .exists({ checkFalsy: true })
+          .withMessage("product bid end time is required")
+          .bail()
+      ]
     }
   }
 };

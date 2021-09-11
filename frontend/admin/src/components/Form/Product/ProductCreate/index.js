@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import useStyles from './styles';
-import { createProduct } from '../../actions/products';
-import { unsetErr } from '../../actions/errors';
+import { createProduct } from 'src/actions/products';
+import { unsetErr } from 'src/actions/errors';
 
 const Form = () => {
     const initialState = {

@@ -11,7 +11,7 @@ const ProductSchema = mongoose.Schema({
         type: String,
         trim: true
     },
-    image: String, 
+    image: String,
     cost: {
         type: Number,
         default: 0,
@@ -23,6 +23,12 @@ const ProductSchema = mongoose.Schema({
     store: String, 
     category: String,
 }, {timestamps: true});
+
+ProductSchema.virtual('productbids',{
+    ref: 'ProductBidDetail',
+    localField: '_id',
+    foreignField: 'product'
+});
 
 const Product = mongoose.model('Product', ProductSchema)
 

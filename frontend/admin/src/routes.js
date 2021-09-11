@@ -9,6 +9,9 @@ import NotFound from './pages/NotFound';
 import ProductList from './pages/ProductList';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
+import ProductBidCreate from './components/Form/Product/ProductBidCreate';
+import ProductCreate from './components/Form/Product/ProductCreate';
+import Products from './components/Products/Products';
 
 const routes = [
   {
@@ -18,7 +21,15 @@ const routes = [
       { path: 'account', element: <Account /> },
       { path: 'customers', element: <CustomerList /> },
       { path: 'dashboard', element: <Dashboard /> },
-      { path: 'products', element: <ProductList /> },
+      {
+        path: 'products',
+        element: <ProductList />,
+        children: [
+          { path: '/', element: <Products /> },
+          { path: 'createbid', element: <ProductBidCreate /> },
+          { path: 'create', element: <ProductCreate /> }
+        ]
+      },
       { path: 'settings', element: <Settings /> },
       { path: '/', element: <Navigate to="/app/dashboard" /> },
       { path: '*', element: <Navigate to="/404" /> }

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import {
   Box,
   Button,
@@ -9,7 +10,9 @@ import {
 } from '@material-ui/core';
 import { Search as SearchIcon } from 'react-feather';
 
-const ProductListToolbar = (props) => (
+const ProductListToolbar = (props) => {
+  const navigate = useNavigate();
+  return(
   <Box {...props}>
     <Box
       sx={{
@@ -26,6 +29,7 @@ const ProductListToolbar = (props) => (
       <Button
         color="primary"
         variant="contained"
+        onClick={() => navigate('create')}
       >
         Add product
       </Button>
@@ -57,5 +61,6 @@ const ProductListToolbar = (props) => (
     </Box>
   </Box>
 );
+            }
 
 export default ProductListToolbar;

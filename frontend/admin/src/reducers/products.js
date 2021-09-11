@@ -1,6 +1,6 @@
-import { CREATE, READ, UPDATE, DELETE, ERROR, LOADING } from "../actionTypes";
+import { CREATE, READ, UPDATE, DELETE, ERROR, LOADING, CREATEBID } from "../actionTypes";
 
-export default (app = { products: [], err: [], loading: false}, action) => {
+export default (app = { products: [], bidproducts: [], err: [], loading: false}, action) => {
     switch (action.type) {
         /* case READ:
             return action.payload.products; */
@@ -9,8 +9,13 @@ export default (app = { products: [], err: [], loading: false}, action) => {
         case CREATE:
             return {
                 ...app,
-                products: [...app.products, action.payload.product]
+                products: [action.payload.product, ...app.products]
             };
+        case CREATEBID:
+            return {
+                ...app,
+                bidproducts: [action.payload.productBid, ...app.bidproducts]
+            }
         case ERROR:
             return {
                 ...app,
