@@ -22,12 +22,21 @@ const ProductSchema = mongoose.Schema({
     }, 
     store: String, 
     category: String,
-}, {timestamps: true});
+}, {toJSON: {virtuals: true},timestamps: true});
 
 ProductSchema.virtual('productbids',{
     ref: 'ProductBidDetail',
     localField: '_id',
-    foreignField: 'product'
+    foreignField: 'product',
+    match: {
+        endTime: { $gt: new Date().toISOString() }
+    }
+});
+ProductSchema.virtual('productbidscount',{
+    ref: 'ProductBidDetail',
+    localField: '_id',
+    foreignField: 'product',
+    count: true
 });
 
 const Product = mongoose.model('Product', ProductSchema)

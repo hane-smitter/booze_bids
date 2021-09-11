@@ -7,7 +7,8 @@ import {
     createProduct,
     getProducts,
     createProductBid, 
-    getBidProducts} from '../controllers/products.js';
+    getBidProducts,
+    getBiddableProducts} from '../controllers/products.js';
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.route('/')
     });
 
 router.post('/bid/create', validate('createProductBid'), createProductBid);
-router.get('/bids', getBidProducts);
+router.get('/bids/all', getBidProducts);
+router.get('/bids', getBiddableProducts);
 
 export default router;

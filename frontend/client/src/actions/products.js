@@ -5,7 +5,7 @@ import { CREATE, READ, UPDATE, DELETE, ERROR } from "../actionTypes";
 export const getProducts = () => async(dispatch) => {
     try {
         //fetch data
-        const { data, status } = await api.fetchBidProducts();
+        const { data } = await api.fetchBiddableProducts();
 
         const action = { type: READ, payload: { products: data } }
         dispatch(action);

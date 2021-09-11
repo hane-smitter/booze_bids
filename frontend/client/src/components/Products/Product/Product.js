@@ -14,15 +14,15 @@ const Product = ({ product }) => {
         <CardActionArea>
             <CardMedia
                 className={classes.media}
-                image={product.image ? product.image : defaultImg}
-                title={product.name}
+                image={product.product.image ? product.product.image : defaultImg}
+                title={product.product.name}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="h2" color="primary">
-                {product.name}
+                {product.product.name}
                 </Typography>
                 <Typography  variant="h5" component="h2">
-                    RRP: KSH {product.cost}
+                    RRP: KSH {product.product.cost}
                 </Typography>
                 
             </CardContent>
@@ -30,7 +30,7 @@ const Product = ({ product }) => {
         <CardActions className = {classes.flexWrap}>
             <Typography variant="body2" color="textSecondary" component="p">
                 Place your bid
-                Bid costs only 30/= Enter your lowest unique bid amount and phone number then standby to pay via Mpesa
+                Bid costs only {product.bidPrice}/= Enter your lowest unique bid amount and phone number then standby to pay via Mpesa
             </Typography>
             <div className={classes.inputWrapper}>
                 <TextField variant="outlined" placeholder="for example 237" fullWidth/>

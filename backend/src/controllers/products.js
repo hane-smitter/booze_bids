@@ -6,8 +6,23 @@ import ProductBidDetail from '../models/ProductBidDetail.js';
 
 export const getProducts = async (req, res) => {
     try {
-        const products = await Product.find().populate('productbids');
+        const products = await Product.find({productbidscount: { $gt: 0 }}).populate(['productbids', 'productbidscount']);
+        /* .exec(function(error, bids) {
+            if(error) throw error;
+            console.log('here is the bids meen!!');
+            console.log(bids.productbids);
+        }) */;
         res.json(products);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({err: [{error: "Server is temporarily down!"}]});
+    }
+}
+
+export const getBiddableProducts = async(req, res) => {
+    try {
+        const biddableProducts = await ProductBidDetail.find({endTime: { $gt: new Date().toISOString() }}).populate(['product']);
+        res.json(biddableProducts);
     } catch (err) {
         console.log(err);
         res.status(500).json({err: [{error: "Server is temporarily down!"}]});
