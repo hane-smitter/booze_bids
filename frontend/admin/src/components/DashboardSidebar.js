@@ -24,9 +24,9 @@ import {
 import NavItem from './NavItem';
 
 const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
+  avatar: '/static/images/avatars/avatar_1.png',
+  jobTitle: 'Admin',
+  name: 'Mr John Doe'
 };
 
 const items = [
@@ -36,9 +36,9 @@ const items = [
     title: 'Dashboard'
   },
   {
-    href: '/app/customers',
+    href: '/app/categories',
     icon: UsersIcon,
-    title: 'Customers'
+    title: 'Categories'
   },
   {
     href: '/app/products',
@@ -47,29 +47,14 @@ const items = [
   },
   {
     href: '/app/account',
-    icon: UserIcon,
-    title: 'Account'
+    icon: ShoppingBagIcon,
+    title: 'Bids'
   },
   {
     href: '/app/settings',
-    icon: SettingsIcon,
-    title: 'Settings'
+    icon: ShoppingBagIcon,
+    title: 'Winnings'
   },
-  {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
-  }
 ];
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
@@ -141,19 +126,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
           p: 2
         }}
       >
-        <Typography
-          align="center"
-          gutterBottom
-          variant="h4"
-        >
-          Need more?
-        </Typography>
-        <Typography
-          align="center"
-          variant="body2"
-        >
-          Upgrade to PRO version and access 20 more screens
-        </Typography>
+        
         <Box
           sx={{
             display: 'flex',
@@ -161,14 +134,6 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
             pt: 2
           }}
         >
-          <Button
-            color="primary"
-            component="a"
-            href="https://react-material-kit.devias.io"
-            variant="contained"
-          >
-            See PRO version
-          </Button>
         </Box>
       </Box>
     </Box>
