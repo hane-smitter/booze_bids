@@ -51,16 +51,16 @@ const Form = () => {
                 </div>
             ) : null}
 
-            <label>product name</label> 
+            <label>Product name</label> 
             <input type="text" name="name" value={formval.name} onChange={event => setFormval({...formval, name: event.target.value})}/>
             <br/>
-            <label>product brand</label>
+            <label>Product brand</label>
             <input type="text" name="brand" value={formval.brand} onChange={event => setFormval({...formval, brand: event.target.value})}/>
             <br/>
-            <label>cost</label>
+            <label>Cost</label>
             <input type="number" name="cost" value={formval.cost} onChange={event => setFormval({...formval, cost: event.target.value})}/>
             <br/>
-            <label>choose product image</label>
+            <label>Choose product image</label>
             <input type="file" name="productimg" onChange={onChangeFileHandler}/>
             <br/>
 

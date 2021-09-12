@@ -27,7 +27,7 @@ const CustomerListToolbar = (props) => (
         color="primary"
         variant="contained"
       >
-        Add customer
+        Add Category
       </Button>
     </Box>
     <Box sx={{ mt: 3 }}>
@@ -48,7 +48,7 @@ const CustomerListToolbar = (props) => (
                   </InputAdornment>
                 )
               }}
-              placeholder="Search customer"
+              placeholder="Search category"
               variant="outlined"
             />
           </Box>
