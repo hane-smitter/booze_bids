@@ -7,7 +7,7 @@ import {
   CardHeader,
   Divider,
   TextField
-} from '@material-ui/core';
+} from '@mui/material';
 
 const SettingsPassword = (props) => {
   const [values, setValues] = useState({

@@ -5,10 +5,10 @@ import {
   CardContent,
   Grid,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MoneyIcon from '@material-ui/icons/Money';
-import { red } from '@material-ui/core/colors';
+import MoneyIcon from '@mui/icons-material/Money';
+import { red } from '@mui/material/colors';
 
 const Budget = (props) => (
   <Card

@@ -8,7 +8,7 @@ import {
   Divider,
   useTheme,
   colors
-} from '@material-ui/core';
+} from '@mui/material';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 

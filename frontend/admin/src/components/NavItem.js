@@ -4,7 +4,7 @@ import {
   useLocation
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Button, ListItem } from '@material-ui/core';
+import { Button, ListItem } from '@mui/material';
 
 const NavItem = ({
   href,

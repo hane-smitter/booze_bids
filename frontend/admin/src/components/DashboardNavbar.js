@@ -8,7 +8,7 @@ import {
   Hidden,
   IconButton,
   Toolbar
-} from '@material-ui/core';
+} from '@mui/material';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';

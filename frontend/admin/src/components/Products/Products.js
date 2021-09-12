@@ -8,7 +8,7 @@ import {
     Pagination,
     Paper,
     Typography
-  } from '@material-ui/core';
+  } from '@mui/material';
 
   import ProductCard from './Product/ProductCard';
 import { getProducts } from 'src/actions/products';

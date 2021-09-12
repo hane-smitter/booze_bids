@@ -8,7 +8,7 @@ import {
   CardContent,
   Divider,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 
 const user = {
   avatar: '/static/images/avatars/avatar_6.png',

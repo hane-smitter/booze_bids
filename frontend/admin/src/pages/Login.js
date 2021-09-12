@@ -10,7 +10,7 @@ import {
   Link,
   TextField,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import FacebookIcon from '../icons/Facebook';
 import GoogleIcon from '../icons/Google';
 

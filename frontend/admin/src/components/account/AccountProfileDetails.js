@@ -8,7 +8,7 @@ import {
   Divider,
   Grid,
   TextField
-} from '@material-ui/core';
+} from '@mui/material';
 
 const states = [
   {

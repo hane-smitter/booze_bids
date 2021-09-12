@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { Formik, Field } from "formik";
 import {
   InputAdornment,
   Box,
@@ -11,12 +11,13 @@ import {
   Typography,
   Button,
   Container,
-  CircularProgress
-} from "@material-ui/core";
+  CircularProgress,
+} from "@mui/material";
 
 import useStyles from "./styles";
+import { DatePickerField } from "../../DatePicker";
 import { createProductBid } from "src/actions/products";
-import { unsetErr } from 'src/actions/errors';
+import { unsetErr } from "src/actions/errors";
 
 const ProductBidCreate = (props) => {
   const classes = useStyles();
@@ -24,26 +25,20 @@ const ProductBidCreate = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { err, loading } = useSelector((state) => state.app);
-  let formFields = ['bidPrice', 'targetAmount', 'startTime', 'endTime'];
+  let formFields = ["bidPrice", "targetAmount", "startTime", "endTime"];
   let formErrors = [];
   let formErrors2 = [];
-  if(err.length > 0) {
+  if (err.length > 0) {
     formErrors = err.filter((error) => formFields.includes(error.param));
   }
-  if(formErrors.length > 0)
-    formErrors.map(error => formErrors2.push(error.param));
+  if (formErrors.length > 0)
+    formErrors.map((error) => formErrors2.push(error.param));
 
-    useEffect(() => {
-        return () => {
-            dispatch(unsetErr());
-        }
-    }, []);
-
-  /* console.log(location.state);
-  console.log('formErrors');
-  console.log(formErrors);
-  console.log('formErrors2');
-  console.log(formErrors2); */
+  useEffect(() => {
+    return () => {
+      dispatch(unsetErr());
+    };
+  }, []);
 
   const bidCreationSchema = Yup.object().shape({
     bidPrice: Yup.number()
@@ -54,7 +49,7 @@ const ProductBidCreate = (props) => {
       .required("Target amount is a required field")
       .positive("This amount is not allowed")
       .integer(),
-    startTime: Yup.date().default(() => new Date()),
+    startTime: Yup.date().required("Bid start date is required"),
     endTime: Yup.date().required("Bid expiry date is required"),
   });
 
@@ -68,13 +63,13 @@ const ProductBidCreate = (props) => {
           initialValues={{
             bidPrice: "",
             targetAmount: "",
-            startTime: "",
+            startTime: new Date(),
             endTime: "",
             product: location.state._id,
           }}
           onSubmit={(values, actions) => {
-              dispatch(createProductBid(values));
-              actions.setSubmitting(loading);
+            dispatch(createProductBid(values));
+            actions.setSubmitting(loading);
           }}
           validationSchema={bidCreationSchema}
         >
@@ -98,13 +93,25 @@ const ProductBidCreate = (props) => {
                   </Button>
                 </Box>
                 <Typography color="textPrimary" variant="h2">
-                  Create Bid for <small><i style={{ textTransform: 'capitalize' }}>{location.state.name}</i></small>
+                  Create Bid for{" "}
+                  <small>
+                    <i style={{ textTransform: "capitalize" }}>
+                      {location.state.name}
+                    </i>
+                  </small>
                 </Typography>
               </Box>
               <TextField
-                error={Boolean((props.touched.bidPrice && props.errors.bidPrice) || (formErrors2.indexOf("bidPrice") !== -1))}
+                error={Boolean(
+                  (props.touched.bidPrice && props.errors.bidPrice) ||
+                    formErrors2.indexOf("bidPrice") !== -1
+                )}
                 fullWidth
-                helperText={(props.touched.bidPrice && props.errors.bidPrice) || (formErrors2.indexOf("bidPrice") !== -1 && formErrors[formErrors2.indexOf("bidPrice")].msg)}
+                helperText={
+                  (props.touched.bidPrice && props.errors.bidPrice) ||
+                  (formErrors2.indexOf("bidPrice") !== -1 &&
+                    formErrors[formErrors2.indexOf("bidPrice")].msg)
+                }
                 label="Bid price"
                 margin="normal"
                 name="bidPrice"
@@ -120,11 +127,14 @@ const ProductBidCreate = (props) => {
               />
               <TextField
                 error={Boolean(
-                  (props.touched.targetAmount && props.errors.targetAmount) || (formErrors2.indexOf("targetAmount") !== -1)
+                  (props.touched.targetAmount && props.errors.targetAmount) ||
+                    formErrors2.indexOf("targetAmount") !== -1
                 )}
                 fullWidth
                 helperText={
-                  (props.touched.targetAmount && props.errors.targetAmount) || (formErrors2.indexOf("targetAmount") !== -1 && formErrors[formErrors2.indexOf("targetAmount")].msg)
+                  (props.touched.targetAmount && props.errors.targetAmount) ||
+                  (formErrors2.indexOf("targetAmount") !== -1 &&
+                    formErrors[formErrors2.indexOf("targetAmount")].msg)
                 }
                 label="Target amount"
                 margin="normal"
@@ -139,38 +149,26 @@ const ProductBidCreate = (props) => {
                   ),
                 }}
               />
-              <TextField
-                error={Boolean(
-                  (props.touched.startTime && props.errors.startTime) || (formErrors2.indexOf("startTime") !== -1)
-                )}
-                fullWidth
-                helperText={
-                    (props.touched.startTime && props.errors.startTime) || (formErrors2.indexOf("startTime") !== -1 && formErrors[formErrors2.indexOf("startTime")].msg)
-                }
+
+              <Field
+                formErrors={formErrors}
+                formErrors2={formErrors2}
                 label="Bid STARTING time"
-                margin="normal"
                 name="startTime"
-                onBlur={props.handleBlur}
-                onChange={props.handleChange}
-                value={props.values.startTime}
-                variant="outlined"
+                disablePast
+                component={DatePickerField}
               />
-              <TextField
-                error={Boolean(
-                    (props.touched.endTime && props.errors.endTime) || (formErrors2.indexOf("endTime") !== -1)
-                )}
-                fullWidth
-                helperText={
-                    (props.touched.endTime && props.errors.endTime) || (formErrors2.indexOf("endTime") !== -1 && formErrors[formErrors2.indexOf("endTime")].msg)
-                }
-                label="Bid ENDING time"
-                margin="normal"
+              <Field
+                formErrors={formErrors}
+                formErrors2={formErrors2}
+                label="Bid EXPIRY time"
                 name="endTime"
-                onBlur={props.handleBlur}
-                onChange={props.handleChange}
-                value={props.values.endTime}
-                variant="outlined"
+                disablePast
+                component={DatePickerField}
+                ampmInClock
+                minDateTime={props.values.startTime}
               />
+
               <Box sx={{ py: 2 }}>
                 <Button
                   color="primary"
@@ -180,7 +178,11 @@ const ProductBidCreate = (props) => {
                   type="submit"
                   variant="contained"
                 >
-                  {loading ? <CircularProgress style={{ color: 'white' }} /> : 'Create bid now' }
+                  {loading ? (
+                    <CircularProgress style={{ color: "white" }} />
+                  ) : (
+                    "Create bid now"
+                  )}
                 </Button>
               </Box>
             </form>

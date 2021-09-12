@@ -6,7 +6,7 @@ import {
   TextField,
   InputAdornment,
   SvgIcon
-} from '@material-ui/core';
+} from '@mui/material';
 import { Search as SearchIcon } from 'react-feather';
 
 const CustomerListToolbar = (props) => (

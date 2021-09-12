@@ -3,7 +3,7 @@ import {
   Box,
   Container,
   Grid
-} from '@material-ui/core';
+} from '@mui/material';
 import AccountProfile from '../components/account/AccountProfile';
 import AccountProfileDetails from '../components/account/AccountProfileDetails';
 

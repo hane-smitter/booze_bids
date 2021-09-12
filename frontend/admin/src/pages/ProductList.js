@@ -1,13 +1,8 @@
 import { Helmet } from 'react-helmet';
 import {
   Box,
-  CircularProgress,
-  Container,
-  Grid,
-  Pagination,
-  Paper,
-  Typography
-} from '@material-ui/core';
+  Container
+} from '@mui/material';
 
 import ProductListToolbar from '../components/Products/ProductListToolbar';
 import products_mock from '../__mocks__/products';
@@ -30,7 +25,6 @@ const ProductList = () => {
       >
         <Container maxWidth={false}>
           <ProductListToolbar />
-          {/* <Products products={products} loading={loading} /> */}
           <Outlet />
         </Container>
       </Box>

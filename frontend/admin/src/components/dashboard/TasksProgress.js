@@ -6,9 +6,9 @@ import {
   Grid,
   LinearProgress,
   Typography
-} from '@material-ui/core';
-import { orange } from '@material-ui/core/colors';
-import InsertChartIcon from '@material-ui/icons/InsertChartOutlined';
+} from '@mui/material';
+import { orange } from '@mui/material/colors';
+import InsertChartIcon from '@mui/icons-material/InsertChartOutlined';
 
 const TasksProgress = (props) => (
   <Card
