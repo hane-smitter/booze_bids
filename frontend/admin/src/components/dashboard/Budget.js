@@ -6,7 +6,7 @@ import {
   Grid,
   Typography
 } from '@mui/material';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import MoneyIcon from '@mui/icons-material/Money';
 import { red } from '@mui/material/colors';
 

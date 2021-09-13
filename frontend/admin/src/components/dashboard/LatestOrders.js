@@ -16,7 +16,7 @@ import {
   TableSortLabel,
   Tooltip
 } from '@mui/material';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 const orders = [
   {

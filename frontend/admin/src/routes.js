@@ -25,13 +25,13 @@ const routes = [
         path: 'products',
         element: <ProductList />,
         children: [
-          { path: '/', element: <Products /> },
+          { path: '', element: <Products /> },
           { path: 'createbid', element: <ProductBidCreate /> },
           { path: 'create', element: <ProductCreate /> }
         ]
       },
       { path: 'settings', element: <Settings /> },
-      { path: '/', element: <Navigate to="/app/dashboard" /> },
+      { path: '', element: <Navigate to="/app/dashboard" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
