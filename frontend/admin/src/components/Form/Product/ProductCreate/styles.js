@@ -1,6 +1,9 @@
+import { createTheme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
-export default makeStyles((theme) => ({
+const theme = createTheme();
+
+export default makeStyles(() => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
