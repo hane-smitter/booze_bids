@@ -14,6 +14,16 @@ const userSchema = mongoose.Schema({
     longitude: String
 }, { timestamps: true });
 
-const User = mongoose.model('User', userSchema)
+userSchema.statics.findExistent = async (phone) => {
+    const user = await User.findOne({ phone });
+
+    if(!!user)
+        return true;
+
+    return false;
+
+}
+
+const User = mongoose.model('User', userSchema);
 
 export default User;
