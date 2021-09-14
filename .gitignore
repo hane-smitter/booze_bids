@@ -3,4 +3,4 @@
 *.env-cmdrc
 *.env
 *.bak
-**/public/imgs/products
+**/public/imgs/products  
