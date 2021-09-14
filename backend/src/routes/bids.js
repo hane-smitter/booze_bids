@@ -1,9 +1,13 @@
 import express from 'express';
 
-import { getBids } from '../controllers/bids.js';
+import { getBids,
+    createBid } from '../controllers/bids.js';
+import { validate } from '../middlewares/validator/index.js';
 
 const router = express.Router();
 
-router.get('/', getBids);
+router.route('/')
+    .get(getBids)
+    .post(validate('createBid'), createBid);
 
 export default router;

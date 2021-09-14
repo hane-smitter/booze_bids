@@ -1,5 +1,5 @@
 import json from 'body-parser';
-import User from '../models/user.js';
+import User from '../models/User.js';
 
 //get users
 export const getUsers = async (req, res) => {

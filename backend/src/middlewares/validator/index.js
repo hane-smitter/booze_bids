@@ -64,5 +64,26 @@ export const validate = (method) => {
           .bail()
       ]
     }
+    case "createBid": {
+      return [
+        body("phone")
+          .exists({ checkFalsy: true })
+          .withMessage("phone number is required")
+          .isNumeric(),
+        body("productId")
+          .exists({ checkFalsy: true })
+          .custom(value => {
+            return mongoose.isValidObjectId(value);
+          }).withMessage("Invalid id"),
+        body("bidPrice")
+          .exists({ checkFalsy: true })
+          .withMessage('Bid price is required')
+          .escape(),
+        body("bidAmount")
+          .exists({ checkFalsy: true })
+          .withMessage('Bid Amount is required')
+          .escape()
+      ]
+    }
   }
 };

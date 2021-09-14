@@ -6,12 +6,14 @@ import ProductBidDetail from '../models/ProductBidDetail.js';
 
 export const getProducts = async (req, res) => {
     try {
-        const products = await Product.find({productbidscount: { $gt: 0 }}).populate(['productbids', 'productbidscount']);
+        const products = await Product.find({})
+                .sort([['createdAt', -1]])
+                .populate(['productbids', 'productbidscount']);
         /* .exec(function(error, bids) {
             if(error) throw error;
             console.log('here is the bids meen!!');
             console.log(bids.productbids);
-        }) */;
+        }); */
         res.json(products);
     } catch (err) {
         console.log(err);
@@ -21,7 +23,9 @@ export const getProducts = async (req, res) => {
 
 export const getBiddableProducts = async(req, res) => {
     try {
-        const biddableProducts = await ProductBidDetail.find({endTime: { $gt: new Date().toISOString() }}).populate(['product']);
+        const biddableProducts = await ProductBidDetail.find({endTime: { $gt: new Date().toISOString() }})
+                    .sort([['createdAt', -1]])
+                    .populate(['product']);
         res.json(biddableProducts);
     } catch (err) {
         console.log(err);
@@ -75,20 +79,18 @@ export const getBidProducts = async (req, res) => {
     }
 }
 
-export const createProductBid = async(req, res) => {
+export const createProductBidDetails = async(req, res) => {
     const errors = validationResult(req);
-    console.log("req.body");
-    console.log(req.body);
     if (!errors.isEmpty()) {
         res.status(422).json({ err: errors.array()});
         return;
     }
     try {
-        const bidProduct = new ProductBidDetail(req.body);
+        const bidDetails = new ProductBidDetail(req.body);
         console.log('bid product');
-        console.log(bidProduct);
-        await bidProduct.save();
-        res.status(201).json({bidProduct});
+        console.log(bidDetails);
+        await bidDetails.save();
+        res.status(201).json({bidDetails});
     } catch (err) {
         console.log(err);
         res.status(400).json({err: [{error: err.message}]});

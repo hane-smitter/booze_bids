@@ -1,4 +1,9 @@
-import { Typography, Paper, Container, Grid } from "@material-ui/core";
+import { Typography,
+  Paper,
+  Container,
+  Grid,
+  Box,
+  CircularProgress } from "@material-ui/core";
 import React from "react";
 import { useSelector } from "react-redux";
 
@@ -6,7 +11,7 @@ import Product from "./Product/Product";
 import useStyles from "./styles";
 
 const Products = () => {
-  const products = useSelector((state) => state.app.products);
+  const { loading, products } = useSelector((state) => state.app);
   const classes = useStyles();
 
   console.log("products from redux store");
@@ -14,6 +19,11 @@ const Products = () => {
 
   return (
     <Container>
+      { loading && (
+        <Box style={{ width: '100%' }} display="flex" justify-content="center">
+          <CircularProgress />
+        </Box>
+      ) }
       {products.length < 1 ? (
         <Paper variant="outlined" className={classes.center}>
           <Typography variant="h5" color="textSecondary" align="center">
