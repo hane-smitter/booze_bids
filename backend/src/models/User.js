@@ -14,13 +14,14 @@ const userSchema = mongoose.Schema({
     longitude: String
 }, { timestamps: true });
 
-userSchema.statics.findExistent = async (phone) => {
+userSchema.statics.findOrCreate = async (phone) => {
     const user = await User.findOne({ phone });
 
     if(!!user)
-        return true;
+        return user;
 
-    return false;
+    const newUser = await new User({ phone });
+    return newUser;
 
 }
 

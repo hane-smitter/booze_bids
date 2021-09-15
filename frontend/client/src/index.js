@@ -11,6 +11,7 @@ import App from './App';
 const initialState = {
     app: {
         products: [],
+        categories: [],
         loading: false,
         err: []
     }

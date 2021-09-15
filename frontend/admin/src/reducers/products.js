@@ -1,10 +1,10 @@
-import { CREATE, READ, UPDATE, DELETE, ERROR, LOADING, CREATEBID } from "../actionTypes";
+import { CREATE, READPROD, UPDATE, DELETE, ERROR, LOADING, CREATEBID } from "../actionTypes";
 
 export default (app = { products: [], bidproducts: [], err: [], loading: false}, action) => {
     switch (action.type) {
-        /* case READ:
+        /* case READPROD:
             return action.payload.products; */
-        case READ:
+        case READPROD:
             return {...app, products: action.payload.products};
         case CREATE:
             return {

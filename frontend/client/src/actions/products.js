@@ -1,20 +1,29 @@
+import { batch } from 'react-redux';
+
 import * as api from '../api';
-import { CREATE, READ, UPDATE, DELETE, ERROR, LOADING } from "../actionTypes";
+import { CREATE, READPROD, UPDATE, READCAT, ERROR, LOADING } from "../constants";
 
 //Action creators
 export const getProducts = () => async(dispatch) => {
     try {
         dispatch({ type: LOADING, payload: { status: 1 } });
         //fetch data
-        const { data } = await api.fetchBiddableProducts();
+        const [ productsData, categoriesData ] = await Promise.all([api.fetchBiddableProducts(), api.fetchProductCategories()]);
+        const { data:products } = productsData;
+        const { data:categories } = categoriesData;
 
-        dispatch({ type: LOADING, payload: { status: 0 } });
-        dispatch({ type: READ, payload: { products: data } });
+        batch(() => {
+            dispatch({ type: LOADING, payload: { status: 0 } });
+            dispatch({ type: READPROD, payload: { products } });
+            dispatch({ type: READCAT, payload: { categories } });
+        });
     } catch (error) {
-        console.log(error);
         const { err } = error?.response?.data ?? {err: []};
-        dispatch({ type: LOADING, payload: { status: 0 } });
-        dispatch({ type: ERROR, payload: { err } });
+
+        batch(() => {
+            dispatch({ type: LOADING, payload: { status: 0 } });
+            dispatch({ type: ERROR, payload: { err } });
+        });
     }
 
 }
@@ -23,12 +32,18 @@ export const createProduct = (body) => async(dispatch) => {
         dispatch({ type: LOADING, payload: { status: 1 } });
         //create product
         const { data } = await api.createProduct(body);
-        dispatch({ type: LOADING, payload: { status: 0 } });
-        dispatch({ type: CREATE, payload: { product: data }});
+
+        batch(() => {
+            dispatch({ type: LOADING, payload: { status: 0 } });
+            dispatch({ type: CREATE, payload: { product: data }});
+        });
     } catch (error) {
         const { err } = error?.response?.data ?? {err: []};
-        dispatch({ type: LOADING, payload: { status: 0 } });
-        dispatch({ type: ERROR, payload: { err } });
+
+        batch(() => {
+            dispatch({ type: LOADING, payload: { status: 0 } });
+            dispatch({ type: ERROR, payload: { err } });
+        });
     }
 }
 export const makeBid = body => async(dispatch) => {
@@ -39,7 +54,10 @@ export const makeBid = body => async(dispatch) => {
         dispatch({ type: LOADING, payload: { status: 0 } });
     } catch (error) {
         const { err } = error?.response?.data || {err: []};
-        dispatch({ type: LOADING, payload: { status: 0 } });
-        dispatch({ type: ERROR, payload: { err } });
+
+        batch(() => {
+            dispatch({ type: LOADING, payload: { status: 0 } });
+            dispatch({ type: ERROR, payload: { err } });
+        });
     }
 }

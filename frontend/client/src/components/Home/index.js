@@ -33,8 +33,7 @@ const Home = () => {
                     <Grid container justifyContent="center">
                         <Banner />
                     </Grid>
-                        <Typography variant="h4" className={classes.heading}>Current Auctions</Typography>
-                            <Products/>
+                    <Products/>
                     {/* <Grid container justifyContent="space-between" alignItems="stretch" spacing="3">
                          <Grid item xs={12} sm={4}>
                             <Form/>

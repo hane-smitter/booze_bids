@@ -1,5 +1,5 @@
 import * as api from '../api';
-import { CREATE, READ, UPDATE, DELETE, ERROR, LOADING, CREATEBID } from "../actionTypes";
+import { CREATE, READPROD, UPDATE, DELETE, ERROR, LOADING, CREATEBID } from "../actionTypes";
 
 //Action creators
 export const getProducts = () => async(dispatch) => {
@@ -9,7 +9,7 @@ export const getProducts = () => async(dispatch) => {
         const { data, status } = await api.fetchBidProducts();
 
         dispatch({ type: LOADING, payload: { status: 0 } });
-        dispatch({ type: READ, payload: { products: data } });
+        dispatch({ type: READPROD, payload: { products: data } });
     } catch (error) {
         console.log(error);
         const { err } = error?.response?.data ?? {err: []};

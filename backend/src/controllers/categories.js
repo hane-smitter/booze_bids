@@ -1,11 +1,11 @@
-import Category from "../models/category.js";
+import Category from "../models/Category.js";
 export const getCategories = async (req, res) => {
     try {
-        const categories = await Category.find();
+        const categories = await Category.find({});
         console.log(categories);
-        res.status(200).json(categories);
+        res.json(categories);
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({err: [{error: "Server is temporarily down!"}]});
     }
 }
 
@@ -17,6 +17,6 @@ export const createCategory = async (req, res) => {
         await newCategory.save();
         res.status(200).json(newCategory);
     } catch (error) {
-        res.status(500).json({message: error.message});
+        res.status(500).json({err: [{error: "Server is temporarily down!"}]});
     }
 }

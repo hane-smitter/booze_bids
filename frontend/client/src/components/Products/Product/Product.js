@@ -20,7 +20,7 @@ import defaultImg from "../../../images/products/defaultImg.jpeg";
 import { makeBid } from "../../../actions/products";
 import { unsetErr } from "../../../actions/errors";
 
-const Product = ({ product }) => {
+const Product = ({ calcTime, product }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { err, loading } = useSelector((state) => state.app);
@@ -77,7 +77,7 @@ const Product = ({ product }) => {
   }, []);
   return (
     <Card className={classes.root}>
-      <CardHeader subheader="Ends in: 07 Days 19 Hours 45 Mins 53 Secs" />
+      <CardHeader subheader={`Ends in: ${calcTime(product.startTime, product.endTime)}`} />
       <CardActionArea>
         <CardMedia
           className={classes.media}
