@@ -16,8 +16,10 @@ import {
   Typography
 } from '@mui/material';
 import getInitials from '../../utils/getInitials';
+import customers from 'src/__mocks__/customers';
 
-const CustomerListResults = ({ customers, ...rest }) => {
+
+const CustomerListResults = ({ ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);

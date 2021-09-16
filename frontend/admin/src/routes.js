@@ -10,8 +10,10 @@ import ProductList from './pages/ProductList';
 import Register from './pages/Register';
 import Settings from './pages/Settings';
 import ProductBidCreate from './components/Form/Product/ProductBidCreate';
+import ProductCategoryCreate from './components/Form/Product/ProductCategoryCreate';
 import ProductCreate from './components/Form/Product/ProductCreate';
 import Products from './components/Products/Products';
+import CustomerListResults from './components/customer/CustomerListResults';
 
 const routes = [
   {
@@ -19,15 +21,22 @@ const routes = [
     element: <DashboardLayout />,
     children: [
       { path: 'account', element: <Account /> },
-      { path: 'categories', element: <CustomerList /> },
+      { path: 'categories',
+        element: <CustomerList />,
+        children: [
+          { path: '', element: <CustomerListResults /> },
+          { path: 'createcat', element: <ProductCategoryCreate /> }
+        ]
+      },
       { path: 'dashboard', element: <Dashboard /> },
       {
         path: 'products',
         element: <ProductList />,
         children: [
           { path: '', element: <Products /> },
+          { path: 'create', element: <ProductCreate /> },
           { path: 'createbid', element: <ProductBidCreate /> },
-          { path: 'create', element: <ProductCreate /> }
+          // { path: 'createcat', element: <ProductCategoryCreate /> }
         ]
       },
       { path: 'settings', element: <Settings /> },

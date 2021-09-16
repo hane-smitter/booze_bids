@@ -1,9 +1,22 @@
 import mongoose from 'mongoose';
 
 const categorySchema = mongoose.Schema({
-    name: String, 
+    name: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true,
+        unique: true
+    }, 
     description: String
-}, { timestamps: true });
+}, { toJSON: {virtuals: true}, timestamps: true });
+
+
+categorySchema.virtual('productsincategory',{
+    ref: 'Product',
+    localField: '_id',
+    foreignField: 'category'
+});
 
 const Category = mongoose.model('Category', categorySchema)
 

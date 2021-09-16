@@ -1,8 +1,8 @@
 import { Helmet } from 'react-helmet';
 import { Box, Container } from '@mui/material';
-import CustomerListResults from '../components/customer/CustomerListResults';
+
 import CustomerListToolbar from '../components/customer/CustomerListToolbar';
-import customers from '../__mocks__/customers';
+import { Outlet } from 'react-router';
 
 const CustomerList = () => (
   <>
@@ -19,7 +19,7 @@ const CustomerList = () => (
       <Container maxWidth={false}>
         <CustomerListToolbar />
         <Box sx={{ pt: 3 }}>
-          <CustomerListResults customers={customers} />
+          <Outlet />
         </Box>
       </Container>
     </Box>

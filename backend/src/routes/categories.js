@@ -1,10 +1,12 @@
 import express from "express";
 
 import { createCategory, getCategories } from "../controllers/categories.js";
+import { validate } from "../middlewares/validator/index.js";
 
 const router = express.Router();
 
-router.get("/", getCategories);
-router.get("/create", createCategory);
+router.route("/")
+    .get(getCategories)
+    .post(validate("createCategory"), createCategory);
 
 export default router;

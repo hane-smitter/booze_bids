@@ -1,16 +1,12 @@
-import { Helmet } from 'react-helmet';
-import {
-  Box,
-  Container
-} from '@mui/material';
+import { useEffect } from "react";
+import { Helmet } from "react-helmet";
+import { Box, Container } from "@mui/material";
 
-import ProductListToolbar from '../components/Products/ProductListToolbar';
-import products_mock from '../__mocks__/products';
-import { Outlet } from 'react-router';
+import ProductListToolbar from "../components/Products/ProductListToolbar";
+import products_mock from "../__mocks__/products";
+import { Outlet } from "react-router";
 
 const ProductList = () => {
-  
-
   return (
     <>
       <Helmet>
@@ -18,9 +14,9 @@ const ProductList = () => {
       </Helmet>
       <Box
         sx={{
-          backgroundColor: 'background.default',
-          minHeight: '100%',
-          py: 3
+          backgroundColor: "background.default",
+          minHeight: "100%",
+          py: 3,
         }}
       >
         <Container maxWidth={false}>

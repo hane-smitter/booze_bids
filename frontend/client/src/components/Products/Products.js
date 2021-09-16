@@ -34,24 +34,27 @@ const Products = () => {
   console.log(products);
 
   let timeDistanceToFuture = (startTime, endTime) => {
-  let result = [],
-    start = dateFns.parseISO(startTime),
-    end = dateFns.parseISO(endTime),
-    parts = ['year', 'month', 'day', 'hour', 'minute']
+    let result = [],
+      start = dateFns.parseISO(startTime),
+      end = dateFns.parseISO(endTime),
+      parts = ["year", "month", "day", "hour", "minute"];
 
-  parts.forEach((part, i) => {
-    let camelDate = part.charAt(0).toUpperCase() + part.slice(1)
-    let time = dateFns[`differenceIn${camelDate}s`](end, start);
-    if (time) {
-      result.push(`${i === parts.length-1 ? 'and ' : ''}${time} ${camelDate}${time === 1 ? '' : 's'}`);
-      if (i < parts.length)
-        end = dateFns[`sub${camelDate}s`](end, time);
-    }
-  })
-  console.log('  TIME');
-  console.log(startTime);
-  return result.join(' ');
-}
+    parts.forEach((part, i) => {
+      let camelDate = part.charAt(0).toUpperCase() + part.slice(1);
+      let time = dateFns[`differenceIn${camelDate}s`](end, start);
+      if (time) {
+        result.push(
+          `${i === parts.length - 1 ? "and " : ""}${time} ${camelDate}${
+            time === 1 ? "" : "s"
+          }`
+        );
+        if (i < parts.length) end = dateFns[`sub${camelDate}s`](end, time);
+      }
+    });
+    console.log("  TIME");
+    console.log(startTime);
+    return result.join(" ");
+  };
 
   return (
     <Container>
@@ -60,40 +63,46 @@ const Products = () => {
           Current Auctions
         </Typography>
 
-        {categories.length && (<Box style={{ flexGrow: 1 }} component="span">
-          <List
-            component="nav"
-            aria-labelledby="categories"
-            subheader={
-              <ListSubheader component="div" id="categories">
-                Find by categories
-              </ListSubheader>
-            }
-            className={classes.rootList}
-          >
-            <ListItem button onClick={handleCatgoryClick}>
-              <ListItemIcon>
-                <CategoryIcon />
-              </ListItemIcon>
-              <ListItemText primary="Categories" />
-              {categoryOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-            </ListItem>
-            <Collapse
-              className={classes.collapse}
-              in={categoryOpen}
-              timeout="auto"
-              unmountOnExit
+        {categories.length && (
+          <Box style={{ flexGrow: 1 }} component="span">
+            <List
+              component="nav"
+              aria-labelledby="categories"
+              subheader={
+                <ListSubheader component="div" id="categories">
+                  Find by categories
+                </ListSubheader>
+              }
+              className={classes.rootList}
             >
-              <List component="div" disablePadding>
-                {categories.map((category) => (
-                  <ListItem button className={classes.nested} key={category._id}>
-                    <ListItemText primary={category.name} />
-                  </ListItem>
-                ))}
-              </List>
-            </Collapse>
-          </List>
-        </Box>)}
+              <ListItem button onClick={handleCatgoryClick}>
+                <ListItemIcon>
+                  <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Categories" />
+                {categoryOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+              </ListItem>
+              <Collapse
+                className={classes.collapse}
+                in={categoryOpen}
+                timeout="auto"
+                unmountOnExit
+              >
+                <List component="div" disablePadding>
+                  {categories.map((category) => (
+                    <ListItem
+                      button
+                      className={classes.nested}
+                      key={category._id}
+                    >
+                      <ListItemText primary={category.name} />
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            </List>
+          </Box>
+        )}
       </Box>
 
       {loading && (

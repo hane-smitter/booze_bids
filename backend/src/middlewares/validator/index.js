@@ -85,5 +85,16 @@ export const validate = (method) => {
           .escape()
       ]
     }
+    case "createCategory": {
+      return [
+        body("name")
+          .exists({ checkFalsy: true })
+          .withMessage("category name is required")
+          .escape(),
+        body("description")
+          .optional({checkFalsy: true})
+          .escape(),
+      ]
+    }
   }
 };

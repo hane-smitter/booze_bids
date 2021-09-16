@@ -14,9 +14,6 @@ export const getBids = async (req, res) => {
   }
 };
 export const createBid = async (req, res) => {
-  console.log("req.body");
-  console.log(req.body);
-
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(422).json({ err: [...errors.array()] });
@@ -25,7 +22,7 @@ export const createBid = async (req, res) => {
 
   try {
     const { phone, productId, bidPrice, bidAmount } = req.body;
-    let user = await User.findOrCreate({ phone });
+    let user = await User.findOrCreate(phone);
 
     const userId = user._id;
 

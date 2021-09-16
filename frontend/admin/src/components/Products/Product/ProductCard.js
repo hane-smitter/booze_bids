@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 
 import useStyles from '../styles';
+import imgDefault from 'src/images/products/default.jpeg';
 
 const ProductCard = ({ product, ...rest }) => {
   const classes = useStyles();
@@ -26,7 +27,7 @@ const ProductCard = ({ product, ...rest }) => {
         <CardActionArea>
             <CardMedia
                 className={classes.media}
-                image={product.image}
+                image={product.image ?? imgDefault}
                 title={product.name}
             />
             <CardContent>

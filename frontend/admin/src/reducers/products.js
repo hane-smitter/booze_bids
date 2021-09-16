@@ -1,32 +1,58 @@
-import { CREATE, READPROD, UPDATE, DELETE, ERROR, LOADING, CREATEBID } from "../actionTypes";
+import {
+  CREATE,
+  READPROD,
+  CREATECAT,
+  ERROR,
+  LOADING,
+  CREATEBID,
+  READCAT
+} from "../constants";
 
-export default (app = { products: [], bidproducts: [], err: [], loading: false}, action) => {
-    switch (action.type) {
-        /* case READPROD:
+const initState = {
+  products: [],
+  categories: [],
+  bidproducts: [],
+  err: [],
+  loading: false,
+};
+
+export default (app = initState, action) => {
+  switch (action.type) {
+    /* case READPROD:
             return action.payload.products; */
-        case READPROD:
-            return {...app, products: action.payload.products};
-        case CREATE:
-            return {
-                ...app,
-                products: [action.payload.product, ...app.products]
-            };
-        case CREATEBID:
-            return {
-                ...app,
-                bidproducts: [action.payload.productBid, ...app.bidproducts]
-            }
-        case ERROR:
-            return {
-                ...app,
-                err: [...action.payload.err]
-            };
-        case LOADING:
-            return {
-                ...app,
-                loading: Boolean(action.payload.status)
-            };
-        default:
-            return app;
-    }
-}
+    case READPROD:
+      return { ...app, products: action.payload.products };
+    case CREATE:
+      return {
+        ...app,
+        products: [action.payload.product, ...app.products],
+      };//categories
+    case READCAT:
+      return {
+        ...app,
+        categories: action.payload.categories,
+      };
+    case CREATEBID:
+      return {
+        ...app,
+        bidproducts: [action.payload.productBid, ...app.bidproducts],
+      };
+    case CREATECAT:
+      return {
+        ...app,
+        categories: [action.payload.category, ...app.categories],
+      };
+    case ERROR:
+      return {
+        ...app,
+        err: [...action.payload.err],
+      };
+    case LOADING:
+      return {
+        ...app,
+        loading: Boolean(action.payload.status),
+      };
+    default:
+      return app;
+  }
+};

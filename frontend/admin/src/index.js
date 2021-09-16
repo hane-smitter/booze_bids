@@ -8,15 +8,7 @@ import '@fontsource/roboto';
 import reducers from './reducers';
 import App from './App';
 
-const initialState = {
-  app: {
-      products: [],
-      bidproducts: [],
-      err: [],
-      loading: false
-  }
-};
-const store = createStore(reducers, initialState, compose(applyMiddleware(thunk)));
+const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
 ReactDOM.render(
   (

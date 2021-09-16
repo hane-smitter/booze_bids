@@ -1,11 +1,13 @@
 import axios from 'axios';
 
-const url = 'http://localhost:5000/products';
+const url = 'http://localhost:5000';
 
-export const fetchBidProducts = () => axios.get(url);
-export const createProduct = (body) => axios.post(url, body, {
+export const fetchBidProducts = () => axios.get(`${url}/products`);
+export const createProduct = (body) => axios.post(`${url}/products`, body, {
         headers: {
             'Content-Type': 'multipart/form-data',
         }
 });
-export const createProductBid = body => axios.post(`${url}/bid/create`, body);
+export const createProductBid = body => axios.post(`${url}/products/bid/create`, body);
+export const fetchProductCategories = () => axios.get(`${url}/categories`);
+export const createProductCategory = body => axios.post(`${url}/categories`, body);

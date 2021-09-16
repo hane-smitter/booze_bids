@@ -21,8 +21,11 @@ const ProductSchema = mongoose.Schema({
         }
     }, 
     store: String, 
-    category: String,
-}, {toJSON: {virtuals: true},timestamps: true});
+    category: {
+        required: true,
+        type: mongoose.Schema.Types.ObjectId
+    },
+}, { toJSON: {virtuals: true}, timestamps: true });
 
 ProductSchema.virtual('productbids',{
     ref: 'ProductBidDetail',
