@@ -1,6 +1,6 @@
 import { Paper } from '@material-ui/core';
 import React from 'react';
-import banner_img from '../../../images/banner1.png';
+import banner_img from '../../../images/banner3.png';
 
 import useStyles from './styles';
 
