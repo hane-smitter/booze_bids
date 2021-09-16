@@ -66,9 +66,6 @@ const Nav = () => {
         onClose={handleMenuClose}
       >
         <MenuItem onClick={handleMenuClose}>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
           <Link href="/">Home</Link>
         </MenuItem>
         <MenuItem onClick={handleMenuClose}>
@@ -80,14 +77,15 @@ const Nav = () => {
       </Menu>
 
       <Typography className={classes.heading} variant="h2" align="center">
-        Logo
+        BidsPesa
       </Typography>
     </React.Fragment>
   );
   const displayDesktop = () => (
     <React.Fragment>
       <div>
-        <img src={Logo} className={classes.image} />
+        {/* <img src={Logo} className={classes.image} /> */}
+        <h3>BidsPesa</h3>
       </div>
       
       <Grid container justifyContent="space-evenly" direction="row" alignItems="center" className={classes.navContainer}>

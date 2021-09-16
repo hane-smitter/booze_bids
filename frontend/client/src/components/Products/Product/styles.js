@@ -1,3 +1,4 @@
+import { capitalize } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles({
@@ -7,8 +8,7 @@ export default makeStyles({
   media: {
     height: 0,
     paddingTop: '56.25%',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    backgroundBlendMode: 'darken',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)'
   },
   border: {
     border: 'solid',
@@ -58,5 +58,12 @@ export default makeStyles({
   inputWrapper: {
     marginBlock: '15px',
     width: '100%'
+  },
+  warning: {
+    color: '#ff9800',
+    fontWeight:'bold',
+  },
+  capitalize: {
+    textTransform: 'capitalize',
   }
 });
