@@ -25,7 +25,10 @@ export const validate = (method) => {
           .bail(),
         body("category")
           .trim()
-          .optional() /* .isIn(['category1', 'category2']) */,
+          .exists({ checkFalsy: true }) /* .isIn(['category1', 'category2']) */
+          .custom(value => {
+            return mongoose.isValidObjectId(value);
+          }).withMessage("Invalid id"),
         body("store")
           .trim()
           .optional(),

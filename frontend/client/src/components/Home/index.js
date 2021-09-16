@@ -28,11 +28,12 @@ const Home = () => {
     return (
         <Container maxidth="lg">
             <Navbar/>
+            <Banner />
             <Grow in>
                 <Container maxwidth="sm">
-                    <Grid container justifyContent="center">
+                    {/* <Grid container justifyContent="center" className={classes.bg}>
                         <Banner />
-                    </Grid>
+                    </Grid> */}
                     <Products/>
                     {/* <Grid container justifyContent="space-between" alignItems="stretch" spacing="3">
                          <Grid item xs={12} sm={4}>

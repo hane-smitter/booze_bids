@@ -102,7 +102,7 @@ const Nav = () => {
     </React.Fragment>
   );
   return (
-    <AppBar className={classes.appBar} position="static" color="inherit">
+    <AppBar className={classes.appBar} position="static" color="inherit"> 
       <Toolbar className={classes.navigation}>
         {isMobile ? displayMobile() : displayDesktop()}
       </Toolbar>
