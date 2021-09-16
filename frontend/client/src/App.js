@@ -9,6 +9,7 @@ import Home from "./components/Home";
 import Form from './components/Form/Form';
 import Faqs from './components/Faqs';
 import PastBids from './components/PastBids';
+import Detail from './components/Products/Product/Details';
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/faqs" component={Faqs} />
         <Route path="/pastbids" component={PastBids} />
         <Route path="/product/create" component={Form} />
+        <Route path="/detail" component={Detail} />
       </Switch>
     </Router>
   );

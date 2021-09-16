@@ -51,8 +51,6 @@ const Products = () => {
         if (i < parts.length) end = dateFns[`sub${camelDate}s`](end, time);
       }
     });
-    console.log("  TIME");
-    console.log(startTime);
     return result.join(" ");
   };
 
