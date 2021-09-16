@@ -59,7 +59,7 @@ const Products = () => {
   return (
     <Container>
       <Box className={classes.productsTitleBox}>
-        <Typography variant="h4" style={{ flexGrow: 4 }}>
+        <Typography variant="h6" style={{ flexGrow: 4 }}>
           Current Auctions
         </Typography>
 
