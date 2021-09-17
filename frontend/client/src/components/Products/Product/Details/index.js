@@ -53,6 +53,7 @@ const Detail = () => {
     bidAmount: Yup.number()
       .required("Bidding amount is required")
       .positive("This amount is not allowed")
+      .min(product.bidPrice, `Minimum bidding amount is ${product.bidPrice}`)
       .integer(),
     phone: Yup.number().required("Phone number is required").integer(),
   });
@@ -62,13 +63,11 @@ const Detail = () => {
     field: { value, name },
     formErrors,
     formErrorsName,
-    min,
     ...others
   }) => (
     <TextField
       name={name}
       value={value}
-      InputProps={{ min }}
       error={
         (form.touched[name] && !!form.errors[name]) ||
         formErrorsName.indexOf(name) !== -1
@@ -214,11 +213,11 @@ const Detail = () => {
                       <Field
                         formErrors={formErrors}
                         formErrorsName={formErrorsName}
-                        min={product.bidPrice}
                         name="bidAmount"
                         label="Bid amount"
                         placeholder="for example 237"
                         autoFocus
+                        inputProps={{ min: product.bidPrice }}
                         type="number"
                         component={Input}
                       />

@@ -44,13 +44,13 @@ const Product = ({ calcTime, product }) => {
             >
               {`Ends in: ${calcTime()(product.startTime, product.endTime)}`}
             </Typography>
-            <Typography variant="subtitle1" component="p">
+            <Typography variant="caption" component="p">
+              Bid me at #kes {product.bidPrice} | Slots: {product.slots ? product.slots : 0}
+            </Typography>
+            <Typography component="div" variant="h5" style={{ fontWeight: "bold" }}>
               RRP: KSH {product.product.cost}
             </Typography>
-            <Typography variant="body2" component="p">
-              <small>Bid me at #kes {product.bidPrice}</small> | 
-              <small> Slots: {product.slots ? product.slots : 0}</small>
-            </Typography>
+            
           </CardContent>
         </CardActionArea>
       </Card>

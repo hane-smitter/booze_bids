@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
     Box,
     CircularProgress,
-    Container,
     Grid,
     Pagination,
     Paper,
@@ -22,9 +21,6 @@ const Products = () => {
         dispatch(getProducts());
     }, [dispatch]);
 
-
-    console.log("products from redux store");
-    console.log(products);
     return (
         <>
         <Box sx={{ pt: 3 }}>

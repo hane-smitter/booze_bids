@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-  Avatar,
+  /* Avatar, */
   Box,
   Card,
   Checkbox,
@@ -15,7 +15,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import getInitials from '../../utils/getInitials';
+/* import getInitials from '../../utils/getInitials'; */
 import customers from 'src/__mocks__/customers';
 
 

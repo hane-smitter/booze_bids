@@ -10,7 +10,7 @@ import {
   Container,
   CircularProgress,
 } from "@mui/material";
-import { FileUpload } from "@mui/icons-material";
+import { Image } from "@mui/icons-material";
 import * as Yup from "yup";
 import { Formik, Field } from "formik";
 import { useNavigate } from "react-router";
@@ -24,7 +24,7 @@ const Form = () => {
     name: "",
     brand: "",
     cost: "",
-    category: "",
+    category: null,
     productimg: "",
   };
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const Form = () => {
   const [imgPrev, setImgPrev] = useState(null);
   const { categories, err, loading } = useSelector((state) => state.app);
   const [categoryVal, setCategoryVal] = useState(
-    categories.length > 0 ? categories[0].name : ""
+    categories.length > 0 ? categories[0] : null
   );
   const categoriesIds =
     categories.length > 0 ? categories.map((category) => category._id) : [];
@@ -85,12 +85,11 @@ const Form = () => {
       <Autocomplete
         value={categoryVal}
         options={categories}
-        getOptionLabel={(option) => {
-          return option.name ?? option;
-        }}
+        disableClearable
+        getOptionLabel={(option) => option.name}
         onChange={(event, newValue) => {
           form.setFieldValue(name, newValue._id, false);
-          setCategoryVal(newValue.name);
+          setCategoryVal(newValue);
         }}
         renderInput={(params) => (
           <TextField
@@ -129,15 +128,19 @@ const Form = () => {
           variant="contained"
           color="primary"
           className={`${classes.button} ${classes.btnUpload}`}
-          startIcon={<FileUpload />}
+          startIcon={<Image />}
           onClick={() => hiddenInp.current.click()}
+          sx={{
+            mt: 2,
+            mb: .5
+          }}
         >
           choose image
         </Button>
         <FormHelperText error={toShowError}>
           {toShowError ? currentError : value?.name ?? helperText}
         </FormHelperText>
-        {imgPrev && <img src={imgPrev} width={200} height={200} />}
+        {imgPrev && <img src={imgPrev} alt="preview" width={200} height={200} />}
         <input
           id="file"
           accept="image/*"
@@ -157,8 +160,6 @@ const Form = () => {
             reader.onload = () => {
               setImgPrev(reader.result);
             };
-            console.log("this is the value of the image from formik");
-            console.log(value);
           }}
           {...others}
         />
@@ -170,6 +171,7 @@ const Form = () => {
     field: { value, name },
     formErrors,
     formErrorsNames,
+    helperText
   }) => {
     return (
       <CustomFileInput
@@ -178,6 +180,7 @@ const Form = () => {
         formErrorsNames={formErrorsNames}
         value={value}
         form={form}
+        helperText={helperText}
       />
     );
   };
@@ -190,7 +193,7 @@ const Form = () => {
     ...others
   }) => {
     const currentError =
-      form.errors[name] || formErrors[formErrorsNames.indexOf(name)]?.msg;
+      (form.errors[name]) || formErrors[formErrorsNames.indexOf(name)]?.msg;
     const toShowError = Boolean(
       (currentError && form.touched[name]) ||
         formErrorsNames.indexOf(name) !== -1
@@ -201,7 +204,7 @@ const Form = () => {
         name={name}
         value={value}
         onChange={(event) =>
-          form.setFieldValue(name, event.target.value, false)
+          form.setFieldValue(name, event.target.value)
         }
         error={toShowError}
         helperText={toShowError ? currentError : undefined}
@@ -211,17 +214,6 @@ const Form = () => {
     );
   };
 
-  /* const onChangeFileHandler = (event) => {
-    setFormval({ ...formval, productimg: event.target.files[0] });
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    let formData = new FormData();
-    for (let key in formval) {
-      formData.append(key, formval[key]);
-    }
-    dispatch(createProduct(formData));
-  }; */
   return (
     <>
       <Container maxWidth="sm">
@@ -233,8 +225,8 @@ const Form = () => {
               console.log(key);
               formData.append(key, values[key]);
             }
+            actions.setSubmitting(loading);
             dispatch(createProduct(formData));
-            actions.setSubmitting(loading)
 
 
             /* console.log("This is the form data from the form");
@@ -317,7 +309,7 @@ const Form = () => {
                   type="submit"
                   variant="contained"
                 >
-                  {props.isSubmitting ? (
+                  {loading ? (
                     <CircularProgress style={{ color: "white" }} />
                   ) : (
                     "Add now"

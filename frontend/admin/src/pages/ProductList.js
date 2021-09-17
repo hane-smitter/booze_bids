@@ -1,9 +1,7 @@
-import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Box, Container } from "@mui/material";
 
 import ProductListToolbar from "../components/Products/ProductListToolbar";
-import products_mock from "../__mocks__/products";
 import { Outlet } from "react-router";
 
 const ProductList = () => {

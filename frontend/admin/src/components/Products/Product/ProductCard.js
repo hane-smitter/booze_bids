@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardMedia,
   Divider,
-  TextField,
   Typography
 } from '@mui/material';
 
@@ -26,8 +25,8 @@ const ProductCard = ({ product, ...rest }) => {
         />
         <CardActionArea>
             <CardMedia
-                className={classes.media}
                 image={product.image ?? imgDefault}
+                className={classes.media}
                 title={product.name}
             />
             <CardContent>
