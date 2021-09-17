@@ -44,18 +44,14 @@ const Products = () => {
             <List
               component="nav"
               aria-labelledby="categories"
-              subheader={
-                <ListSubheader component="div" id="categories">
-                  Find by categories
-                </ListSubheader>
-              }
+              
               className={classes.rootList}
             >
               <ListItem button onClick={handleCatgoryClick}>
                 <ListItemIcon>
                   <CategoryIcon />
                 </ListItemIcon>
-                <ListItemText primary="Categories" />
+                <ListItemText primary="Browse categories" />
                 {categoryOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
               </ListItem>
               <Collapse

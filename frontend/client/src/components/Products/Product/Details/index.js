@@ -13,12 +13,20 @@ import {
   TextField,
   CircularProgress,
   Grow,
+  Divider,
+  ListItem,
+  Avatar,
 } from "@material-ui/core";
+import List from '@material-ui/core/List';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ImageIcon from '@material-ui/icons/Image';
+import WorkIcon from '@material-ui/icons/Work';
 import { useLocation } from "react-router";
 import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-
+import Navbar from '../../../Nav';
 import useStyles from "./styles.js";
 import { makeBid } from "../../../../actions/products";
 import defaultImg from "../../../../images/products/defaultImg.jpeg";
@@ -88,6 +96,8 @@ const Detail = () => {
 
   return (
     <>
+    <Container maxwidth="lg">
+    <Navbar/>
       <Grow in>
         <Container maxwidth="sm">
           <Grid container>
@@ -111,20 +121,32 @@ const Detail = () => {
                       title={product.product.name}
                     />
                     <CardContent>
+                    <Divider color="grey"/>
                       <Typography
                         gutterBottom
                         variant="body2"
                         component="p"
-                        // className={classes.warning}
+                        className={classes.warning}
                       >
                         {`Ends in: ${FutureTimeCalc()(
                           product.startTime,
                           product.endTime
                         )}`}
+                        
                       </Typography>
-                      <Typography variant="body2" component="p">
-                        RRP: KSH {product.product.cost}
-                      </Typography>
+                      
+                      <Grid container alignItems="center">
+                        <Grid item xs>
+                        <Typography variant="body2" component="p">
+                          RRP: KSH {product.product.cost}
+                        </Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography variant="body2" component="p">
+                            Slots Remaining: {product.slots ? product.slots : 0}
+                          </Typography>
+                        </Grid>
+                      </Grid>
                     </CardContent>
                   </CardActionArea>
                 </Card>
@@ -133,11 +155,27 @@ const Detail = () => {
             <Grid item xs={12} md={6} className={classes.flex}>
               <Box className={classes.darkBox}>
                 <Typography gutterBottom variant="h5">
-                  Brand : <b>{product.product.brand}</b>
+                  Highest Bidder
+                </Typography>
+                {/*highest bidder  details*/}
+                <List>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <ImageIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary="Thee Bidder"/>
+                    <ListItemText primary="Bidded: KES. 1000" />
+                  </ListItem>
+                </List> 
+                <Divider color="grey"/>
+                <Typography gutterBottom variant="h5">
+                  <b>{product.product.brand}</b>
                 </Typography>
                 <Typography variant="body2" color="inherit" component="p">
-                  Place your bid Bid costs only {product.bidPrice}/= Enter your
-                  lowest unique bid amount and phone number then standby to pay
+                  Place your bid Bid. Minimum Bid amount is {product.bidPrice}/= . 
+                  Enter phone number then standby to pay
                   via Mpesa
                 </Typography>
 
@@ -212,6 +250,7 @@ const Detail = () => {
           </Grid>
         </Container>
       </Grow>
+      </Container>
     </>
   );
 };

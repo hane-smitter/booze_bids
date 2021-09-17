@@ -35,6 +35,10 @@ export default makeStyles((theme) => ({
       },
     "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
         borderColor: "white"
-    }
-  }
+    },  
+  },
+  warning: {
+      color: '#ff9800',
+      fontWeight:'bold',
+    },
 }));

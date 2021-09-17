@@ -48,7 +48,8 @@ const Product = ({ calcTime, product }) => {
               RRP: KSH {product.product.cost}
             </Typography>
             <Typography variant="body2" component="p">
-              <small>Bid me at #kes {product.bidPrice}</small>
+              <small>Bid me at #kes {product.bidPrice}</small> | 
+              <small> Slots: {product.slots ? product.slots : 0}</small>
             </Typography>
           </CardContent>
         </CardActionArea>
