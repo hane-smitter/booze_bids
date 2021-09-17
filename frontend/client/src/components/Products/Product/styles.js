@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles({
   root: {
     fontSize: 'inherit',
+    minHeight: '300px',
+    minWidth: '200px'
   },
   media: {
     height: 0,

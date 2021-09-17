@@ -12,6 +12,7 @@ import {
   Button,
   TextField,
   CircularProgress,
+  Grow,
 } from "@material-ui/core";
 import { useLocation } from "react-router";
 import { Formik, Field } from "formik";
@@ -44,7 +45,7 @@ const Detail = () => {
     bidAmount: Yup.number()
       .required("Bidding amount is required")
       .positive("This amount is not allowed")
-      .positive(),
+      .integer(),
     phone: Yup.number().required("Phone number is required").integer(),
   });
 
@@ -53,11 +54,13 @@ const Detail = () => {
     field: { value, name },
     formErrors,
     formErrorsName,
+    min,
     ...others
   }) => (
     <TextField
       name={name}
       value={value}
+      InputProps={{ min }}
       error={
         (form.touched[name] && !!form.errors[name]) ||
         formErrorsName.indexOf(name) !== -1
@@ -85,120 +88,130 @@ const Detail = () => {
 
   return (
     <>
-      <Container maxwidth="sm">
-        <Grid container>
-          <Grid item xs={12} md={6} className={classes.flex}>
-            <Box className={classes.lightBox}>
-              <Card className={classes.cardRoot}>
-                <CardHeader
-                  className={classes.capitalize}
-                  color="primary"
-                  subheader={product.product.name}
-                />
-                <CardActionArea>
-                  <CardMedia
-                    className={classes.media}
-                    component={"img"}
-                    image={product.product.image ? product.product.image : defaultImg}
-                    title={product.product.name}
+      <Grow in>
+        <Container maxwidth="sm">
+          <Grid container>
+            <Grid item xs={12} md={6} className={classes.flex}>
+              <Box className={classes.lightBox}>
+                <Card className={classes.cardRoot}>
+                  <CardHeader
+                    className={classes.capitalize}
+                    color="primary"
+                    subheader={product.product.name}
                   />
-                  <CardContent>
-                    <Typography
-                      gutterBottom
-                      variant="body2"
-                      component="p"
-                      // className={classes.warning}
-                    >
-                      {`Ends in: ${FutureTimeCalc()(
-                        product.startTime,
-                        product.endTime
-                      )}`}
-                    </Typography>
-                    <Typography variant="body2" component="p">
-                      RRP: KSH {product.product.cost}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6} className={classes.flex}>
-            <Box className={classes.darkBox}>
-              <Typography gutterBottom variant="h5">
-                Brand : <b>{product.product.brand}</b>
-              </Typography>
-              <Typography variant="body2" color="inherit" component="p">
-                Place your bid Bid costs only {product.bidPrice}/= Enter your
-                lowest unique bid amount and phone number then standby to pay
-                via Mpesa
-              </Typography>
-
-              <Formik
-                initialValues={{
-                  bidAmount: "",
-                  phone: "",
-                  bidPrice: product.bidPrice,
-                  productId: product.product._id,
-                }}
-                onSubmit={function (values, actions) {
-                  let currentCard = document.querySelector(
-                    `#bid4m-${product._id}`
-                  );
-
-                  currentCard.dataset.id === product._id &&
-                    setNowLoading(loading);
-
-                  dispatch(makeBid(values));
-                  actions.setSubmitting(loading);
-                  /* setTimeout(() => {
-           alert(JSON.stringify(values, null, 2));
-           actions.setSubmitting(false);
-         }, 1000); */
-                }}
-                validationSchema={makeBidSchema}
-              >
-                {(props) => (
-                  <form
-                    onSubmit={props.handleSubmit}
-                    id={"bid4m-" + product._id}
-                    autoComplete="off"
-                    noValidate
-                    data-id={product._id}
-                  >
-                    <Field
-                      formErrors={formErrors}
-                      formErrorsName={formErrorsName}
-                      name="bidAmount"
-                      placeholder="for example 237"
-                      component={Input}
+                  <CardActionArea>
+                    <CardMedia
+                      className={classes.media}
+                      component={"img"}
+                      image={
+                        product.product.image
+                          ? product.product.image
+                          : defaultImg
+                      }
+                      title={product.product.name}
                     />
-                    <Field
-                      formErrors={formErrors}
-                      formErrorsName={formErrorsName}
-                      name="phone"
-                      placeholder="Your phone number"
-                      component={Input}
-                    />
+                    <CardContent>
+                      <Typography
+                        gutterBottom
+                        variant="body2"
+                        component="p"
+                        // className={classes.warning}
+                      >
+                        {`Ends in: ${FutureTimeCalc()(
+                          product.startTime,
+                          product.endTime
+                        )}`}
+                      </Typography>
+                      <Typography variant="body2" component="p">
+                        RRP: KSH {product.product.cost}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6} className={classes.flex}>
+              <Box className={classes.darkBox}>
+                <Typography gutterBottom variant="h5">
+                  Brand : <b>{product.product.brand}</b>
+                </Typography>
+                <Typography variant="body2" color="inherit" component="p">
+                  Place your bid Bid costs only {product.bidPrice}/= Enter your
+                  lowest unique bid amount and phone number then standby to pay
+                  via Mpesa
+                </Typography>
 
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      fullWidth
+                <Formik
+                  initialValues={{
+                    bidAmount: product.bidPrice,
+                    phone: "",
+                    bidPrice: product.bidPrice,
+                    productId: product.product._id,
+                  }}
+                  onSubmit={function (values, actions) {
+                    let currentCard = document.querySelector(
+                      `#bid4m-${product._id}`
+                    );
+
+                    currentCard.dataset.id === product._id &&
+                      setNowLoading(loading);
+
+                    dispatch(makeBid(values));
+                    actions.setSubmitting(loading);
+                    /* setTimeout(() => {
+                    alert(JSON.stringify(values, null, 2));
+                    actions.setSubmitting(false);
+                  }, 1000); */
+                  }}
+                  validationSchema={makeBidSchema}
+                >
+                  {(props) => (
+                    <form
+                      onSubmit={props.handleSubmit}
+                      id={"bid4m-" + product._id}
+                      autoComplete="off"
+                      noValidate
+                      data-id={product._id}
                     >
-                      {nowLoading ? (
-                        <CircularProgress style={{ color: "white" }} />
-                      ) : (
-                        "Place your bid"
-                      )}
-                    </Button>
-                  </form>
-                )}
-              </Formik>
-            </Box>
+                      <Field
+                        formErrors={formErrors}
+                        formErrorsName={formErrorsName}
+                        min={product.bidPrice}
+                        name="bidAmount"
+                        label="Bid amount"
+                        placeholder="for example 237"
+                        autoFocus
+                        type="number"
+                        component={Input}
+                      />
+                      <Field
+                        formErrors={formErrors}
+                        formErrorsName={formErrorsName}
+                        name="phone"
+                        label="Phone number"
+                        component={Input}
+                      />
+
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                      >
+                        {nowLoading ? (
+                          <CircularProgress style={{ color: "white" }} />
+                        ) : (
+                          "Place your bid"
+                        )}
+                      </Button>
+                    </form>
+                  )}
+                </Formik>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </Grow>
     </>
   );
 };

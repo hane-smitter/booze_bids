@@ -42,10 +42,13 @@ const Product = ({ calcTime, product }) => {
               component="p"
               className={classes.warning}
             >
-              {`Ends in: ${calcTime(product.startTime, product.endTime)}`}
+              {`Ends in: ${calcTime()(product.startTime, product.endTime)}`}
             </Typography>
-            <Typography variant="p" component="p">
+            <Typography variant="subtitle1" component="p">
               RRP: KSH {product.product.cost}
+            </Typography>
+            <Typography variant="body2" component="p">
+              <small>Bid me at #kes {product.bidPrice}</small>
             </Typography>
           </CardContent>
         </CardActionArea>

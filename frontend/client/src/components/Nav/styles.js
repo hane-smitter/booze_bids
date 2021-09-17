@@ -20,8 +20,7 @@ export default makeStyles(() => ({
     },
     image: {
         display: 'block',
-        width: '80px',
-        height: '60px',
+        height: '80px',
     },
     navLink: {
         marginInline: '5px',

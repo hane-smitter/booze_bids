@@ -24,7 +24,7 @@ export const getProducts = async (req, res) => {
 export const getBiddableProducts = async(req, res) => {
     try {
         const biddableProducts = await ProductBidDetail.find({endTime: { $gt: new Date().toISOString() }})
-                    .sort([['createdAt', -1]])
+                    .sort([['endTime', 1]])
                     .populate(['product']);
         res.json(biddableProducts);
     } catch (err) {

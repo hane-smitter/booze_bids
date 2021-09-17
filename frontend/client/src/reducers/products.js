@@ -22,7 +22,7 @@ export default (app = { products: [], categories: [], loading: false, err: [] },
     case READCAT:
       return {
         ...app,
-        categories: {...app, categories: action.payload.categories},
+        categories: action.payload.categories,
       };
     case ERROR:
       return {

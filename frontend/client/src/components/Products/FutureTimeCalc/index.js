@@ -6,14 +6,17 @@ const FutureTimeCalc = () => {
     let result = [],
       start = dateFns.parseISO(startTime),
       end = dateFns.parseISO(endTime),
-      parts = ["year", "month", "day", "hour", "minute"];
+      // parts = ["year", "month", "day", "hour", "minute"];
+      // parts = ["hour", "minute", "second"];
+      parts = [{time: "hour", abbr: "hr"}, {time: "minute", abbr: "min"}, {time: "second", abbr: "sec"}];
 
     parts.forEach((part, i) => {
-      let camelDate = part.charAt(0).toUpperCase() + part.slice(1);
+      let camelDate = part.time.charAt(0).toUpperCase() + part.time.slice(1);
+      let dateAbbr = part.abbr.charAt(0).toUpperCase() + part.abbr.slice(1);
       let time = dateFns[`differenceIn${camelDate}s`](end, start);
       if (time) {
         result.push(
-          `${i === parts.length - 1 ? "and " : ""}${time} ${camelDate}${
+          `${i === parts.length - 1 ? "and " : ""}${time} ${dateAbbr}${
             time === 1 ? "" : "s"
           }`
         );

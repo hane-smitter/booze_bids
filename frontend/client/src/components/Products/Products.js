@@ -21,6 +21,7 @@ import CategoryIcon from "@material-ui/icons/Category";
 
 import Product from "./Product/Product";
 import useStyles from "./styles";
+import timeDistanceToFuture from './FutureTimeCalc';
 
 const Products = () => {
   const { loading, products, categories } = useSelector((state) => state.app);
@@ -30,30 +31,7 @@ const Products = () => {
   const handleCatgoryClick = () => {
     setCategoryOpen(!categoryOpen);
   };
-  console.log("products from redux store");
-  console.log(products);
-
-  let timeDistanceToFuture = (startTime, endTime) => {
-    let result = [],
-      start = dateFns.parseISO(startTime),
-      end = dateFns.parseISO(endTime),
-      parts = ["year", "month", "day", "hour", "minute"];
-
-    parts.forEach((part, i) => {
-      let camelDate = part.charAt(0).toUpperCase() + part.slice(1);
-      let time = dateFns[`differenceIn${camelDate}s`](end, start);
-      if (time) {
-        result.push(
-          `${i === parts.length - 1 ? "and " : ""}${time} ${camelDate}${
-            time === 1 ? "" : "s"
-          }`
-        );
-        if (i < parts.length) end = dateFns[`sub${camelDate}s`](end, time);
-      }
-    });
-    return result.join(" ");
-  };
-
+  
   return (
     <Container>
       <Box className={classes.productsTitleBox}>

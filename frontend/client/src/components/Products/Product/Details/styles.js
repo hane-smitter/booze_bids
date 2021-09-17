@@ -30,7 +30,7 @@ export default makeStyles((theme) => ({
       maxWidth: "100%"
   },
   rootTextField: {
-      "& .MuiInputBase-root": {
+      "& .MuiInputBase-root, .MuiFormLabel-root": {
           color: "rgba(245, 245, 245, 1)"
       },
     "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {

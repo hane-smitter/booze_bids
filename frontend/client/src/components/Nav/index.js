@@ -16,7 +16,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 
 import useStyles from './styles';
-import Logo from '../../images/booze_bids_logo.png';
+import Logo from '../../images/booze_bids_logo2.png';
 
 const Nav = () => {
     const [anchor, setAnchor] = React.useState(null);
@@ -84,8 +84,8 @@ const Nav = () => {
   const displayDesktop = () => (
     <React.Fragment>
       <div>
-        {/* <img src={Logo} className={classes.image} /> */}
-        <h3>BidsPesa</h3>
+        <img src={Logo} className={classes.image} />
+        {/* <h3>BidsPesa</h3> */}
       </div>
       
       <Grid container justifyContent="space-evenly" direction="row" alignItems="center" className={classes.navContainer}>
