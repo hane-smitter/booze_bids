@@ -2,7 +2,11 @@ import mongoose from 'mongoose';
 
 const storeSchema = mongoose.Schema({
     name: String, 
-    typ: String, 
+    type: String, 
+    contact: String,
+    mpesaType: String,
+    mpesaAccountNo: String,
+    mpesaNumber: Number,
     location: String, 
     latitude: String, 
     longitude: String, 

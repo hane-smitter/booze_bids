@@ -26,7 +26,7 @@ const Home = () => {
     }, [dispatch]);
 
     return (
-        <Container maxidth="lg">
+        <Container maxwidth="lg">
             <Navbar/>
             <Banner />
             <Grow in>
