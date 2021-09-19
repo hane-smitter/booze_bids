@@ -14,15 +14,25 @@ const userSchema = mongoose.Schema({
     longitude: String
 }, { timestamps: true });
 
-userSchema.statics.findOrCreate = async (phone) => {
-    const user = await User.findOne({ phone });
+userSchema.statics.findOrCreate = async (bidder = {}) => {
 
-    if(!!user)
-        return user;
+    const user = await User.findOne({ phone: bidder.phone });
+    if(!user && !bidder.acknowledgeNew) {
+      return "NEW";
+    } else if((!user && bidder.acknowledgeNew)) {
+        delete bidder.acknowledgeNew;
+        let newBidder = {
+            phone: bidder.phone,
+            surname: bidder?.lastname,
+            othername: bidder?.firstname,
+            password: bidder?.password,
+            location: bidder?.location
+        }
+        const newUser = await new User(newBidder).save();
+        return newUser;
+    }
 
-    const newUser = await new User({ phone });
-    return newUser;
-
+    return user;
 }
 
 const User = mongoose.model('User', userSchema);

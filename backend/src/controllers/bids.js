@@ -1,6 +1,9 @@
 import { validationResult } from "express-validator";
+import mongoose from "mongoose";
 
 import Bid from "../models/Bid.js";
+import Product from "../models/Product.js";
+import ProductBidDetail from "../models/ProductBidDetail.js";
 import User from "../models/User.js";
 
 export const getBids = async (req, res) => {
@@ -13,6 +16,7 @@ export const getBids = async (req, res) => {
     res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
   }
 };
+//customer bidding for a product
 export const createBid = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -21,8 +25,26 @@ export const createBid = async (req, res) => {
   }
 
   try {
-    const { phone, productId, bidPrice, bidAmount } = req.body;
-    let user = await User.findOrCreate(phone);
+    let { bidder, productId, bidPrice, bidAmount } = req.body;
+    let user = await User.findOrCreate(bidder);
+    if(user === "NEW") {
+      res.status(204).json({ info: { message: "Is a new user", code: "newbiddinguser"} });
+      return;
+    }
+
+    let productBidInfo = await ProductBidDetail.findOne({product: mongoose.Types.ObjectId(productId)}).lean();
+    if(!productBidInfo) {
+      res.status(404).json({ err: [{ error: "Sorry this product is not found" }] });
+      return;
+    }
+    bidPrice = productBidInfo.bidPrice;
+
+    //generate slot figure
+    if(bidAmount < bidPrice) {
+      res.status(422).json({ err: [{ error: "Amount bidding is way Low!" }] });
+      return;
+    }
+    let slot = Math.floor(bidAmount / bidPrice);
 
     const userId = user._id;
 
@@ -33,11 +55,11 @@ export const createBid = async (req, res) => {
       bidAmount,
     });
 
-    await Promise.all([user.save(), bid.save()]);
-    console.log("bid created !!");
-    console.log(bid);
-    console.log("user");
-    console.log(user);
+    await Promise.all([
+      ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $inc: { slots: -slot } }),
+      user.save(),
+      bid.save()
+    ]);
 
     res.json({ bid });
   } catch (err) {

@@ -1,11 +1,12 @@
 import mongoose from 'mongoose';
+import Category from './Category.js';
 
 const ProductSchema = mongoose.Schema({
     name: {
         type: String,
         required: [true, 'You need to provide a name'],
         trim: true,
-        lowercase: true
+        set: capitalize
     }, 
     brand: {
         type: String,
@@ -23,9 +24,21 @@ const ProductSchema = mongoose.Schema({
     store: String, 
     category: {
         required: true,
-        type: mongoose.Schema.Types.ObjectId
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category"
     },
 }, { toJSON: {virtuals: true}, timestamps: true });
+
+ProductSchema.pre('validate', async function(next) {
+    const category = await Category.findById(this.category);
+    if(!category) throw new Error('This Category does not exist');
+    next();
+});
+
+function capitalize (val) {
+    if (typeof val !== 'string') val = '';
+    return val.charAt(0).toUpperCase() + val.substring(1).toLowerCase();
+}
 
 ProductSchema.virtual('productbids',{
     ref: 'ProductBidDetail',

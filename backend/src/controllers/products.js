@@ -87,8 +87,8 @@ export const createProductBidDetails = async(req, res) => {
     }
     try {
         const bidDetails = new ProductBidDetail(req.body);
-        console.log('bid product');
-        console.log(bidDetails);
+        /* console.log('bid product');
+        console.log(bidDetails); */
         await bidDetails.save();
         res.status(201).json({bidDetails});
     } catch (err) {
