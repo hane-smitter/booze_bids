@@ -48,7 +48,9 @@ const Detail = () => {
     err.length && err.filter((error) => formFields.includes(error.param));
   formErrors.length &&
     formErrors.map((error) => formErrorsName.push(error.param));
-
+  let isHidden = true;
+  let newUserAlert = err.length && err[0].newUserAlert;
+  newUserAlert ? newUserAlert.length > 0 ? isHidden = false : isHidden = true : isHidden = true;
   const makeBidSchema = Yup.object().shape({
     bidAmount: Yup.number()
       .required("Bidding amount is required")
@@ -210,24 +212,65 @@ const Detail = () => {
                       noValidate
                       data-id={product._id}
                     >
+                      
                       <Field
                         formErrors={formErrors}
                         formErrorsName={formErrorsName}
                         name="bidAmount"
                         label="Bid amount"
-                        placeholder="for example 237"
+                        placeholder="for example 1000"
                         autoFocus
                         inputProps={{ min: product.bidPrice }}
                         type="number"
                         component={Input}
                       />
+                      
                       <Field
                         formErrors={formErrors}
                         formErrorsName={formErrorsName}
                         name="phone"
                         label="Phone number"
+                        placeholder="e.g 254701XXXXXX"
+                        type="number"
                         component={Input}
                       />
+                      <div hidden={isHidden}>
+                      <Typography
+                        gutterBottom
+                        variant="body2"
+                        component="p"
+                        className={classes.warning}
+                        >
+                          Please provide your details(For contact/delivery -You will only provide once)</Typography>
+
+                        <Field
+                          formErrors={formErrors}
+                          formErrorsName={formErrorsName}
+                          name="bidder.surname"
+                          label="Surname"
+                          placeholder="for example Doe"
+                          type="text"
+                          component={Input}
+                        />
+                        <Field
+                          formErrors={formErrors}
+                          formErrorsName={formErrorsName}
+                          name="bidder.othername"
+                          label="Othername"
+                          placeholder="for example John"
+                          type="text"
+                          component={Input}
+                        />
+                        <Field
+                          formErrors={formErrors}
+                          formErrorsName={formErrorsName}
+                          name="bidder.location"
+                          label="Location"
+                          placeholder="e.g No 1 Abc Rd. Abc"
+                          type="text"
+                          component={Input}
+                        />
+                      </div>
 
                       <Button
                         type="submit"

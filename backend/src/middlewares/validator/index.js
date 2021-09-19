@@ -70,25 +70,25 @@ export const validate = (method) => {
     }
     case "createBid": {
       return [
-        check("bidder.phone")
+        check("phone")
           .exists({ checkFalsy: true })
           .withMessage("phone number is required")
           .bail()
           .isNumeric()
           .withMessage("phone number should be numeric")
           .bail(),
-        body("bidder.firstname")
-          .if(body("bidder.acknowledgeNew").exists({ checkFalsy: true }))
+        body("bidder.surname")
+          .if(body("bidder.surname").exists({ checkFalsy: true }))
           .notEmpty()
           .trim()
           .escape(),
-        check("bidder.lastname")
-          .if(body("bidder.acknowledgeNew").exists({ checkFalsy: true }))
+        body("bidder.othername")
+          .if(body("bidder.othername").exists({ checkFalsy: true }))
           .notEmpty()
           .trim()
           .escape(),
         check("bidder.location")
-          .if(body("bidder.acknowledgeNew").exists({ checkFalsy: true }))
+          .if(body("bidder.location").exists({ checkFalsy: true }))
           .notEmpty()
           .trim()
           .escape(),
