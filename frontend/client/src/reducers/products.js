@@ -6,9 +6,10 @@ import {
   DELETE,
   ERROR,
   LOADING,
+  STATUS
 } from "../constants";
 
-export default (app = { products: [], categories: [], loading: false, err: [] }, action) => {
+export default (app = { products: [], status: {}, categories: [], loading: false, err: [] }, action) => {
   switch (action.type) {
     /* case READPROD:
             return action.payload.products; */
@@ -23,6 +24,11 @@ export default (app = { products: [], categories: [], loading: false, err: [] },
       return {
         ...app,
         categories: action.payload.categories,
+      };
+      case STATUS:
+      return {
+        ...app,
+        status: action.payload.status,
       };
     case ERROR:
       return {

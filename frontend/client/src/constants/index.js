@@ -5,3 +5,4 @@ export const DELETE = 'DELETE';
 export const ERROR = 'ERROR';
 export const LOADING = 'LOADING';
 export const READCAT = 'FETCH_CATEGORIES';
+export const STATUS = 'STATUS';
