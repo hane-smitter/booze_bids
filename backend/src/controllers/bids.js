@@ -28,8 +28,7 @@ export const createBid = async (req, res) => {
     let { bidder, productId, bidPrice, bidAmount } = req.body;
     let user = await User.findOrCreate(bidder);
     if(user === "NEW") {
-      res.status(204).json({ info: { message: "Is a new user", code: "newbiddinguser"} });
-      return;
+      return res.status(202).json({ info: { message: "Is a new user", code: "newbiddinguser"} });
     }
 
     let productBidInfo = await ProductBidDetail.findOne({product: mongoose.Types.ObjectId(productId)}).lean();

@@ -80,16 +80,19 @@ export const validate = (method) => {
         body("bidder.firstname")
           .if(body("bidder.acknowledgeNew").exists({ checkFalsy: true }))
           .notEmpty()
+          .withMessage("firstname should be provided")
           .trim()
           .escape(),
         check("bidder.lastname")
           .if(body("bidder.acknowledgeNew").exists({ checkFalsy: true }))
           .notEmpty()
+          .withMessage("lastname should be provided")
           .trim()
           .escape(),
         check("bidder.location")
           .if(body("bidder.acknowledgeNew").exists({ checkFalsy: true }))
           .notEmpty()
+          .withMessage("location should be provided")
           .trim()
           .escape(),
         check("productId")
