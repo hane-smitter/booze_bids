@@ -43,8 +43,26 @@ export const createBid = async (req, res) => {
       res.status(422).json({ err: [{ error: "Amount bidding is way Low!" }] });
       return;
     }
+    // let dbSlot;
+    let slotField = 'slots';
+    let updateSlot = {};
     let slot = Math.floor(bidAmount / bidPrice);
-
+    // if(slot > productBidInfo.slots) slotField = 'extraSlots';
+    if(slot > productBidInfo.slots && slotField == 'slots') {
+      await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $set: {slots: 0} });
+      slotField = 'extraSlots';
+      let exSlot = slot - productBidInfo.slots;
+      slot = exSlot;
+    }
+    if(slot > productBidInfo.slots && slot > productBidInfo.extraSlots) {
+      await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $set: {extraSlots: 0, status: 'Inactive'} });
+      let exSlot = slot - productBidInfo.extraSlots;
+      return res.status(403).json({ err: [{ error: "slot extra by " + exSlot }] });
+    }
+    
+    updateSlot[slotField] = -slot;
+    await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $inc: updateSlot });
+    
     const userId = user._id;
 
     const bid = new Bid({
@@ -55,7 +73,6 @@ export const createBid = async (req, res) => {
     });
 
     await Promise.all([
-      ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $inc: { slots: -slot } }),
       user.save(),
       bid.save()
     ]);

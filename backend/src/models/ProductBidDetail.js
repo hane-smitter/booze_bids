@@ -11,8 +11,22 @@ const ProductBidDetailSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    extraLots: Number,
-    extraCost: Number,
+    extraSlots: {
+        type: Number,
+        required: true
+    },
+    extraCost: {
+        type: Number,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: {
+            values: ['Active', 'Inactive'],
+            message: '{VALUE} is not supported'
+        },
+        default: 'Active'
+    },
     startTime: {
         type: Date,
         default: Date.now
@@ -34,7 +48,11 @@ ProductBidDetailSchema.pre('validate', async function(next) {
     if(!product) throw new Error('This product does not exist');
     if(this.targetAmount < product.cost) throw new Error("Target Amount is less than cost of Product");
     const slots = Math.ceil(product.cost / this.bidPrice);
+    const extraCost = (this.targetAmount - product.cost);
+    const extraSlots = Math.ceil(extraCost / this.bidPrice);
     this.slots = slots;
+    this.extraSlots = extraSlots;
+    this.extraCost = extraCost;
     next();
 });
 

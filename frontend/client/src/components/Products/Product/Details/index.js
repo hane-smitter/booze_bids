@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CardContent,
   Typography,
@@ -16,34 +16,43 @@ import {
   Divider,
   ListItem,
   Avatar,
+  List,
+  ListItemText,
+  ListItemAvatar
 } from "@material-ui/core";
-import List from "@material-ui/core/List";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Alert from '@material-ui/lab/Alert';
 import ImageIcon from "@material-ui/icons/Image";
-import WorkIcon from "@material-ui/icons/Work";
 import { useLocation } from "react-router";
 import { Formik, Field, getIn } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../../Nav";
 import useStyles from "./styles.js";
-import { makeBid } from "../../../../actions/products";
+import { makeBid, getProducts } from "../../../../actions/products";
 import defaultImg from "../../../../images/products/defaultImg.jpeg";
-import { unsetErr } from "../../../../actions/errors";
+import { unsetErr, unsetStatus } from "../../../../actions/errors";
 import FutureTimeCalc from "../../FutureTimeCalc";
 
 const Detail = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const location = useLocation();
-  const { product } = location.state;
+  const locationRouter = useLocation();
+  const { product } = locationRouter.state;
   const { err, loading, status } = useSelector((state) => state.app);
+  /* const [newBidder, setNewBidder] = useState(
+    Boolean(status?.info?.code === "newbiddinguser")
+  ); */
+  const newBidder = Boolean(status?.info?.code === "newbiddinguser");
 
   console.log("STATUS OF FORM SUBMISSION");
   console.log(status);
+  console.log("NEW BIDDER");
+  console.log(newBidder);
+  console.log(status?.info?.code === "newbiddinguser");
+  console.log(Boolean(status?.info?.code === "newbiddinguser"));
+  if(newBidder) window.scroll({top: 0, left: 0, behavior: 'smooth'});
 
-  let formFields = ["bidAmount", "bidder.phone"];
+  let formFields = ["bidAmount", "bidder.phone", "bidder.lastname", "bidder.firstname", "bidder.location"];
   let formErrors = [];
   let formErrorsName = [];
   formErrors =
@@ -58,7 +67,20 @@ const Detail = () => {
       .min(product.bidPrice, `Minimum bidding amount is ${product.bidPrice}`)
       .integer(),
     bidder: Yup.object().shape({
-      phone: Yup.number().required("Phone number is required__yup").integer(),
+      phone: Yup.number("You phone number should be numerical").required("Phone number is required").integer(),
+      acknowledgeNew: Yup.boolean(),
+      firstname: Yup.string().when("acknowledgeNew", {
+        is: true,
+        then: Yup.string().required("Your other name(firstname) is required"),
+      }),
+      lastname: Yup.string().when("acknowledgeNew", {
+        is: true,
+        then: Yup.string().required("Your surname is required"),
+      }),
+      location: Yup.string().when("acknowledgeNew", {
+        is: true,
+        then: Yup.string().required("Your location(e.g nearest town) is required"),
+      }),
     }),
   });
 
@@ -94,10 +116,19 @@ const Detail = () => {
   };
 
   useEffect(() => {
+    window.shouldClearForm && delete window.shouldClearForm;
     return () => {
       dispatch(unsetErr());
+      dispatch(unsetStatus());
     };
   }, []);
+  useEffect(() => {
+    if(window.shouldClearForm) {
+      window.shouldClearForm(Boolean(status?.info?.code === "newbiddinguser"));
+      delete window.shouldClearForm
+    }
+  }, [status]);
+  
 
   return (
     <>
@@ -178,29 +209,44 @@ const Detail = () => {
                   <Typography gutterBottom variant="h5">
                     <b>{product.product.brand}</b>
                   </Typography>
-                  <Typography variant="body2" color="inherit" component="p">
+                  <Typography gutterBottom variant="body2" color="inherit" component="p">
                     Place your bid Bid. Minimum Bid amount is {product.bidPrice}
                     /= . Enter phone number then standby to pay via Mpesa
                   </Typography>
 
                   <Formik
+                  enableReinitialize={true}
                     initialValues={{
                       bidAmount: product.bidPrice,
                       bidder: {
                         phone: "",
+                        acknowledgeNew: newBidder,
+                        firstname: "",
+                        lastname: "",
+                        location: "",
                       },
                       bidPrice: product.bidPrice,
                       productId: product.product._id,
                     }}
                     onSubmit={function (values, actions) {
+                      function shouldClearForm(newBidder = false) {
+                        if(newBidder) {
+                          actions.resetForm({ values });
+                        } else {
+                          actions.resetForm()
+                        }
+                      }
                       let currentCard = document.querySelector(
                         `#bid4m-${product._id}`
-                      );
+                        );
 
-                      currentCard.dataset.id === product._id &&
+                        currentCard.dataset.id === product._id &&
+                        dispatch(makeBid(values));
+                        dispatch(getProducts());
+                        window.shouldClearForm = shouldClearForm;
+                        // actions.resetForm();
 
-                      dispatch(makeBid(values));
-                      actions.setSubmitting(loading);
+                        // newBidder && actions.resetForm({ values });
                       /* setTimeout(() => {
                     alert(JSON.stringify(values, null, 2));
                     actions.setSubmitting(false);
@@ -216,24 +262,50 @@ const Detail = () => {
                         noValidate
                         data-id={product._id}
                       >
+                        {newBidder ? (
+                          <>
+                            <Alert severity="info">Chances are high this could be your first bid. Just a littele more information and get your bid going.</Alert>
+                            <Field
+                              name="bidder.lastname"
+                              label="surname name"
+                              formErrors={formErrors}
+                              formErrorsName={formErrorsName}
+                              component={Input}
+                            />
+                            <Field
+                              name="bidder.firstname"
+                              label="other name"
+                              formErrors={formErrors}
+                              formErrorsName={formErrorsName}
+                              component={Input}
+                            />
+                            <Field
+                              name="bidder.location"
+                              label="Your location"
+                              formErrors={formErrors}
+                              formErrorsName={formErrorsName}
+                              component={Input}
+                            />
+                          </>
+                        ) : null}
                         <Field
                           formErrors={formErrors}
                           formErrorsName={formErrorsName}
                           name="bidAmount"
                           label="Bid amount"
                           placeholder="for example 237"
-                          autoFocus
+                          autoFocus={!newBidder}
                           inputProps={{ min: product.bidPrice }}
                           type="number"
                           component={Input}
                         />
                         <Field
-                        formErrors={formErrors}
-                        formErrorsName={formErrorsName}
-                        name="bidder.phone"
-                        label="Phone number"
-                        component={Input}
-                      />
+                          formErrors={formErrors}
+                          formErrorsName={formErrorsName}
+                          name="bidder.phone"
+                          label="Phone number"
+                          component={Input}
+                        />
 
                         <Button
                           type="submit"

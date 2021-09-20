@@ -5,17 +5,17 @@ export default makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     color: "#333",
     padding: "20px",
-    width: "100%"
+    width: "100%",
   },
   darkBox: {
     color: "#fff",
     backgroundColor: "#181D32",
     width: "100%",
-    padding: "20px"
+    padding: "20px",
   },
   flex: {
-      display: "flex",
-      alignItems: "stretch"
+    display: "flex",
+    alignItems: "stretch",
   },
   capitalize: {
     textTransform: "capitalize",
@@ -24,21 +24,21 @@ export default makeStyles((theme) => ({
     fontSize: "small",
   },
   media: {
-      height: 300,
-      objectFit: "contain",
-      maxHeight: "100%",
-      maxWidth: "100%"
+    height: 300,
+    objectFit: "contain",
+    maxHeight: "100%",
+    maxWidth: "100%",
   },
   rootTextField: {
-      "& .MuiInputBase-root, .MuiFormLabel-root": {
-          color: "rgba(245, 245, 245, 1)"
-      },
+    "& .MuiInputBase-root, .MuiFormLabel-root": {
+      color: "rgba(245, 245, 245, 1)",
+    },
     "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-        borderColor: "white"
-    },  
+      borderColor: "white",
+    },
   },
   warning: {
-      color: '#ff9800',
-      fontWeight:'bold',
-    },
+    color: "#ff9800",
+    fontWeight: "bold",
+  },
 }));
