@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Card,
@@ -16,21 +16,33 @@ import FutureTimeCalc from "../FutureTimeCalc";
 
 const Product = ({ calcTime, product }) => {
   const classes = useStyles();
-  
+
   const location = {
     pathname: "/detail",
     state: { product },
   };
 
-  const [ countDownTime, setCountDownTime ] = useState(0);
+  const defaultRemainingTime = {
+    seconds: "00",
+    minutes: "00",
+    hours: "00",
+    days: "00",
+  };
+
+  const [countDownTime, setCountDownTime] = useState(defaultRemainingTime);
 
   useEffect(() => {
-    let interval = setInterval(upDateTime(), 1000);
+    let interval = setInterval(() => {
+      upDateTime();
+    }, 1000);
     return () => clearInterval(interval);
-  });
+  }, []);
 
   function upDateTime() {
-    setCountDownTime(FutureTimeCalc()(product.startTime, product.endTime));
+    console.log("hello world");
+    console.log(FutureTimeCalc(product.startTime, product.endTime));
+    console.log(countDownTime);
+    setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
   }
 
   return (
@@ -54,15 +66,34 @@ const Product = ({ calcTime, product }) => {
               component="p"
               className={classes.warning}
             >
-              {`Ends in: ${countDownTime}`}
+              Ends in:{" "}
+              <span className={`${classes.countdowntime}`}>
+                {countDownTime.days}
+              </span>
+              <span>Days</span>
+              <span className={`${classes.countdowntime} ${classes.countdown}`}>
+                {countDownTime.hours}
+              </span>
+              <span>Hrs</span>
+              <span className={`${classes.countdowntime} ${classes.countdown}`}>
+                {countDownTime.minutes}
+              </span>
+              <span>minutes</span>
+              <span className={`${classes.countdowntime} ${classes.countdown}`}>
+                {countDownTime.seconds}
+              </span>
+              <span>seconds</span>
             </Typography>
             <Typography variant="caption" component="p">
               Bid me at #kes {product.bidPrice} | Slots: {product.slots ?? 0}
             </Typography>
-            <Typography component="div" variant="h5" style={{ fontWeight: "bold" }}>
+            <Typography
+              component="div"
+              variant="h5"
+              style={{ fontWeight: "bold" }}
+            >
               RRP: KSH {product.product.cost}
             </Typography>
-            
           </CardContent>
         </CardActionArea>
       </Card>

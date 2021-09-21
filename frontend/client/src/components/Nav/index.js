@@ -5,7 +5,6 @@ import {
   useMediaQuery,
   Toolbar,
   IconButton,
-  Link,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -16,7 +15,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 
 import useStyles from './styles';
-import Logo from '../../images/booze_bids_logo2.png';
+import Logo from '../../images/booze_bids_logo3.png';
+import { Link } from "react-router-dom";
 
 const Nav = () => {
     const [anchor, setAnchor] = React.useState(null);
@@ -66,13 +66,13 @@ const Nav = () => {
         onClose={handleMenuClose}
       >
         <MenuItem onClick={handleMenuClose}>
-          <Link href="/">Home</Link>
+          <Link to="/">Home</Link>
         </MenuItem>
         <MenuItem onClick={handleMenuClose}>
-          <Link href="/pastbids">Past Bids</Link>
+          <Link to="/pastbids">Past Bids</Link>
         </MenuItem>
         <MenuItem onClick={handleMenuClose}>
-          <Link href="/faqs">FAQs</Link>
+          <Link to="/faqs">FAQs</Link>
         </MenuItem>
       </Menu>
 
@@ -90,13 +90,13 @@ const Nav = () => {
       
       <Grid container justifyContent="space-evenly" direction="row" alignItems="center" className={classes.navContainer}>
         <Grid item xs>
-          <Link href="/">Home</Link>
+          <Link className={classes.navLink} to="/">Home</Link>
         </Grid>
         <Grid item xs>
-          <Link href="/pastbids">Past Bids</Link>
+          <Link className={classes.navLink} to="/pastbids">Past Bids</Link>
         </Grid>
         <Grid item xs>
-          <Link href="/faqs">FAQs</Link>
+          <Link className={classes.navLink} to="/faqs">FAQs</Link>
         </Grid>
       </Grid>
     </React.Fragment>

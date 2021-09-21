@@ -37,21 +37,22 @@ const Detail = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const locationRouter = useLocation();
-  const { product } = locationRouter.state;
-  const { err, loading, status } = useSelector((state) => state.app);
-  /* const [newBidder, setNewBidder] = useState(
-    Boolean(status?.info?.code === "newbiddinguser")
-  ); */
+  let { product } = locationRouter.state;
+  const { err, loading, status, products } = useSelector((state) => state.app);
+  const defaultCountDownTime = {
+    seconds: '00',
+    minutes: '00',
+    hours: '00',
+    days: '00',
+  }
+  const [ countDownTime, setCountDownTime ] = useState(defaultCountDownTime);
   const newBidder = Boolean(status?.info?.code === "newbiddinguser");
 
-  console.log("STATUS OF FORM SUBMISSION");
-  console.log(status);
-  console.log("NEW BIDDER");
-  console.log(newBidder);
-  console.log(status?.info?.code === "newbiddinguser");
-  console.log(Boolean(status?.info?.code === "newbiddinguser"));
   if(newBidder) window.scroll({top: 0, left: 0, behavior: 'smooth'});
 
+  function updateTime() {
+    setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
+  }
   let formFields = ["bidAmount", "bidder.phone", "bidder.lastname", "bidder.firstname", "bidder.location"];
   let formErrors = [];
   let formErrorsName = [];
@@ -117,17 +118,28 @@ const Detail = () => {
 
   useEffect(() => {
     window.shouldClearForm && delete window.shouldClearForm;
+    let interval = setInterval(() => {updateTime()}, 1000);
     return () => {
+      clearInterval(interval);
       dispatch(unsetErr());
       dispatch(unsetStatus());
     };
   }, []);
+  function updateProduct() {
+    let currProductArr = products.filter((product) => {
+      return product._id == locationRouter.state.product.product._id;
+    });
+    if(currProductArr.length > 0) {
+      product = currProductArr[0];
+    }
+  }
   useEffect(() => {
+    updateProduct();
     if(window.shouldClearForm) {
       window.shouldClearForm(Boolean(status?.info?.code === "newbiddinguser"));
       delete window.shouldClearForm
     }
-  }, [status]);
+  }, [status, products]);
   
 
   return (
@@ -164,10 +176,15 @@ const Detail = () => {
                           component="p"
                           className={classes.warning}
                         >
-                          {`Ends in: ${FutureTimeCalc()(
-                            product.startTime,
-                            product.endTime
-                          )}`}
+                          Ends in:{" "}
+                          <span className={`${classes.countdowntime}`}>{countDownTime.days}</span>
+                          <span>Days</span>
+                          <span className={`${classes.countdowntime} ${classes.countdown}`}>{countDownTime.hours}</span>
+                          <span>Hrs</span>
+                          <span className={`${classes.countdowntime} ${classes.countdown}`}>{countDownTime.minutes}</span>
+                          <span>minutes</span>
+                          <span className={`${classes.countdowntime} ${classes.countdown}`}>{countDownTime.seconds}</span>
+                          <span>seconds</span>
                         </Typography>
 
                         <Grid container alignItems="center">
@@ -294,7 +311,6 @@ const Detail = () => {
                           name="bidAmount"
                           label="Bid amount"
                           placeholder="for example 237"
-                          autoFocus={!newBidder}
                           inputProps={{ min: product.bidPrice }}
                           type="number"
                           component={Input}

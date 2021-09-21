@@ -5,7 +5,7 @@ export default makeStyles(() => ({
         // borderRadius: 15,
         marginBlockStart: '10px',
         // marginBlockEnd: '20px',
-        backgroundColor: '#ff9800',
+        backgroundColor: '#1A4357',// #ff9800
         color: 'whitesmoke'
     },
     navigation: {
@@ -20,7 +20,7 @@ export default makeStyles(() => ({
     },
     image: {
         display: 'block',
-        height: '80px',
+        height: '40px',
     },
     navLink: {
         marginInline: '5px',

@@ -67,5 +67,11 @@ export default makeStyles({
   },
   capitalize: {
     textTransform: 'capitalize',
+  },
+  countdowntime: {
+    width: "2ch",
+  },
+  countdown: {
+    marginInlineStart: 10,
   }
 });
