@@ -27,11 +27,16 @@ const ProductSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category"
     },
+    category_slug: {
+        type: String,
+        required: true
+    }
 }, { toJSON: {virtuals: true}, timestamps: true });
 
 ProductSchema.pre('validate', async function(next) {
     const category = await Category.findById(this.category);
     if(!category) throw new Error('This Category does not exist');
+    this.category_slug = category.category_slug;
     next();
 });
 

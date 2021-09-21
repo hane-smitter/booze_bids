@@ -179,7 +179,7 @@ const Detail = () => {
                           <Grid item>
                             <Typography variant="body2" component="p">
                               Slots Remaining:{" "}
-                              {product.slots ? product.slots : 0}
+                              {product.totalslots ?? 0}
                             </Typography>
                           </Grid>
                         </Grid>

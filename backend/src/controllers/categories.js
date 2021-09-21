@@ -21,6 +21,8 @@ export const createCategory = async (req, res) => {
   }
   try {
     const newCategory = new Category(req.body);
+    let category_slug = `${new Date().valueOf() + Math.random()}_${Math.random().toString(36).substring(2,7)}`;
+    newCategory.category_slug = category_slug;
     await newCategory.save();
     console.log('category has been created');
     console.log(newCategory);

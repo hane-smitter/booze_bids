@@ -41,11 +41,13 @@ const ProductBidDetailSchema = mongoose.Schema({
         unique: true,
         ref: 'Product'
     }
-}, {timestamps: true});
+},{ toJSON: { virtuals: true } }, {timestamps: true});
 
 ProductBidDetailSchema.pre('validate', async function(next) {
     const product = await Product.findById(this.product);
     if(!product) throw new Error('This product does not exist');
+    const prodBidDet = await ProductBidDetail.findOne({product: mongoose.Types.ObjectId(this.product)});
+    if(prodBidDet) throw new Error('This product detail entry already exists');
     if(this.targetAmount < product.cost) throw new Error("Target Amount is less than cost of Product");
     const slots = Math.ceil(product.cost / this.bidPrice);
     const extraCost = (this.targetAmount - product.cost);
@@ -54,6 +56,10 @@ ProductBidDetailSchema.pre('validate', async function(next) {
     this.extraSlots = extraSlots;
     this.extraCost = extraCost;
     next();
+});
+
+ProductBidDetailSchema.virtual('totalslots').get(function () {
+    return this.slots + this.extraSlots;
 });
 
 const ProductBidDetail = mongoose.model('ProductBidDetail', ProductBidDetailSchema);

@@ -7,6 +7,10 @@ const categorySchema = mongoose.Schema({
         trim: true,
         lowercase: true,
         unique: true
+    },
+    category_slug: {
+        type: String,
+        required: true
     }, 
     description: String
 }, { toJSON: {virtuals: true}, timestamps: true });

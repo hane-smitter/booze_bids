@@ -23,9 +23,17 @@ export const getProducts = async (req, res) => {
 
 export const getBiddableProducts = async(req, res) => {
     try {
-        const biddableProducts = await ProductBidDetail.find({endTime: { $gt: new Date().toISOString() }})
+        const match = new Object();
+        if(req.query.category) {
+            let category = req.query.category;
+            match.category_slug = category;
+        }
+        const biddableProducts = await ProductBidDetail.find({endTime: { $gt: new Date().toISOString() }, status: 'Active'})
                     .sort([['endTime', 1]])
-                    .populate(['product']);
+                    .populate({
+                        path: 'product',
+                        match
+                    });
         res.json(biddableProducts);
     } catch (err) {
         console.log(err);
