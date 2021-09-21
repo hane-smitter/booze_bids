@@ -4,7 +4,7 @@ export default makeStyles(() => ({
     imgContainer: {
         height: '200px',
         marginBlockEnd: '20px',
-        backgroundColor: '#1A4357',
+        backgroundColor: '#F5F6FA',
         borderBottomLeftRadius: '50%',
         borderBottomRightRadius: '50%'
     },

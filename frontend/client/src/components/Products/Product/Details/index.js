@@ -29,9 +29,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../../Nav";
 import useStyles from "./styles.js";
 import { makeBid, getProducts } from "../../../../actions/products";
-import defaultImg from "../../../../images/products/defaultImg.jpeg";
 import { unsetErr, unsetStatus } from "../../../../actions/errors";
 import FutureTimeCalc from "../../FutureTimeCalc";
+import LightBox from "./LightBox";
 
 const Detail = () => {
   const classes = useStyles();
@@ -39,20 +39,12 @@ const Detail = () => {
   const locationRouter = useLocation();
   let { product } = locationRouter.state;
   const { err, loading, status, products } = useSelector((state) => state.app);
-  const defaultCountDownTime = {
-    seconds: '00',
-    minutes: '00',
-    hours: '00',
-    days: '00',
-  }
-  const [ countDownTime, setCountDownTime ] = useState(defaultCountDownTime);
+  
   const newBidder = Boolean(status?.info?.code === "newbiddinguser");
 
   if(newBidder) window.scroll({top: 0, left: 0, behavior: 'smooth'});
 
-  function updateTime() {
-    setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
-  }
+  
   let formFields = ["bidAmount", "bidder.phone", "bidder.lastname", "bidder.firstname", "bidder.location"];
   let formErrors = [];
   let formErrorsName = [];
@@ -118,9 +110,7 @@ const Detail = () => {
 
   useEffect(() => {
     window.shouldClearForm && delete window.shouldClearForm;
-    let interval = setInterval(() => {updateTime()}, 1000);
     return () => {
-      clearInterval(interval);
       dispatch(unsetErr());
       dispatch(unsetStatus());
     };
@@ -131,15 +121,18 @@ const Detail = () => {
     });
     if(currProductArr.length > 0) {
       product = currProductArr[0];
+      console.log("PRODUCT IS set by currentArr");
+      console.log(product);
     }
   }
   useEffect(() => {
     updateProduct();
     if(window.shouldClearForm) {
+      console.log(`${Boolean(status?.info?.code === "newbiddinguser")} We are GOING to CLEAR your form.`)
       window.shouldClearForm(Boolean(status?.info?.code === "newbiddinguser"));
       delete window.shouldClearForm
     }
-  }, [status, products]);
+  }, [status, products, dispatch]);
   
 
   return (
@@ -150,60 +143,7 @@ const Detail = () => {
           <Container maxwidth="sm">
             <Grid container>
               <Grid item xs={12} md={6} className={classes.flex}>
-                <Box className={classes.lightBox}>
-                  <Card className={classes.cardRoot}>
-                    <CardHeader
-                      className={classes.capitalize}
-                      color="primary"
-                      subheader={product.product.name}
-                    />
-                    <CardActionArea>
-                      <CardMedia
-                        className={classes.media}
-                        component={"img"}
-                        image={
-                          product.product.image
-                            ? product.product.image
-                            : defaultImg
-                        }
-                        title={product.product.name}
-                      />
-                      <CardContent>
-                        <Divider color="grey" />
-                        <Typography
-                          gutterBottom
-                          variant="body2"
-                          component="p"
-                          className={classes.warning}
-                        >
-                          Ends in:{" "}
-                          <span className={`${classes.countdowntime}`}>{countDownTime.days}</span>
-                          <span>Days</span>
-                          <span className={`${classes.countdowntime} ${classes.countdown}`}>{countDownTime.hours}</span>
-                          <span>Hrs</span>
-                          <span className={`${classes.countdowntime} ${classes.countdown}`}>{countDownTime.minutes}</span>
-                          <span>minutes</span>
-                          <span className={`${classes.countdowntime} ${classes.countdown}`}>{countDownTime.seconds}</span>
-                          <span>seconds</span>
-                        </Typography>
-
-                        <Grid container alignItems="center">
-                          <Grid item xs>
-                            <Typography variant="body2" component="p">
-                              RRP: KSH {product.product.cost}
-                            </Typography>
-                          </Grid>
-                          <Grid item>
-                            <Typography variant="body2" component="p">
-                              Slots Remaining:{" "}
-                              {product.totalslots ?? 0}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Box>
+                <LightBox product={product} />
               </Grid>
               <Grid item xs={12} md={6} className={classes.flex}>
                 <Box className={classes.darkBox}>
@@ -248,8 +188,12 @@ const Detail = () => {
                     onSubmit={function (values, actions) {
                       function shouldClearForm(newBidder = false) {
                         if(newBidder) {
-                          actions.resetForm({ values });
+                          console.log("hey we should have restored your values");
+                          console.log(values);
+                          actions.resetForm({ values: values });
                         } else {
+                          console.log("Soory, we had to deal away with your data");
+                          console.log(values);
                           actions.resetForm()
                         }
                       }

@@ -5,8 +5,8 @@ export default makeStyles(() => ({
         // borderRadius: 15,
         marginBlockStart: '10px',
         // marginBlockEnd: '20px',
-        backgroundColor: '#1A4357',// #ff9800
-        color: 'whitesmoke'
+        backgroundColor: '#F5F6FA',// #ff9800
+        color: '#1A4357'
     },
     navigation: {
         display: 'flex',
@@ -24,7 +24,7 @@ export default makeStyles(() => ({
     },
     navLink: {
         marginInline: '5px',
-        color: 'whitesmoke'
+        color: '#1A4357'
     },
     navContainer: {
         maxWidth: '300px',

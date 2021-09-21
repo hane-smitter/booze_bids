@@ -1,53 +1,44 @@
 import React, { useState, useEffect } from "react";
 import {
-  Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Typography,
-} from "@material-ui/core";
-import { Link } from "react-router-dom";
+    CardContent,
+    Typography,
+    CardActionArea,
+    CardMedia,
+    Card,
+    CardHeader,
+    Grid,
+    Box,
+    Divider,
+  } from "@material-ui/core";
 
-import useStyles from "./styles";
-import defaultImg from "../../../images/products/defaultImg.jpeg";
-import FutureTimeCalc from "../FutureTimeCalc";
+import FutureTimeCalc from "../../../FutureTimeCalc";
+import useStyles from './style';
+import defaultImg from "../../../../../images/products/defaultImg.jpeg";
 
-const Product = ({ calcTime, product }) => {
-  const classes = useStyles();
 
-  const location = {
-    pathname: "/detail",
-    state: { product },
-  };
+const LightBox = ({ product }) => {
+    const classes = useStyles();
+    const defaultCountDownTime = {
+    seconds: '00',
+    minutes: '00',
+    hours: '00',
+    days: '00',
+  }
+  const [ countDownTime, setCountDownTime ] = useState(defaultCountDownTime);
 
-  const defaultRemainingTime = {
-    seconds: "00",
-    minutes: "00",
-    hours: "00",
-    days: "00",
-  };
-
-  const [countDownTime, setCountDownTime] = useState(defaultRemainingTime);
-
-  useEffect(() => {
-    let interval = setInterval(() => {
-      upDateTime();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  function upDateTime() {
-    console.log("hello world");
-    console.log(FutureTimeCalc(product.startTime, product.endTime));
-    console.log(countDownTime);
+  function updateTime() {
     setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
   }
 
+  useEffect(() => {
+    let interval = setInterval(() => {updateTime()}, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
   return (
-    <Button component={Link} to={location}>
-      <Card className={classes.root}>
+    <Box className={classes.lightBox}>
+      <Card className={classes.cardRoot}>
         <CardHeader
           className={classes.capitalize}
           color="primary"
@@ -56,10 +47,12 @@ const Product = ({ calcTime, product }) => {
         <CardActionArea>
           <CardMedia
             className={classes.media}
+            component={"img"}
             image={product.product.image ? product.product.image : defaultImg}
             title={product.product.name}
           />
           <CardContent>
+            <Divider color="grey" />
             <Typography
               gutterBottom
               variant="body2"
@@ -84,21 +77,24 @@ const Product = ({ calcTime, product }) => {
               </span>
               <span>seconds</span>
             </Typography>
-            <Typography variant="caption" component="p">
-              Bid me at #kes {product.bidPrice} | Slots: {product.totalslots ?? 0}
-            </Typography>
-            <Typography
-              component="div"
-              variant="h5"
-              style={{ fontWeight: "bold" }}
-            >
-              RRP: KSH {product.product.cost}
-            </Typography>
+
+            <Grid container alignItems="center">
+              <Grid item xs>
+                <Typography variant="body2" component="p">
+                  RRP: KSH {product.product.cost}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography variant="body2" component="p">
+                  Slots Remaining: {product.totalslots ?? 0}
+                </Typography>
+              </Grid>
+            </Grid>
           </CardContent>
         </CardActionArea>
       </Card>
-    </Button>
+    </Box>
   );
 };
 
-export default Product;
+export default LightBox;

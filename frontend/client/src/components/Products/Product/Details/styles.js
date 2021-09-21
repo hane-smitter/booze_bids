@@ -1,12 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
-  lightBox: {
-    backgroundColor: theme.palette.background.paper,
-    color: "#333",
-    padding: "20px",
-    width: "100%",
-  },
   darkBox: {
     color: "#fff",
     backgroundColor: "#181D32",
@@ -16,18 +10,6 @@ export default makeStyles((theme) => ({
   flex: {
     display: "flex",
     alignItems: "stretch",
-  },
-  capitalize: {
-    textTransform: "capitalize",
-  },
-  cardRoot: {
-    fontSize: "small",
-  },
-  media: {
-    height: 300,
-    objectFit: "contain",
-    maxHeight: "100%",
-    maxWidth: "100%",
   },
   rootTextField: {
     "& .MuiInputBase-root, .MuiFormLabel-root": {
@@ -41,10 +23,4 @@ export default makeStyles((theme) => ({
     color: "#ff9800",
     fontWeight: "bold",
   },
-  countdowntime: {
-    width: "2ch",
-  },
-  countdown: {
-    marginInlineStart: 10,
-  }
 }));
