@@ -65,7 +65,10 @@ const Products = () => {
                       button
                       className={classes.nested}
                       key={category._id}
-                      onClick={() => dispatch(getProducts(`category=${category.category_slug}`))}
+                      onClick={() => {
+                        setCategoryOpen(false);
+                        dispatch(getProducts(`category=${category.category_slug}`));
+                      }}
                     >
                       <ListItemText primary={category.name} />
                     </ListItem>
@@ -96,11 +99,17 @@ const Products = () => {
           alignItems="stretch"
           spacing={6}
         >
-          {products.map((product) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
-              <Product product={product} />
-            </Grid>
-          ))}
+          {products.map((product) => {
+            let content = null;
+            if (Boolean(product.product)) {
+              content = (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
+                  <Product product={product} />
+                </Grid>)
+            }
+            return content;
+            
+          })}
         </Grid>
       )}
     </Container>

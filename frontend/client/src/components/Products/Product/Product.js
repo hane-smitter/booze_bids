@@ -53,7 +53,7 @@ const Product = ({ product }) => {
         <CardActionArea>
           <CardMedia
             className={classes.media}
-            image={product.product.image ? product.product.image : defaultImg}
+            image={product.product.image || defaultImg}
             title={product.product.name}
           />
           <CardContent>

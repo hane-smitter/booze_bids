@@ -17,6 +17,7 @@ export default makeStyles((theme) => ({
     textAlign: 'center',
   },
   center: {
+    height: '300px',
     display: 'grid',
     placeItems: 'center'
   },
