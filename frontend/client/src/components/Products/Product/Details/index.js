@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  CardContent,
   Typography,
-  CardActionArea,
-  CardMedia,
-  Card,
-  CardHeader,
   Container,
   Grid,
   Box,
@@ -25,22 +20,22 @@ import ImageIcon from "@material-ui/icons/Image";
 import { useLocation } from "react-router";
 import { Formik, Field, getIn } from "formik";
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
+import { batch, useDispatch, useSelector } from "react-redux";
 import Navbar from "../../../Nav";
 import useStyles from "./styles.js";
 import { makeBid, getProducts } from "../../../../actions/products";
 import { unsetErr, unsetStatus } from "../../../../actions/errors";
-import FutureTimeCalc from "../../FutureTimeCalc";
 import LightBox from "./LightBox";
 
 const Detail = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const locationRouter = useLocation();
-  let { product } = locationRouter.state;
+  let initialProduct = locationRouter.state.product;
+  const [ product, setProduct ] = useState(initialProduct);
   const { err, loading, status, products } = useSelector((state) => state.app);
   
-  const newBidder = Boolean(status?.info?.code === "newbiddinguser");
+  let newBidder = Boolean(status?.info?.code === "newbiddinguser");
 
   if(newBidder) window.scroll({top: 0, left: 0, behavior: 'smooth'});
 
@@ -109,6 +104,7 @@ const Detail = () => {
   };
 
   useEffect(() => {
+    dispatch(getProducts());
     window.shouldClearForm && delete window.shouldClearForm;
     return () => {
       dispatch(unsetErr());
@@ -117,19 +113,17 @@ const Detail = () => {
   }, []);
   function updateProduct() {
     let currProductArr = products.filter((product) => {
-      return product._id == locationRouter.state.product.product._id;
+      return product.product._id === locationRouter.state.product.product._id;
     });
+    console.log(currProductArr);
     if(currProductArr.length > 0) {
-      product = currProductArr[0];
-      console.log("PRODUCT IS set by currentArr");
-      console.log(product);
+      setProduct(currProductArr[0]);
     }
   }
   useEffect(() => {
     updateProduct();
     if(window.shouldClearForm) {
-      console.log(`${Boolean(status?.info?.code === "newbiddinguser")} We are GOING to CLEAR your form.`)
-      window.shouldClearForm(Boolean(status?.info?.code === "newbiddinguser"));
+      window.shouldClearForm(newBidder);
       delete window.shouldClearForm
     }
   }, [status, products, dispatch]);
@@ -172,7 +166,7 @@ const Detail = () => {
                   </Typography>
 
                   <Formik
-                  enableReinitialize={true}
+                    enableReinitialize={true}
                     initialValues={{
                       bidAmount: product.bidPrice,
                       bidder: {
@@ -188,23 +182,24 @@ const Detail = () => {
                     onSubmit={function (values, actions) {
                       function shouldClearForm(newBidder = false) {
                         if(newBidder) {
-                          console.log("hey we should have restored your values");
-                          console.log(values);
                           actions.resetForm({ values: values });
                         } else {
-                          console.log("Soory, we had to deal away with your data");
-                          console.log(values);
                           actions.resetForm()
                         }
                       }
                       let currentCard = document.querySelector(
                         `#bid4m-${product._id}`
                         );
-
                         currentCard.dataset.id === product._id &&
-                        dispatch(makeBid(values));
-                        dispatch(getProducts());
+                        batch(() => {
+                          dispatch(makeBid(values));
+                          dispatch(getProducts());
+                        })
                         window.shouldClearForm = shouldClearForm;
+                        if(newBidder){
+                          dispatch(unsetStatus());
+                          actions.resetForm();
+                        }
                         // actions.resetForm();
 
                         // newBidder && actions.resetForm({ values });

@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import Category from './Category.js';
 
 const ProductSchema = mongoose.Schema({
     name: {
@@ -32,13 +31,6 @@ const ProductSchema = mongoose.Schema({
         required: true
     }
 }, { toJSON: {virtuals: true}, timestamps: true });
-
-ProductSchema.pre('validate', async function(next) {
-    const category = await Category.findById(this.category);
-    if(!category) throw new Error('This Category does not exist');
-    this.category_slug = category.category_slug;
-    next();
-});
 
 function capitalize (val) {
     if (typeof val !== 'string') val = '';

@@ -1,6 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import * as dateFns from "date-fns";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Typography,
   Paper,
@@ -9,7 +8,6 @@ import {
   Box,
   CircularProgress,
   ListItem,
-  ListSubheader,
   ListItemIcon,
   ListItemText,
   Collapse,
@@ -21,9 +19,10 @@ import CategoryIcon from "@material-ui/icons/Category";
 
 import Product from "./Product/Product";
 import useStyles from "./styles";
-import timeDistanceToFuture from './FutureTimeCalc';
+import { getProducts } from "../../actions/products";
 
 const Products = () => {
+  const dispatch = useDispatch();
   const { loading, products, categories } = useSelector((state) => state.app);
   const classes = useStyles();
   const [categoryOpen, setCategoryOpen] = React.useState(false);
@@ -66,6 +65,7 @@ const Products = () => {
                       button
                       className={classes.nested}
                       key={category._id}
+                      onClick={() => dispatch(getProducts(`category=${category.category_slug}`))}
                     >
                       <ListItemText primary={category.name} />
                     </ListItem>
@@ -98,7 +98,7 @@ const Products = () => {
         >
           {products.map((product) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
-              <Product calcTime={timeDistanceToFuture} product={product} />
+              <Product product={product} />
             </Grid>
           ))}
         </Grid>

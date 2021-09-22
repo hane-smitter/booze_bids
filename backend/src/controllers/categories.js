@@ -1,6 +1,7 @@
 import { validationResult } from "express-validator";
 
 import Category from "../models/Category.js";
+import makeId from "./utils/makeid/makeid.js"
 
 export const getCategories = async (req, res) => {
   try {
@@ -21,7 +22,7 @@ export const createCategory = async (req, res) => {
   }
   try {
     const newCategory = new Category(req.body);
-    let category_slug = `${new Date().valueOf() + Math.random()}_${Math.random().toString(36).substring(2,7)}`;
+    let category_slug = `${makeId(4)}T${new Date().valueOf() + Math.floor(Math.random() * 1000)}_${makeId(6)}`;
     newCategory.category_slug = category_slug;
     await newCategory.save();
     console.log('category has been created');

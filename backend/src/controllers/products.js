@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 
 import Product from '../models/Product.js';
 import ProductBidDetail from '../models/ProductBidDetail.js';
+import Category from '../models/Category.js';
 
 export const getProducts = async (req, res) => {
     try {
@@ -25,8 +26,11 @@ export const getBiddableProducts = async(req, res) => {
     try {
         const match = new Object();
         if(req.query.category) {
+            console.log(req.query);
+            console.log(req.query.category);
             let category = req.query.category;
             match.category_slug = category;
+            console.log(match);
         }
         const biddableProducts = await ProductBidDetail.find({endTime: { $gt: new Date().toISOString() }, status: 'Active'})
                     .sort([['endTime', 1]])
@@ -61,7 +65,10 @@ export const createProduct = async (req, res) => {
     const URL = process.env.APP_URL ?? "http://localhost:5000";
     const filePath = `${URL}/imgs/products/${req.file.filename}`;
     try {
-        const product = new Product({...req.body, image: filePath});
+        const category = await Category.findById(req.body.category);
+        if(!category) throw new Error('This Category does not exist');
+        
+        let product = new Product({...req.body, image: filePath, category: category._id, category_slug: category.category_slug});
         console.log('product');
         console.log(product);
         await product.save();

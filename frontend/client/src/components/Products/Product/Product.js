@@ -14,7 +14,7 @@ import useStyles from "./styles";
 import defaultImg from "../../../images/products/defaultImg.jpeg";
 import FutureTimeCalc from "../FutureTimeCalc";
 
-const Product = ({ calcTime, product }) => {
+const Product = ({ product }) => {
   const classes = useStyles();
 
   const location = {
@@ -39,9 +39,6 @@ const Product = ({ calcTime, product }) => {
   }, []);
 
   function upDateTime() {
-    console.log("hello world");
-    console.log(FutureTimeCalc(product.startTime, product.endTime));
-    console.log(countDownTime);
     setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
   }
 
