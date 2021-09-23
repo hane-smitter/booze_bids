@@ -10,3 +10,4 @@ export const createProduct = (body) => axios.post(`${url}/products`, body, {
         }
 });
 export const makeBid = body => axios.post(`${url}/bids`, body);
+export const fetchTopBidder = () => axios.get(`${url}/bids/amount/high`);

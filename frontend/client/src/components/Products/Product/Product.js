@@ -9,12 +9,14 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion"
 
 import useStyles from "./styles";
 import defaultImg from "../../../images/products/defaultImg.jpeg";
 import FutureTimeCalc from "../FutureTimeCalc";
 
 const Product = ({ product }) => {
+  const [ cardBlinking, setCardBlinking ] = useState(!Boolean(product.slots));
   const classes = useStyles();
 
   const location = {
@@ -42,9 +44,26 @@ const Product = ({ product }) => {
     setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
   }
 
+  const cardVariants = {
+    blink: {
+      backgroundColor: ['rgba(255, 255, 255, .9)', 'rgba(237, 82, 73, .1)', 'rgba(243, 32, 19, .3)', 'rgba(237, 82, 73, .1)', 'rgba(255, 255, 255, .9)'],
+      transition: {
+        repeat: Infinity,
+        repeatType: "reverse",
+        duration: 3,
+        repeatDelay: 1
+      }
+    },
+  }
+
   return (
     <Button component={Link} to={location}>
-      <Card className={classes.root}>
+      <Card
+        className={classes.root}
+        component={motion.div}
+        variants={cardVariants}
+        animate={cardBlinking ?  "blink" : ""}
+      >
         <CardHeader
           className={classes.capitalize}
           color="primary"

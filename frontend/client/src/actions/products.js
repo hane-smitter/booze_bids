@@ -9,15 +9,16 @@ import {
   ERROR,
   LOADING,
   STATUS,
+  FETCHTB
 } from "../constants";
 
 //Action creators
 export const getProducts = (query) => async (dispatch) => {
-    if(query) {
-        query='?'+query;
-    } else {
-        query='';
-    }
+  if (query) {
+    query = "?" + query;
+  } else {
+    query = "";
+  }
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch data
@@ -34,12 +35,7 @@ export const getProducts = (query) => async (dispatch) => {
       dispatch({ type: READCAT, payload: { categories } });
     });
   } catch (error) {
-    const { err } = error?.response?.data ?? { err: [] };
-
-    batch(() => {
-      dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: ERROR, payload: { err } });
-    });
+    logError(error, dispatch);
   }
 };
 export const createProduct = (body) => async (dispatch) => {
@@ -53,12 +49,7 @@ export const createProduct = (body) => async (dispatch) => {
       dispatch({ type: CREATE, payload: { product: data } });
     });
   } catch (error) {
-    const { err } = error?.response?.data ?? { err: [] };
-
-    batch(() => {
-      dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: ERROR, payload: { err } });
-    });
+    logError(error, dispatch);
   }
 };
 export const makeBid = (body) => async (dispatch) => {
@@ -71,11 +62,52 @@ export const makeBid = (body) => async (dispatch) => {
     }
     dispatch({ type: LOADING, payload: { status: 0 } });
   } catch (error) {
-    const { err } = error?.response?.data || { err: [] };
+    logError(error, dispatch);
+  }
+};
+export const fetchTopBidder = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //fetch top bidder
+    const { data } = await api.fetchTopBidder();
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: FETCHTB, payload: { bidder: data } });
+    });
+  } catch (error) {
+    logError(error, dispatch);
+  }
+};
+
+function logError(error, dispatch) {
+  if (error.response) {
+    const { err } = error.response.data;
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: ERROR, payload: { err } });
+    });
+  } else if (error.request) {
+    let err = [
+      {
+        msg: "Could not get response",
+      },
+    ];
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: ERROR, payload: { err } });
+    });
+  } else {
+    let err = [
+      {
+        msg: "Oops! An unknown error occured!",
+      },
+    ];
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: ERROR, payload: { err } });
     });
   }
-};
+}

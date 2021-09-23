@@ -7,10 +7,20 @@ import {
   ERROR,
   LOADING,
   STATUS,
+  FETCHTB,
 } from "../constants";
 
 export default (
-  app = { products: [], status: {}, categories: [], loading: false, err: [] },
+  app = {
+    products: [],
+    status: {},
+    categories: [],
+    bidder: {
+      topBidder: {}
+    },
+    loading: false,
+    err: [],
+  },
   action
 ) => {
   switch (action.type) {
@@ -27,6 +37,11 @@ export default (
       return {
         ...app,
         categories: action.payload.categories,
+      };
+    case FETCHTB:
+      return {
+        ...app,
+        bidder: { ...app.bidder, topBidder: action.payload.bidder },
       };
     case STATUS:
       return {

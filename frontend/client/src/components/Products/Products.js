@@ -60,6 +60,16 @@ const Products = () => {
                 unmountOnExit
               >
                 <List component="div" disablePadding>
+                  <ListItem
+                      button
+                      className={classes.nested}
+                      onClick={() => {
+                        setCategoryOpen(false);
+                        dispatch(getProducts());
+                      }}
+                    >
+                      <ListItemText primary={"All"} />
+                    </ListItem>
                   {categories.map((category) => (
                     <ListItem
                       button

@@ -8,7 +8,7 @@ import User from "../models/User.js";
 
 export const getBids = async (req, res) => {
   try {
-    const bids = await Bid.find({}).sort([["createdAt", -1]]);
+    const bids = await Bid.find({}).populate('bidderuser').sort([["createdAt", -1]]);
 
     res.json(bids);
   } catch (err) {
@@ -48,9 +48,7 @@ export const createBid = async (req, res) => {
     let updateSlot = {};
     if( bidAmount < 1 || bidPrice < 1 || isNaN(bidAmount) || isNaN(bidPrice) ) throw new Error("Indivisible numbers");
     let slot = Math.floor(bidAmount / bidPrice);
-    // if(slot > productBidInfo.slots) slotField = 'extraSlots';
     if(slot > productBidInfo.slots && slotField == 'slots') {
-      // await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $set: {slots: 0} });
       slotField = 'extraSlots';
       let exSlot = slot - productBidInfo.slots;
       slot = exSlot;
@@ -58,7 +56,7 @@ export const createBid = async (req, res) => {
       if(slot > productBidInfo.extraSlots) {
         await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $set: {extraSlots: 0, slots: 0, status: 'Inactive'} }, { new: true, runValidators: true });
         let exSlot = slot - productBidInfo.extraSlots;
-        return res.status(403).json({ err: [{ error: "slot extra by " + exSlot }] });
+        return res.status(403).json({ err: [{ error: "slots extra by " + exSlot }] });
       } else {
         updateSlot[slotField] = -slot;
         await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $inc: updateSlot, $set: {slots: 0} }, { new: true, runValidators: true });
@@ -70,18 +68,21 @@ export const createBid = async (req, res) => {
     
     
     const userId = user._id;
-
+    let bidExists = await Bid.findOne({ user: mongoose.Types.ObjectId(userId), product: mongoose.Types.ObjectId(productId) });
+    if(bidExists) {
+      bidExists.bidAmount.push(bidAmount);
+      bidExists.bidsCount += 1;
+      const bid = await bidExists.save();
+      return res.json({ bid });
+    }
     const bid = new Bid({
       user: userId,
       product: productId,
       bidPrice,
-      bidAmount,
+      bidAmount: [bidAmount],
     });
 
-    await Promise.all([
-      user.save(),
-      bid.save()
-    ]);
+    await bid.save();
 
     res.json({ bid });
   } catch (err) {
@@ -89,3 +90,14 @@ export const createBid = async (req, res) => {
     res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
   }
 };
+
+export const getHighestAmountBidder = async (req, res) => {
+  try {
+    const bidder = await Bid.findOne({}).populate('bidderuser').sort('-bidAmountTotal');
+
+    res.json({ bidder });
+} catch{
+  console.log(err);
+  res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+}
+}

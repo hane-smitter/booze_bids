@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
     location: String, 
     latitude: String, 
     longitude: String
-}, { timestamps: true });
+}, { toJSON: { virtuals: true } }, { timestamps: true });
 
 userSchema.statics.findOrCreate = async (bidder = {}) => {
 
@@ -34,6 +34,10 @@ userSchema.statics.findOrCreate = async (bidder = {}) => {
 
     return user;
 }
+
+userSchema.virtual('fullname').get(function () {
+    return `${this.othername} ${this.surname}`;
+});
 
 const User = mongoose.model('User', userSchema);
 

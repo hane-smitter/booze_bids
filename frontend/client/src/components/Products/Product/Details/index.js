@@ -23,7 +23,7 @@ import * as Yup from "yup";
 import { batch, useDispatch, useSelector } from "react-redux";
 import Navbar from "../../../Nav";
 import useStyles from "./styles.js";
-import { makeBid, getProducts } from "../../../../actions/products";
+import { makeBid, getProducts, fetchTopBidder } from "../../../../actions/products";
 import { unsetErr, unsetStatus } from "../../../../actions/errors";
 import LightBox from "./LightBox";
 
@@ -33,11 +33,11 @@ const Detail = () => {
   const locationRouter = useLocation();
   let initialProduct = locationRouter.state.product;
   const [ product, setProduct ] = useState(initialProduct);
-  const { err, loading, status, products } = useSelector((state) => state.app);
+  const { err, loading, status, products, bidder: { topBidder } } = useSelector((state) => state.app);
   
   let newBidder = Boolean(status?.info?.code === "newbiddinguser");
 
-  if(newBidder) window.scroll({top: 0, left: 0, behavior: 'smooth'});
+  if(newBidder) window.scroll({top: 2, left: 0, behavior: 'smooth'});
 
   
   let formFields = ["bidAmount", "bidder.phone", "bidder.lastname", "bidder.firstname", "bidder.location"];
@@ -105,6 +105,7 @@ const Detail = () => {
 
   useEffect(() => {
     dispatch(getProducts());
+    dispatch(fetchTopBidder());
     window.shouldClearForm && delete window.shouldClearForm;
     return () => {
       dispatch(unsetErr());
@@ -113,7 +114,7 @@ const Detail = () => {
   }, []);
   function updateProduct() {
     let currProductArr = products.filter((product) => {
-      return product.product._id === locationRouter.state.product.product._id;
+      return Boolean(product?.product?._id === locationRouter.state.product?.product?._id);
     });
     console.log(currProductArr);
     if(currProductArr.length > 0) {
@@ -152,8 +153,8 @@ const Detail = () => {
                           <ImageIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary="Thee Bidder" />
-                      <ListItemText primary="Bidded: KES. 1000" />
+                      <ListItemText primary={(topBidder.bidder?.bidderuser[0]?.fullname) ?? '__'} />
+                      <ListItemText primary={`KES ${(topBidder?.bidder?.bidAmountTotal) ?? 0}`} />
                     </ListItem>
                   </List>
                   <Divider color="grey" />
@@ -194,6 +195,7 @@ const Detail = () => {
                         batch(() => {
                           dispatch(makeBid(values));
                           dispatch(getProducts());
+                          dispatch(fetchTopBidder());
                         })
                         window.shouldClearForm = shouldClearForm;
                         if(newBidder){
