@@ -3,7 +3,8 @@ import Background from '../../../images/bannerbg.png';
 
 export default makeStyles(() => ({
     root: {
-        backgroundImage: `url(${Background})`
+        backgroundImage: `url(${Background})`,
+        marginLeft:'0px',
     },
     imgContainer: {
         backgroundImage: `url(${Background})`,
@@ -13,7 +14,8 @@ export default makeStyles(() => ({
         height: '200px',
         marginBlockEnd: '20px',
         borderBottomLeftRadius: '50%',
-        borderBottomRightRadius: '50%'
+        borderBottomRightRadius: '60%',
+        marginBlockStart:'80px',
     },
     image: {
         width: '100%',

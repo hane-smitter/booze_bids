@@ -15,7 +15,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 
 import useStyles from './styles';
-import Logo from '../../images/booze_bids_logo3.png';
+import Logo from '../../images/logo.png';
 import { Link } from "react-router-dom";
 
 const Nav = () => {
@@ -71,14 +71,9 @@ const Nav = () => {
         <MenuItem onClick={handleMenuClose}>
           <Link to="/pastbids">Past Bids</Link>
         </MenuItem>
-        <MenuItem onClick={handleMenuClose}>
-          <Link to="/faqs">FAQs</Link>
-        </MenuItem>
       </Menu>
 
-      <Typography className={classes.heading} variant="h2" align="center">
-        BidsPesa
-      </Typography>
+      <img alignItems="center" src={Logo} className={classes.image,classes.position} />
     </React.Fragment>
   );
   const displayDesktop = () => (
@@ -95,14 +90,11 @@ const Nav = () => {
         <Grid item xs>
           <Link className={classes.navLink} to="/pastbids">Past Bids</Link>
         </Grid>
-        <Grid item xs>
-          <Link className={classes.navLink} to="/faqs">FAQs</Link>
-        </Grid>
       </Grid>
     </React.Fragment>
   );
   return (
-    <AppBar className={classes.appBar} position="static" color="inherit"> 
+    <AppBar className={classes.appBar} position="fixed" color="inherit"> 
       <Toolbar className={classes.navigation}>
         {isMobile ? displayMobile() : displayDesktop()}
       </Toolbar>

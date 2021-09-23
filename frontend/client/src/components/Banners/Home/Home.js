@@ -8,7 +8,7 @@ const Banner = () => {
     const classes = useStyles();
 
     return (
-        <Paper /* elevation={3} */ className={classes.imgContainer}>
+        <Paper size="large" sx={{ m: 1 }}/* elevation={3} */ className={classes.imgContainer}>
             <img src={banner_img} className={classes.image}/>
         </Paper>
     )
