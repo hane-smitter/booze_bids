@@ -132,7 +132,7 @@ const Detail = () => {
 
   return (
     <>
-      <Container maxwidth="lg">
+      <Container className={classes.topStart} maxwidth="lg">
         <Navbar />
         <Grow in>
           <Container maxwidth="sm">

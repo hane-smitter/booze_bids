@@ -16,8 +16,9 @@ import Detail from './components/Products/Product/Details';
 const easyBg = createTheme({
   palette: {
     background: {
-      default: "rgb(2520, 250, 250)"
-    }
+      default: "#f0f0f0"
+    },
+    fontFamily: 'Open Sans'
   }
 })
 

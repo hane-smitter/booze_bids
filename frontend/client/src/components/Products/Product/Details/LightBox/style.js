@@ -25,4 +25,8 @@ export default makeStyles((theme) => ({
   countdown: {
     marginInlineStart: 10,
   },
+  warning: {
+    color: "#ff9800",
+    fontWeight: "bold",
+  },
 }));

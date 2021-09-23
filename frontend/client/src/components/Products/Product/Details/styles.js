@@ -1,6 +1,9 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
+  topStart: {
+    marginBlockStart:'100px'
+  },
   darkBox: {
     color: "#fff",
     backgroundColor: "#181D32",

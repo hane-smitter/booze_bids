@@ -16,7 +16,7 @@ import {
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import CategoryIcon from "@material-ui/icons/Category";
-
+import SearchBar from "material-ui-search-bar";
 import Product from "./Product/Product";
 import useStyles from "./styles";
 import { getProducts } from "../../actions/products";
@@ -30,22 +30,23 @@ const Products = () => {
   const handleCatgoryClick = () => {
     setCategoryOpen(!categoryOpen);
   };
-  
+  const [criteria, setCriteria] = React.useState("1");
+  const [searchItem, setSearchItem] = React.useState("");
+  console.log(criteria);
   return (
     <Container>
       <Box className={classes.productsTitleBox}>
-        <Typography variant="h6" style={{ flexGrow: 4 }}>
-          Current Auctions
-        </Typography>
-
-        {categories.length && (
-          <Box style={{ flexGrow: 1 }} component="span">
+        
+        
+        {/* {categories.length && ( */}
+          <Box style={{ flexGrow: 4 }} component="span">
             <List
               component="nav"
               aria-labelledby="categories"
               
               className={classes.rootList}
             >
+              
               <ListItem button onClick={handleCatgoryClick}>
                 <ListItemIcon>
                   <CategoryIcon />
@@ -87,7 +88,19 @@ const Products = () => {
               </Collapse>
             </List>
           </Box>
-        )}
+        {/* )} */}
+        <Typography style={{ flexGrow: 1 }} >
+          <SearchBar
+                  value={searchItem}
+                  onChange={value => {
+                    setSearchItem(value);
+                  }}
+                  onRequestSearch={() => console.log("onRequestSearch")}
+                  style={{
+                    maxWidth: 400
+                  }}
+                />
+        </Typography>
       </Box>
 
       {loading && (

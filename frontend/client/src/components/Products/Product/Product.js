@@ -59,7 +59,7 @@ const Product = ({ product }) => {
   return (
     <Button component={Link} to={location}>
       <Card
-        className={classes.root}
+        className={classes.root,classes.borderBlack}
         component={motion.div}
         variants={cardVariants}
         animate={cardBlinking ?  "blink" : ""}
@@ -75,37 +75,36 @@ const Product = ({ product }) => {
             image={product.product.image || defaultImg}
             title={product.product.name}
           />
-          <CardContent>
+          <CardContent className={classes.darkBox}> 
             <Typography
+            className={classes.warning}
               gutterBottom
               variant="body2"
               component="p"
-              className={classes.warning}
             >
               Ends in:{" "}
               <span className={`${classes.countdowntime}`}>
                 {countDownTime.days}
               </span>
-              <span>Days</span>
+              <span>:</span>
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.hours}
               </span>
-              <span>Hrs</span>
+              <span>:</span>
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.minutes}
               </span>
-              <span>minutes</span>
+              <span>:</span>
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.seconds}
               </span>
-              <span>seconds</span>
             </Typography>
             <Typography variant="caption" component="p">
               Bid me at #kes {product.bidPrice} | Slots: {product.totalslots ?? 0}
             </Typography>
             <Typography
               component="div"
-              variant="h5"
+              variant="h6"
               style={{ fontWeight: "bold" }}
             >
               RRP: KSH {product.product.cost}

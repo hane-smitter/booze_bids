@@ -14,6 +14,13 @@ export default makeStyles({
   border: {
     border: 'solid',
   },
+  borderBlack: {
+    border:'solid 1px black'
+  },
+  darkBox: {
+    color: "#000",
+    backgroundColor: "#f0f0f0"
+  },
   fullHeightCard: {
     height: '100%',
   },

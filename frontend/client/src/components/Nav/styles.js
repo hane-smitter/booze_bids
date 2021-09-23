@@ -5,7 +5,7 @@ export default makeStyles(() => ({
         // borderRadius: 15,
         // marginBlockStart: '10px',
         // marginBlockEnd: '20px',
-        backgroundColor: '#1f2f38',// #ff9800
+        backgroundColor: '#020b14',
         color: '#ffffff'
     },
     navigation: {
@@ -20,7 +20,12 @@ export default makeStyles(() => ({
     },
     image: {
         display: 'block',
-        height: '40px',
+        height: '65px',
+    },
+    kenya:{
+        display: 'block',
+        height: '20px',
+        marginLeft:'170px'
     },
     position: {
         position: 'relative',
@@ -29,9 +34,14 @@ export default makeStyles(() => ({
     },
     navLink: {
         marginInline: '5px',
-        color: '#ffffff',
+        color: '#ffffff',//'#283c9d',
         fontWeight:'bold',
-        textDecoration: 'none'
+        fontFamily: 'Open Sans',
+        fontSize:'18px',
+        textDecoration: 'none',
+        "&:hover": {
+            textDecoration:'underline'
+          },
     },
     navContainer: {
         maxWidth: '200px',
