@@ -10,7 +10,7 @@ export default makeStyles(() => ({
         backgroundImage: `url(${Background})`,
         backgroundPosition: 'center',
         backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
+        backgroundRepeat: 'yes',
         height: '200px',
         marginBlockEnd: '20px',
         borderBottomLeftRadius: '50%',
