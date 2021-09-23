@@ -3,10 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles(() => ({
     appBar: {
         // borderRadius: 15,
-        marginBlockStart: '10px',
+        // marginBlockStart: '10px',
         // marginBlockEnd: '20px',
-        backgroundColor: '#F5F6FA',// #ff9800
-        color: '#1A4357'
+        backgroundColor: '#1f2f38',// #ff9800
+        color: '#ffffff'
     },
     navigation: {
         display: 'flex',
@@ -22,11 +22,18 @@ export default makeStyles(() => ({
         display: 'block',
         height: '40px',
     },
+    position: {
+        position: 'relative',
+        margin:'auto',
+        height:'40px'
+    },
     navLink: {
         marginInline: '5px',
-        color: '#1A4357'
+        color: '#ffffff',
+        fontWeight:'bold',
+        textDecoration: 'none'
     },
     navContainer: {
-        maxWidth: '300px',
+        maxWidth: '200px',
     }
 }));
