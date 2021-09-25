@@ -39,68 +39,76 @@ const Products = () => {
         
         
         {/* {categories.length && ( */}
-          <Box style={{ flexGrow: 4 }} component="span">
-            <List
-              component="nav"
-              aria-labelledby="categories"
-              
-              className={classes.rootList}
-            >
-              
-              <ListItem button onClick={handleCatgoryClick}>
-                <ListItemIcon>
-                  <CategoryIcon />
-                </ListItemIcon>
-                <ListItemText primary="Browse categories" />
-                {categoryOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-              </ListItem>
-              <Collapse
-                className={classes.collapse}
-                in={categoryOpen}
-                timeout="auto"
-                unmountOnExit
-              >
-                <List component="div" disablePadding>
-                  <ListItem
-                      button
-                      className={classes.nested}
-                      onClick={() => {
-                        setCategoryOpen(false);
-                        dispatch(getProducts());
-                      }}
-                    >
-                      <ListItemText primary={"All"} />
-                    </ListItem>
-                  {categories.map((category) => (
-                    <ListItem
-                      button
-                      className={classes.nested}
-                      key={category._id}
-                      onClick={() => {
-                        setCategoryOpen(false);
-                        dispatch(getProducts(`category=${category.category_slug}`));
-                      }}
-                    >
-                      <ListItemText primary={category.name} />
-                    </ListItem>
-                  ))}
+          <Grid container rowSpacing={0} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid item xs={12} sm={4}>
+              <Box style={{ flexGrow: 4 }} component="span">
+                <List
+                  component="nav"
+                  aria-labelledby="categories"
+                  
+                  className={classes.rootList}
+                >
+                  
+                  <ListItem button onClick={handleCatgoryClick}>
+                    <ListItemIcon>
+                      <CategoryIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Browse categories" />
+                    {categoryOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                  </ListItem>
+                  <Collapse
+                    className={classes.collapse}
+                    in={categoryOpen}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <List component="div" disablePadding>
+                      <ListItem
+                          button
+                          className={classes.nested}
+                          onClick={() => {
+                            setCategoryOpen(false);
+                            dispatch(getProducts());
+                          }}
+                        >
+                          <ListItemText primary={"All"} />
+                        </ListItem>
+                      {categories.map((category) => (
+                        <ListItem
+                          button
+                          className={classes.nested}
+                          key={category._id}
+                          onClick={() => {
+                            setCategoryOpen(false);
+                            dispatch(getProducts(`category=${category.category_slug}`));
+                          }}
+                        >
+                          <ListItemText primary={category.name} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
                 </List>
-              </Collapse>
-            </List>
-          </Box>
+              </Box>
+          </Grid>
+          <Grid item xs={12} sm={4}></Grid>
         {/* )} */}
-        <Typography style={{ flexGrow: 1 }} >
-          <SearchBar
-                  value={searchItem}
-                  onChange={value => {
-                    setSearchItem(value);
-                  }}
-                  onRequestSearch={() => console.log("onRequestSearch")}
-                  style={{
-                    maxWidth: 400
-                  }}
-                />
-        </Typography>
+          <Grid item  style={{ flexGrow: 1 }} xs={12} sm={4}>
+            <Typography >
+              <SearchBar
+                      value={searchItem}
+                      onChange={value => {
+                        setSearchItem(value);
+                      }}
+                      onRequestSearch={() => console.log("onRequestSearch")}
+                      style={{
+                        maxWidth: 400,
+                        margin:10
+                      }}
+                    />
+            </Typography>
+          </Grid>
+        </Grid>
       </Box>
 
       {loading && (

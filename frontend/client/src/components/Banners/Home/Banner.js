@@ -2,7 +2,9 @@ import React from 'react';
 import Carousel from "react-material-ui-carousel"
 import autoBind from "auto-bind"
 import useStyles from './style/BannerFile.js';
-
+import BgImage from '../../../images/boy.png';
+import GgImage from '../../../images/girl.png';
+import BannerBg from '../../../images/bannerbg.png';
 import {
     Card,
     CardContent,
@@ -27,16 +29,18 @@ function Banner(props) {
 
     let items = [];
     const content = (
-        <Grid item xs={12 / totalItems} key="content">
-            <CardContent className={classes.Content}>
-                <Typography className={classes.Title}>
-                    {props.item.Name}
-                </Typography>
+        <Grid item xs={12 / totalItems} >
+            <CardMedia
+                className={classes.Content}
+                style={{ width:150, objectFit:'contain'}}
+                image={props.item.image}
+                title={props.item.Name}
+            >
+                {/* <Typography className={classes.MediaCaption}>
+                    {item.Name}
+                </Typography> */}
+            </CardMedia>
 
-                <Typography className={classes.Caption}>
-                    {props.item.Caption}
-                </Typography>
-            </CardContent>
         </Grid>
     )
 
@@ -45,7 +49,7 @@ function Banner(props) {
         const item = props.item.Items[i];
 
         const media = (
-            <Grid item xs={12 / totalItems} key={item.Name}>
+            <Grid item xs={12 / totalItems} key={item.Name} >
                 <CardMedia
                     className={classes.Media}
                     image={item.Image}
@@ -83,6 +87,7 @@ const items = [
     {
         Name: "Electronics",
         Caption: "Electrify your friends!",
+        image:BgImage,
         contentPosition: "left",
         Items: [
             {
@@ -99,6 +104,7 @@ const items = [
         Name: "Home Appliances",
         Caption: "Say no to manual home labour!",
         contentPosition: "middle",
+        image:GgImage,
         Items: [
             {
                 Name: "Washing Machine WX9102",
@@ -114,6 +120,7 @@ const items = [
         Name: "Decoratives",
         Caption: "Give style and color to your living room!",
         contentPosition: "right",
+        image:BgImage,
         Items: [
             {
                 Name: "Living Room Lamp",
@@ -159,7 +166,7 @@ class BannerFile extends React.Component {
 
     render() {
         return (
-            <div style={{ marginTop: "110px", color: "#494949" }}>
+            <div style={{ marginTop: "100px", color: "#494949" }}>
 
                 <Carousel
                     autoPlay={this.state.autoPlay}

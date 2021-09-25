@@ -1,10 +1,11 @@
 import { makeStyles } from "@material-ui/core/styles";
-
+import BannerBg from '../../../../images/bannerbg.png';
+import BannerFile from "../Banner";
 export default makeStyles(() => ({
     Banner: {
         height: '195px',
         position: 'relative',
-        maxWidth:'90%',
+        maxWidth:'100%',
         margin:'auto',
         justifyContent:'center',
    },
@@ -45,11 +46,11 @@ export default makeStyles(() => ({
    },
     Content: {
         color: 'white',
-        backgroundColor: '#771818',
+        backgroundImage: BannerBg,
         height: '100%',
         position: 'relative',
         cursor: 'pointer',
-        padding: '30px',
+        padding: '20px',
         transition: '300ms',
         "&:active": {
             backgroundColor: '#571111',

@@ -83,10 +83,15 @@ const Product = ({ product }) => {
               component="p"
             >
               Ends in:{" "}
-              <span className={`${classes.countdowntime}`}>
-                {countDownTime.days}
+              <span className={classes.bomb}>
+              {countDownTime.days &&
+              <span>
+                <span className={`${classes.countdowntime}`}>
+                  {countDownTime.days}
+                </span>
+                <span>:</span>
               </span>
-              <span>:</span>
+              }
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.hours}
               </span>
@@ -98,8 +103,9 @@ const Product = ({ product }) => {
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.seconds}
               </span>
+              </span>
             </Typography>
-            <Typography variant="caption" component="p">
+            <Typography className={classes.success} variant="caption" component="p">
               Bid me at #kes {product.bidPrice} | Slots: {product.totalslots ?? 0}
             </Typography>
             <Typography

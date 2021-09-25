@@ -162,7 +162,7 @@ const Detail = () => {
                     <b>{product.product.brand}</b>
                   </Typography>
                   <Typography gutterBottom variant="body2" color="inherit" component="p">
-                    Place your bid Bid. Minimum Bid amount is {product.bidPrice}
+                    Place your bid Bid. Minimum Bid amount is <span className={classes.bold}>{product.bidPrice}</span>
                     /= . Enter phone number then standby to pay via Mpesa
                   </Typography>
 

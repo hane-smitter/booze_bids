@@ -26,4 +26,11 @@ export default makeStyles((theme) => ({
     color: "#ff9800",
     fontWeight: "bold",
   },
+  success: {
+    color: '#42b449',
+    fontWeight:'bold',
+  },
+  bold: {
+    fontWeight:'bold',
+  },
 }));
