@@ -26,6 +26,7 @@ import useStyles from "./styles.js";
 import { makeBid, getProducts, fetchTopBidder } from "../../../../actions/products";
 import { unsetErr, unsetStatus } from "../../../../actions/errors";
 import LightBox from "./LightBox";
+import Footer from "../../../Footer";
 
 const Detail = () => {
   const classes = useStyles();
@@ -285,6 +286,7 @@ const Detail = () => {
           </Container>
         </Grow>
       </Container>
+      <Footer/>
     </>
   );
 };
