@@ -8,7 +8,10 @@ import {
     getProducts,
     createProductBidDetails, 
     getBidProducts,
-    getBiddableProducts} from '../controllers/products.js';
+    getBiddableProducts,
+    deleteProduct,
+    updateProduct
+} from '../controllers/products.js';
 
 const router = express.Router();
 
@@ -17,12 +20,14 @@ router.route('/')
     .post(upload.single('productimg'), validate('createProduct'), createProduct, (error, req, res, next) => {
         if(error){
             console.log(error);
-            res.status(400).json({err: [{error: error.message}]});
+            res.status(400).json({err: [{msg: error.message}]});
         }
     });
 
 router.post('/bid/create', validate('createProductBid'), createProductBidDetails);
 router.get('/bids/all', getBidProducts);
 router.get('/bids', getBiddableProducts);
+router.delete('/mod', validate('deleteProduct'), deleteProduct);
+router.patch('/mod/update/:id', validate('updateProduct'), updateProduct);
 
 export default router;

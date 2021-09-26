@@ -1,13 +1,13 @@
 import { Helmet } from 'react-helmet';
 import { Box, Container } from '@mui/material';
 
-import CustomerListToolbar from '../components/customer/CustomerListToolbar';
+import CategoriesListToolbar from '../components/categories/CategoriesListToolbar';
 import { Outlet } from 'react-router';
 
-const CustomerList = () => (
+const CategoriesList = () => (
   <>
     <Helmet>
-      <title>Customers | Booze Bids</title>
+      <title>Categories | Booze Bids</title>
     </Helmet>
     <Box
       sx={{
@@ -17,7 +17,7 @@ const CustomerList = () => (
       }}
     >
       <Container maxWidth={false}>
-        <CustomerListToolbar />
+        <CategoriesListToolbar />
         <Box sx={{ pt: 3 }}>
           <Outlet />
         </Box>
@@ -26,4 +26,4 @@ const CustomerList = () => (
   </>
 );
 
-export default CustomerList;
+export default CategoriesList;

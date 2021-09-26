@@ -14,12 +14,15 @@ import { Image } from "@mui/icons-material";
 import * as Yup from "yup";
 import { Formik, Field } from "formik";
 import { useNavigate } from "react-router";
+import { decode } from 'html-entities';
 
 import useStyles from "./styles";
 import { createProduct, getProducts } from "src/actions/products";
-import { unsetErr } from "src/actions/errors";
+import { unsetErr, unsetStatus } from "src/actions/errors";
+import ShowFeedback from "src/utils/ShowFeedback";
 
 const Form = () => {
+  const { categories, err, loading, status } = useSelector((state) => state.app);
   const initialValues = {
     name: "",
     brand: "",
@@ -31,10 +34,11 @@ const Form = () => {
   const navigate = useNavigate();
   const classes = useStyles();
   const [imgPrev, setImgPrev] = useState(null);
-  const { categories, err, loading } = useSelector((state) => state.app);
   const [categoryVal, setCategoryVal] = useState(
     categories.length > 0 ? categories[0] : null
   );
+  const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
+  const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
   const categoriesIds =
     categories.length > 0 ? categories.map((category) => category._id) : [];
   let formFields = ["name", "brand", "cost", "category", "productimg"];
@@ -50,11 +54,18 @@ const Form = () => {
     formErrors.map((error) => formErrorsNames.push(error.param));
 
   useEffect(() => {
-    if (categories.length < 1) dispatch(getProducts());
+    dispatch(getProducts());
     return () => {
       dispatch(unsetErr());
+      dispatch(unsetStatus());
     };
   }, []);
+  useEffect(() => {
+    setAlertOpen(Boolean(status?.info));
+  }, [status]);
+  useEffect(() => {
+    setErrAlertOpen(Boolean(err.length > 0));
+  }, [err]);
 
   const prodCreationSchema = Yup.object().shape({
     name: Yup.string().required("Name of the product is required"),
@@ -83,10 +94,10 @@ const Form = () => {
     );
     return (
       <Autocomplete
-        value={categoryVal}
+      value={categoryVal}
         options={categories}
         disableClearable
-        getOptionLabel={(option) => option.name}
+        getOptionLabel={(option) => decode(option.name)}
         onChange={(event, newValue) => {
           form.setFieldValue(name, newValue._id, false);
           setCategoryVal(newValue);
@@ -217,6 +228,22 @@ const Form = () => {
   return (
     <>
       <Container maxWidth="sm">
+      <ShowFeedback
+          alertOpen={alertOpen}
+          setAlertOpen={setAlertOpen}
+          severity={status?.info?.severity}
+          msg={status?.info?.message}
+        />
+        {err.length > 0 &&
+          err.map((error) => (
+            <ShowFeedback
+              alertOpen={errAlertOpen}
+              setAlertOpen={setErrAlertOpen}
+              severity={"error"}
+              msg={error.msg}
+              title="Ooops!"
+            />
+          ))}
         <Formik
           initialValues={initialValues}
           onSubmit={(values, actions) => {

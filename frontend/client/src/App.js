@@ -16,7 +16,7 @@ import Detail from './components/Products/Product/Details';
 const easyBg = createTheme({
   palette: {
     background: {
-      default: "rgb(2520, 250, 250)"
+      default: "rgb(250, 249, 252)"
     }
   }
 })

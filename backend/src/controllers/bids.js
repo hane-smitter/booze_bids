@@ -28,19 +28,18 @@ export const createBid = async (req, res) => {
     let { bidder, productId, bidPrice, bidAmount } = req.body;
     let user = await User.findOrCreate(bidder);
     if(user === "NEW") {
-      return res.status(202).json({ info: { message: "Is a new user", code: "newbiddinguser"} });
+      return res.status(202).json({ info: { message: "Welcome, get registered with us", severity: "info", code: "newbiddinguser"} });
     }
 
     let productBidInfo = await ProductBidDetail.findOne({product: mongoose.Types.ObjectId(productId)}).lean();
     if(!productBidInfo) {
-      res.status(404).json({ err: [{ error: "Sorry this product is not found" }] });
-      return;
+      return res.status(404).json({ err: [{ msg: "Sorry this product is not found" }] });
     }
     bidPrice = productBidInfo.bidPrice;
 
     //generate slot figure
     if(bidAmount < bidPrice) {
-      res.status(422).json({ err: [{ error: "Amount bidding is way Low!" }] });
+      res.status(422).json({ err: [{ msg: "Amount bidding is way Low!" }] });
       return;
     }
     // let dbSlot;
@@ -56,7 +55,7 @@ export const createBid = async (req, res) => {
       if(slot > productBidInfo.extraSlots) {
         await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $set: {extraSlots: 0, slots: 0, status: 'Inactive'} }, { new: true, runValidators: true });
         let exSlot = slot - productBidInfo.extraSlots;
-        return res.status(403).json({ err: [{ error: "slots extra by " + exSlot }] });
+        return res.status(403).json({ err: [{ msg: "Sorry! Item not available for bidding" }] });
       } else {
         updateSlot[slotField] = -slot;
         await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $inc: updateSlot, $set: {slots: 0} }, { new: true, runValidators: true });
@@ -66,14 +65,20 @@ export const createBid = async (req, res) => {
       await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $inc: updateSlot }, { new: true, runValidators: true });
     }
     
-    
+    let successMsg = {
+      info: {
+      message: "Success! Your Bid has been placed." ,
+      severity: "success",
+      code: "makebid"
+      }
+    }
     const userId = user._id;
     let bidExists = await Bid.findOne({ user: mongoose.Types.ObjectId(userId), product: mongoose.Types.ObjectId(productId) });
     if(bidExists) {
       bidExists.bidAmount.push(bidAmount);
       bidExists.bidsCount += 1;
       const bid = await bidExists.save();
-      return res.json({ bid });
+      return res.json(successMsg);
     }
     const bid = new Bid({
       user: userId,
@@ -84,7 +89,7 @@ export const createBid = async (req, res) => {
 
     await bid.save();
 
-    res.json({ bid });
+    res.json(successMsg);
   } catch (err) {
     console.log(err);
     res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });

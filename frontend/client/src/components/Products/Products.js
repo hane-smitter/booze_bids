@@ -16,6 +16,7 @@ import {
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import CategoryIcon from "@material-ui/icons/Category";
+import {decode} from 'html-entities';
 
 import Product from "./Product/Product";
 import useStyles from "./styles";
@@ -80,7 +81,7 @@ const Products = () => {
                         dispatch(getProducts(`category=${category.category_slug}`));
                       }}
                     >
-                      <ListItemText primary={category.name} />
+                      <ListItemText primary={decode(category.name)} />
                     </ListItem>
                   ))}
                 </List>

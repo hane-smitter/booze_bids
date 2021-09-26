@@ -13,7 +13,7 @@ import { motion } from "framer-motion"
 
 import useStyles from "./styles";
 import defaultImg from "../../../images/products/defaultImg.jpeg";
-import FutureTimeCalc from "../FutureTimeCalc";
+import FutureTimeCalc from "../../utils/FutureTimeCalc";
 
 const Product = ({ product }) => {
   const [ cardBlinking, setCardBlinking ] = useState(!Boolean(product.slots));
@@ -46,11 +46,11 @@ const Product = ({ product }) => {
 
   const cardVariants = {
     blink: {
-      backgroundColor: ['rgba(255, 255, 255, .9)', 'rgba(237, 82, 73, .1)', 'rgba(243, 32, 19, .3)', 'rgba(237, 82, 73, .1)', 'rgba(255, 255, 255, .9)'],
+      backgroundColor: ['rgba(255, 255, 255, .9)', 'rgba(237, 10, 10, .1)', 'rgba(243, 5, 5, .3)'],
       transition: {
         repeat: Infinity,
         repeatType: "reverse",
-        duration: 3,
+        duration: 1,
         repeatDelay: 1
       }
     },

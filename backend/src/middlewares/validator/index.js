@@ -34,6 +34,20 @@ export const validate = (method) => {
         body("store").trim().optional(),
       ];
     }
+    case "updateProduct": {
+      return [
+        check("name").optional().isAlpha('en-US', {ignore: ' '}).withMessage("Do not use symbols").trim(),
+        body("brand").optional().isAlpha('en-US', {ignore: ' '}).trim(),
+        body("cost").optional().isNumeric({ no_symbols: true }).trim(),
+        body("category")
+          .optional()
+          .custom((value) => {
+            return mongoose.isValidObjectId(value);
+          })
+          .withMessage("Invalid id"),
+        body("store").optional().isAlpha('en-US', {ignore: ' '}).trim(),
+      ];
+    }
     case "createProductBid": {
       return [
         body("product")
@@ -127,7 +141,7 @@ export const validate = (method) => {
           .exists({ checkFalsy: true })
           .withMessage("category name is required")
           .escape()
-          .custom((async (name) => {
+          .custom(async (name) => {
             try {
               name = name && name.trim().toLowerCase();
               const exists = await Category.findOne({ name });
@@ -136,10 +150,43 @@ export const validate = (method) => {
               console.log(err);
               return Promise.reject();
             }
-           
-          }))
+          })
           .withMessage("This category name is already occupied!"),
         body("description").optional({ checkFalsy: true }).escape(),
+      ];
+    }
+    case "deleteCategory": {
+      return [
+        check("catId")
+          .exists({ checkFalsy: true })
+          .withMessage("category Id is required")
+          .bail()
+          .custom((value) => {
+            return mongoose.isValidObjectId(value);
+          })
+          .withMessage("Invalid id"),
+      ];
+    }
+    case "updateCategory": {
+      return [
+        body("name")
+          .exists({ checkFalsy: true })
+          .withMessage("Name is required")
+          .bail()
+          .escape(),
+        body("description").escape(),
+      ];
+    }
+    case "deleteProduct": {
+      return [
+        body("productId")
+          .exists({ checkFalsy: true })
+          .withMessage("Product id is required")
+          .bail()
+          .custom((value) => {
+            return mongoose.isValidObjectId(value);
+          })
+          .withMessage("Invalid id"),
       ];
     }
   }
