@@ -35,19 +35,9 @@ export default function Footer() {
               </Typography>
                 <List>
                     <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <ContactPhoneIcon />
-                            </Avatar>
-                        </ListItemAvatar>
                         <ListItemText primary={'Phone: 254789XXXXX'} />
                     </ListItem>
                     <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <ContactMailIcon />
-                            </Avatar>
-                        </ListItemAvatar>
                         <ListItemText primary={'Email: info@bidspesa.com'} />
                     </ListItem>
                 </List>
@@ -68,7 +58,7 @@ export default function Footer() {
             <hr/>
             <Toolbar>
               <Typography variant="l" className={classes.center} color="inherit">
-              Copyright © 2021 bidspesa limited. – &nbsp;-&nbsp;All rights reserved ® <br/>
+              Copyright © 2021 bidspesa limited.  &nbsp;&nbsp;All rights reserved ® <br/>
               Version 1.0.1 2021-09-24
               </Typography>
             </Toolbar>

@@ -46,7 +46,8 @@ const Product = ({ product }) => {
 
   const cardVariants = {
     blink: {
-      backgroundColor: ['rgba(255, 255, 255, .9)', 'rgba(237, 10, 10, .1)', 'rgba(243, 5, 5, .3)'],
+      // backgroundColor: ['rgba(255, 255, 255, .9)', 'rgba(237, 82, 73, .1)', 'rgba(243, 32, 19, .3)', 'rgba(237, 82, 73, .1)', 'rgba(255, 255, 255, .9)'],
+      backgroundColor: ['#f0f0f0', '#e6c96c', '#ebb957', '#f1a53c', '#f79224'],
       transition: {
         repeat: Infinity,
         repeatType: "reverse",
@@ -62,7 +63,6 @@ const Product = ({ product }) => {
         className={classes.root,classes.borderBlack}
         component={motion.div}
         variants={cardVariants}
-        animate={cardBlinking ?  "blink" : ""}
       >
         <CardHeader
           className={classes.capitalize}
@@ -75,12 +75,17 @@ const Product = ({ product }) => {
             image={product.product.image || defaultImg}
             title={product.product.name}
           />
-          <CardContent className={classes.darkBox}> 
+          <CardContent 
+          className={classes.darkBox} 
+          component={motion.div}
+          variants={cardVariants}
+          animate={cardBlinking ?  "blink" : ""} > 
             <Typography
-            className={classes.warning}
+            className={cardBlinking ? classes.danger: classes.warning}
               gutterBottom
               variant="body2"
               component="p"
+              
             >
               Ends in:{" "}
               <span className={classes.bomb}>
@@ -106,11 +111,11 @@ const Product = ({ product }) => {
               </span>
             </Typography>
             <Typography className={classes.success} variant="caption" component="p">
-              Bid me at #kes {product.bidPrice} | Slots: {product.totalslots ?? 0}
+              Bid me @ Kes {product.bidPrice} | Slots: {product.totalslots ?? 0}
             </Typography>
             <Typography
               component="div"
-              variant="h6"
+              variant="body2"
               style={{ fontWeight: "bold" }}
             >
               RRP: KSH {product.product.cost}

@@ -75,6 +75,10 @@ export default makeStyles({
     color: '#ff9800',
     fontWeight:'bold',
   },
+  danger :{
+    color: 'red',
+    fontWeight:'bold',
+  },
   success: {
     color: '#42b449',
     fontWeight:'bold',

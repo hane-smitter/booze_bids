@@ -18,7 +18,7 @@ export default makeStyles(() => ({
         fontWeight: 'bold',
     },
     logo: {
-        maxWidth:'100px',
+        maxWidth:'130px',
         objectFit:'contain'
     }
 }));
