@@ -62,7 +62,12 @@ const Detail = () => {
   //   updateProduct();
   // }, [products]);
   
-
+const nav = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0
+}
   const navVariants = {
     hidden: {
       opacity: 0,
@@ -118,7 +123,7 @@ const Detail = () => {
 
   return (
     <>
-      <Container maxwidth="lg">
+      <Container maxwidth="lg" style={{ paddingTop: '120px' }}>
       <ShowFeedback
           alertOpen={alertOpen}
           setAlertOpen={setAlertOpen}
@@ -135,16 +140,18 @@ const Detail = () => {
               title="Ooops!"
             />
           ))}
-        <motion.div
-          variants={navVariants}
-          initial="hidden"
-          animate="visible"
-          exit="leave"
-        >
-          <Navbar />
-        </motion.div>
 
-        <Container maxwidth="sm">
+<motion.div
+style={nav}
+      variants={navVariants}
+      initial="hidden"
+      animate="visible"
+      exit="leave"
+    >
+      <Navbar />
+    </motion.div>
+
+        <Container maxwidth="lg" className={classes.wrapperContainer}>
           <Grid container>
             <Grid
               item

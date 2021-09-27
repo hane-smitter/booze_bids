@@ -14,7 +14,10 @@ export default makeStyles((theme) => ({
     display: "flex",
     alignItems: "stretch",
   },
-  
+  wrapperContainer: {
+    paddingTop: '90px',
+    background: theme.palette.background.default
+  },
   rootTextField: {
     "& .MuiInputBase-root, .MuiFormLabel-root": {
       color: "rgba(245, 245, 245, 1)",

@@ -95,7 +95,7 @@ const Nav = () => {
     </React.Fragment>
   );
   return (
-    <AppBar className={classes.appBar} position="fixed" color="inherit"> 
+    <AppBar className={classes.appBar} position="fixed" color="inherit">
       <Toolbar className={classes.navigation}>
         {isMobile ? displayMobile() : displayDesktop()}
       </Toolbar>
