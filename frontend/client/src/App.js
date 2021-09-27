@@ -18,8 +18,9 @@ const easyBg = createTheme({
     background: {
       default: "rgb(250, 249, 252)"
     }
-  }
-})
+  },
+  fontFamily: 'Open Sans'
+  })
 
 const App = () => {
   return (

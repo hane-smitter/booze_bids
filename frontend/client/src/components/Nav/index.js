@@ -15,7 +15,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 
 import useStyles from './styles';
-import Logo from '../../images/logo.png';
+import Logo from '../../images/smoke.png';
+import Kenya from '../../images/kenya.png';
 import { Link } from "react-router-dom";
 
 const Nav = () => {
@@ -80,7 +81,7 @@ const Nav = () => {
     <React.Fragment>
       <div>
         <img src={Logo} className={classes.image} />
-        {/* <h3>BidsPesa</h3> */}
+        <img alignItems="center" src={Kenya} className={classes.kenya} />
       </div>
       
       <Grid container justifyContent="space-evenly" direction="row" alignItems="center" className={classes.navContainer}>

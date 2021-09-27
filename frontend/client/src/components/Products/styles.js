@@ -27,7 +27,8 @@ export default makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'nowrap',
-    marginBlockEnd: '20px'
+    marginBlockEnd: '20px',
+    backgroundColor:'#d0d0d0',  
   },
   w100: {
     // width: '100%'
@@ -39,7 +40,7 @@ export default makeStyles((theme) => ({
     },
     width: '100%',
     maxWidth: 300,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#d0d0d0',
     position: 'relative',
   },
   nested: {
@@ -48,7 +49,7 @@ export default makeStyles((theme) => ({
   collapse: {
     width: '100%',
     position: 'absolute',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#f0f0f0',
     zIndex: 10,
     overflow: 'auto',
     maxHeight: 300

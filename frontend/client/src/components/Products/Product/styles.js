@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import '../../Fonts/TickingTimebombBB.ttf';
 
 export default makeStyles({
   root: {
@@ -11,8 +12,18 @@ export default makeStyles({
     paddingTop: '56.25%',
     backgroundSize:'contain'
   },
+  bomb: {
+    fontFamily: 'ticking-timebomb-bb'
+  },
   border: {
     border: 'solid',
+  },
+  borderBlack: {
+    border:'solid 1px black'
+  },
+  darkBox: {
+    color: "#000",
+    backgroundColor: "#f0f0f0"
   },
   fullHeightCard: {
     height: '100%',
@@ -62,6 +73,10 @@ export default makeStyles({
   },
   warning: {
     color: '#ff9800',
+    fontWeight:'bold',
+  },
+  success: {
+    color: '#42b449',
     fontWeight:'bold',
   },
   capitalize: {

@@ -14,6 +14,7 @@ import LightBox from "./LightBox";
 import DarkBox from "./DarkBox";
 import ShowFeedback from "../../../utils/ShowFeedback";
 import { unsetErr, unsetStatus } from "../../../../actions/errors";
+import Footer from "../../../Footer";
 
 const Detail = () => {
   const { products, err, status  } = useSelector((state) => state.app);
@@ -174,6 +175,7 @@ const Detail = () => {
           </Grid>
         </Container>
       </Container>
+      <Footer/>
     </>
   );
 };
