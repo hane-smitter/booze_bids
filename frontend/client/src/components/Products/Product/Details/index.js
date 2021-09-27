@@ -223,7 +223,7 @@ const Detail = () => {
                       >
                         {newBidder ? (
                           <>
-                            <Alert severity="info">Chances are high this could be your first bid. Just a littele more information and get your bid going.</Alert>
+                            <Alert severity="warning">Chances are this could be your first bid. Just a little more information and get your bid going.</Alert>
                             <Field
                               name="bidder.lastname"
                               label="surname name"
