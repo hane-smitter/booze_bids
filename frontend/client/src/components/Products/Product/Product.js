@@ -13,7 +13,7 @@ import { motion } from "framer-motion"
 
 import useStyles from "./styles";
 import defaultImg from "../../../images/products/defaultImg.jpeg";
-import FutureTimeCalc from "../FutureTimeCalc";
+import FutureTimeCalc from "../../utils/FutureTimeCalc";
 
 const Product = ({ product }) => {
   const [ cardBlinking, setCardBlinking ] = useState(!Boolean(product.slots));
@@ -51,7 +51,7 @@ const Product = ({ product }) => {
       transition: {
         repeat: Infinity,
         repeatType: "reverse",
-        duration: 3,
+        duration: 1,
         repeatDelay: 1
       }
     },

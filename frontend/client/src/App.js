@@ -16,11 +16,11 @@ import Detail from './components/Products/Product/Details';
 const easyBg = createTheme({
   palette: {
     background: {
-      default: "#f0f0f0"
-    },
-    fontFamily: 'Open Sans'
-  }
-})
+      default: "rgb(250, 249, 252)"
+    }
+  },
+  fontFamily: 'Open Sans'
+  })
 
 const App = () => {
   return (

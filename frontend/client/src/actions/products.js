@@ -13,7 +13,7 @@ import {
 } from "../constants";
 
 //Action creators
-export const getProducts = (query) => async (dispatch) => {
+export const getProducts = (query, cb) => async (dispatch) => {
   if (query) {
     query = "?" + query;
   } else {
@@ -34,6 +34,7 @@ export const getProducts = (query) => async (dispatch) => {
       dispatch({ type: READPROD, payload: { products } });
       dispatch({ type: READCAT, payload: { categories } });
     });
+    cb(products);
   } catch (error) {
     logError(error, dispatch);
   }
@@ -46,6 +47,11 @@ export const createProduct = (body) => async (dispatch) => {
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: STATUS, payload: { info: {
+        message: "Success! Product created.",
+        severity: "success",
+        code: "createproduct"
+      } } });
       dispatch({ type: CREATE, payload: { product: data } });
     });
   } catch (error) {
@@ -56,11 +62,11 @@ export const makeBid = (body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //make a product bid
-    const response = await api.makeBid(body);
-    if (response.status == 202) {
-      dispatch({ type: STATUS, payload: { status: response.data } });
-    }
-    dispatch({ type: LOADING, payload: { status: 0 } });
+    const { data:status } = await api.makeBid(body);
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: STATUS, payload: { status } });
+  });
   } catch (error) {
     logError(error, dispatch);
   }

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
@@ -17,14 +17,18 @@ import {
 import useStyles from "./styles";
 import { DatePickerField } from "../../DatePicker";
 import { createProductBid } from "src/actions/products";
-import { unsetErr } from "src/actions/errors";
+import { unsetErr, unsetStatus } from "src/actions/errors";
+import ShowFeedback from "src/utils/ShowFeedback";
 
 const ProductBidCreate = (props) => {
   const classes = useStyles();
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { err, loading } = useSelector((state) => state.app);
+  const { err, loading, status } = useSelector((state) => state.app);
+  const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
+  const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
+
   let formFields = ["bidPrice", "targetAmount", "startTime", "endTime"];
   let formErrors = [];
   let formErrors2 = [];
@@ -37,8 +41,15 @@ const ProductBidCreate = (props) => {
   useEffect(() => {
     return () => {
       dispatch(unsetErr());
+      dispatch(unsetStatus());
     };
   }, []);
+  useEffect(() => {
+    setAlertOpen(Boolean(status?.info));
+  }, [status]);
+  useEffect(() => {
+    setErrAlertOpen(Boolean(err.length > 0));
+  }, [err]);
 
   const bidCreationSchema = Yup.object().shape({
     bidPrice: Yup.number()
@@ -59,6 +70,22 @@ const ProductBidCreate = (props) => {
         <title>Create Product Bid | Booze Bids</title>
       </Helmet>
       <Container maxWidth="sm">
+        <ShowFeedback
+          alertOpen={alertOpen}
+          setAlertOpen={setAlertOpen}
+          severity={status?.info?.severity}
+          msg={status?.info?.message}
+        />
+        {err.length > 0 &&
+          err.map((error) => (
+            <ShowFeedback
+              alertOpen={errAlertOpen}
+              setAlertOpen={setErrAlertOpen}
+              severity={"error"}
+              msg={error.msg}
+              title="Ooops!"
+            />
+          ))}
         <Formik
           initialValues={{
             bidPrice: "",

@@ -11,7 +11,7 @@ import {
     Divider,
   } from "@material-ui/core";
 
-import FutureTimeCalc from "../../../FutureTimeCalc";
+import FutureTimeCalc from "../../../../utils/FutureTimeCalc";
 import useStyles from './style';
 import defaultImg from "../../../../../images/products/defaultImg.jpeg";
 

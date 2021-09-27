@@ -7,3 +7,4 @@ export const LOADING = 'LOADING';
 export const CREATEBID = 'CREATE_BID';
 export const CREATECAT = 'CREATE_CATEGORY';
 export const READCAT = 'FETCH_CATEGORIES';
+export const STATUS = 'STATUS';

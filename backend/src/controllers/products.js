@@ -1,5 +1,6 @@
 import fs from "fs";
 import { validationResult } from "express-validator";
+import mongoose from 'mongoose';
 
 import Product from "../models/Product.js";
 import ProductBidDetail from "../models/ProductBidDetail.js";
@@ -76,10 +77,14 @@ export const createProduct = async (req, res) => {
       category: category._id,
       category_slug: category.category_slug,
     });
-    console.log("product");
-    console.log(product);
     await product.save();
-    res.status(201).json({ product });
+    res.status(201).json({
+      info: {
+        message: "Item added successfully!",
+        severity: "success",
+        code: "createproduct",
+      },
+    });
   } catch (err) {
     req.file &&
       fs.unlink(`${req.file.destination}/${req.file.filename}`, (error) => {
@@ -87,7 +92,7 @@ export const createProduct = async (req, res) => {
         console.log("Uploaded file deleted successfully!");
       });
     console.log(err);
-    res.status(400).json({ err: [{ error: err.message }] });
+    res.status(400).json({ err: [{ msg: err.message }] });
   }
 };
 
@@ -112,9 +117,95 @@ export const createProductBidDetails = async (req, res) => {
     /* console.log('bid product');
         console.log(bidDetails); */
     await bidDetails.save();
-    res.status(201).json({ bidDetails });
+    res.status(201).json({
+      info: {
+        message: "Bid details for the product is created successfully",
+        severity: "success",
+        code: "createproductbiddetails",
+      },
+    }); 
   } catch (err) {
     console.log(err);
-    res.status(400).json({ err: [{ error: err.message }] });
+    res.status(400).json({ err: [{ msg: err.message }] });
   }
 };
+
+//delete product
+export const deleteProduct = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(422).json({ err: errors.array() });
+    return;
+  }
+  try {
+    const productId = req.body.productId;
+    if(!productId) throw new Error("Provide the product ID");
+    const product = await Product.findOneAndDelete({_id: mongoose.Types.ObjectId(productId)});
+    if(!product) throw new Error("Product not found");
+    const imageUrl = product.image;
+    let capturingRegex = /\/(?<img>[a-zA-Z0-9]+[_]\d+\.(jpe?g|png))$/;
+    const { groups } = imageUrl.match(capturingRegex);
+    const imageName = groups.img;
+    if(imageName) {
+      fs.unlink(`public/imgs/products/${imageName}`, (error) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('file deleted successfully');
+          };
+        });
+    }
+    res.json({
+      info: {
+        message: "Product has been deleted successfully",
+        severity: "success",
+        code: "deleteproduct",
+      },
+    });
+  }catch(err) {
+    console.log(err);
+    res.status(400).json({ err: [ {
+      msg: "Could not complete operation!"
+     } ] })
+  }
+}
+
+//update product
+export const updateProduct = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(422).json({ err: [...errors.array()] });
+    return;
+  }
+  if (!req.params.id) throw new Error("Must provide id of the category");
+  try {
+    const allowedUpdates = ["name", "brand", "image", "cost", "category"];
+    const body = req.body;
+
+    const bodyKeys = Object.keys(body);
+    const validFields = bodyKeys.filter((bodyKey) =>
+      allowedUpdates.includes(bodyKey)
+    );
+
+    const isValidId = mongoose.isValidObjectId(req.params.id);
+    if(!isValidId) throw new Error("Invalid ID is provided!");
+
+    const product = await Product.findById(req.params.id);
+    for (let i = 0; i < validFields.length; i++) {
+      product[validFields[i]] = req.body[validFields[i]];
+    }
+
+    await product.save();
+    res.json({
+      info: {
+        message: "Product has been updated successfully!",
+        code: "updateproduct",
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ err: [{
+      msg: "Could not complete requested operation"
+    }] });
+  }
+}

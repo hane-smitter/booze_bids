@@ -5,13 +5,15 @@ import {
   ERROR,
   LOADING,
   CREATEBID,
-  READCAT
+  READCAT,
+  STATUS
 } from "../constants";
 
 const initState = {
   products: [],
   categories: [],
   bidproducts: [],
+  status: {},
   err: [],
   loading: false,
 };
@@ -41,6 +43,11 @@ export default (app = initState, action) => {
       return {
         ...app,
         categories: [action.payload.category, ...app.categories],
+      };
+      case STATUS:
+      return {
+        ...app,
+        status: action.payload.status,
       };
     case ERROR:
       return {

@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import DashboardLayout from './components/DashboardLayout';
 import MainLayout from './components/MainLayout';
 import Account from './pages/Account';
-import CustomerList from './pages/CustomerList';
+import CategoriesList from './pages/CategoriesList';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
@@ -13,7 +13,7 @@ import ProductBidCreate from './components/Form/Product/ProductBidCreate';
 import ProductCategoryCreate from './components/Form/Product/ProductCategoryCreate';
 import ProductCreate from './components/Form/Product/ProductCreate';
 import Products from './components/Products/Products';
-import CustomerListResults from './components/customer/CustomerListResults';
+import CategoriesListResults from './components/categories/CategoriesListResults';
 
 const routes = [
   {
@@ -22,9 +22,9 @@ const routes = [
     children: [
       { path: 'account', element: <Account /> },
       { path: 'categories',
-        element: <CustomerList />,
+        element: <CategoriesList />,
         children: [
-          { path: '', element: <CustomerListResults /> },
+          { path: '', element: <CategoriesListResults /> },
           { path: 'createcat', element: <ProductCategoryCreate /> }
         ]
       },
