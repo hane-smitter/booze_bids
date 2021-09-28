@@ -1,78 +1,61 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from 'react';
 import {
-    Box,
-    CircularProgress,
-    Grid,
-    Pagination,
-    Paper,
-    Typography
-  } from '@mui/material';
+  Box,
+  CircularProgress,
+  Grid,
+  Pagination,
+  Paper,
+  Typography,
+  Tabs,
+  Tab,
+} from '@mui/material';
 
-  import ProductCard from './Product/ProductCard';
+import ProductCard from './Product/ProductCard';
 import { getProducts } from 'src/actions/products';
+import ProductTabs from './ProductTabs';
+import AllProducts from './AllProducts';
+import BiddableProducts from './BiddableProducts';
+import UnbiddableProducts from './UnbiddableProducts';
+
+
+function spreadAttr(index) {
+  return {
+    id: `product-tab-${index}`,
+    "aria-controls": `product-tabpanel-${index}`,
+  };
+}
 
 const Products = () => {
-    const dispatch = useDispatch();
-    const products = useSelector((state) => state.app.products);
-    const loading = useSelector((state) => state.app.loading);
-    
-    useEffect(() => {
-        dispatch(getProducts());
-    }, [dispatch]);
+  const [view, setView] = React.useState(0);
 
-    return (
-        <>
-        <Box sx={{ pt: 3 }}>
-            <Box sx={{ 
-              display: 'flex',
-              justifyContent: 'center',
-              py: 1
-             }}>
-              {loading ? <CircularProgress /> : null}
-             </Box>
-            {products.length < 1 ? (
-                <Paper variant="outlined">
-                  <Typography variant="h5" color="textSecondary" paddingX={2} align="center">
-                    Sorry! No Products are available!!
-                  </Typography>
-                </Paper>
-              ) :
-              (
-                <Grid
-                  container
-                  spacing={3}
-                >
-                  {products.map((product) => (
-                    <Grid
-                      item
-                      key={product.id}
-                      lg={4}
-                      md={6}
-                      xs={12}
-                    >
-                      <ProductCard product={product} />
-                    </Grid>
-                  ))}
-                </Grid>
-              )
-            }
-        </Box>
-        {products.length < 1 ? null : (<Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              pt: 3
-            }}
-          >
-            <Pagination
-              color="primary"
-              count={3}
-              size="small"
-            />
-          </Box>)}
-        </>
-    )
-}
+  const handleChange = (event, newValue) => {
+    setView(newValue);
+  };
+
+  return (
+    <Box sx={{ width: "100%" }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={view}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="All Products" {...spreadAttr(0)} />
+          <Tab label="Biddable Products" {...spreadAttr(1)} />
+          <Tab label="UnBiddable Products" {...spreadAttr(2)} />
+        </Tabs>
+      </Box>
+      <ProductTabs value={view} index={0}>
+        <AllProducts />
+      </ProductTabs>
+      <ProductTabs value={view} index={1}>
+        <BiddableProducts />
+      </ProductTabs>
+      <ProductTabs value={view} index={2}>
+        <UnbiddableProducts />
+      </ProductTabs>
+    </Box>
+  );
+};
 
 export default Products;

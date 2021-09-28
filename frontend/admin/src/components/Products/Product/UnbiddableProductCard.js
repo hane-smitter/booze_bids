@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import {
-  Chip,
+  Button,
   Card,
   CardActionArea,
   CardActions,
@@ -15,14 +15,13 @@ import {
 import useStyles from '../styles';
 import imgDefault from 'src/images/products/default.jpeg';
 
-const ProductCard = ({ product, ...rest }) => {
+const UnbiddableProductCard = ({ product, ...rest }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   return (
     <Card className={classes.root}>
         <CardHeader
-            color="primary"
-            subheader={product.name}
+            subheader="Ends in: 07 Days 19 Hours 45 Mins 53 Secs"
         />
         <CardActionArea>
             <CardMedia
@@ -31,6 +30,9 @@ const ProductCard = ({ product, ...rest }) => {
                 title={product.name}
             />
             <CardContent>
+                <Typography gutterBottom variant="h5" component="h2" color="primary">
+                {product.name}
+                </Typography>
                 <Typography  variant="h5" component="h2">
                     RRP: KSH {product.cost}
                 </Typography>
@@ -38,15 +40,24 @@ const ProductCard = ({ product, ...rest }) => {
             </CardContent>
         </CardActionArea>
         <Divider />
-        <CardActions className={classes.flexWrap} style={{ height: '50px' }}>
-            {product.productbidscount ? null : <Chip label="No bid details created" color="warning" />}
+        <CardActions className = {classes.flexWrap}>
+            <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={_ => {
+                    navigate('createbid', { state: product });
+                }}
+            >
+                Create bid
+            </Button>
         </CardActions>
     </Card>
   );
 };
 
-ProductCard.propTypes = {
+UnbiddableProductCard.propTypes = {
   product: PropTypes.object.isRequired
 };
 
-export default ProductCard;
+export default UnbiddableProductCard;

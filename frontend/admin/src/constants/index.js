@@ -1,5 +1,7 @@
 export const CREATE = 'CREATE';
-export const READPROD = 'FETCH_PRODUCTS';
+export const READALLPROD = 'FETCH_ALL_PRODUCTS';
+export const READBIDDABLEPROD = 'FETCH_BIDDABLE_PRODUCTS';
+export const READUNBIDDABLEPROD = 'FETCH_UNBIDDABLE_PRODUCTS';
 export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
 export const ERROR = 'ERROR';

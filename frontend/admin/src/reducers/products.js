@@ -1,16 +1,22 @@
 import {
   CREATE,
-  READPROD,
+  READALLPROD,
+  READBIDDABLEPROD,
+  READUNBIDDABLEPROD,
   CREATECAT,
   ERROR,
   LOADING,
   CREATEBID,
   READCAT,
-  STATUS
+  STATUS,
 } from "../constants";
 
 const initState = {
-  products: [],
+  products: {
+    allprod: [],
+    biddableprod: [],
+    unbiddableprod: [],
+  },
   categories: [],
   bidproducts: [],
   status: {},
@@ -20,15 +26,27 @@ const initState = {
 
 export default (app = initState, action) => {
   switch (action.type) {
-    /* case READPROD:
-            return action.payload.products; */
-    case READPROD:
-      return { ...app, products: action.payload.products };
+    case READALLPROD:
+      return {
+        ...app,
+        products: { ...app.products, allprod: action.payload.products },
+      };
+      case READBIDDABLEPROD:
+      return {
+        ...app,
+        products: { ...app.products, biddableprod: action.payload.products },
+      };
+      case READUNBIDDABLEPROD:
+      return {
+        ...app,
+        products: { ...app.products, unbiddableprod: action.payload.products },
+      };
     case CREATE:
       return {
         ...app,
         products: [action.payload.product, ...app.products],
-      };//categories
+      };
+    //categories
     case READCAT:
       return {
         ...app,
@@ -44,7 +62,7 @@ export default (app = initState, action) => {
         ...app,
         categories: [action.payload.category, ...app.categories],
       };
-      case STATUS:
+    case STATUS:
       return {
         ...app,
         status: action.payload.status,
