@@ -22,10 +22,11 @@ import SearchBar from "material-ui-search-bar";
 import Product from "./Product/Product";
 import useStyles from "./styles";
 import { getProducts } from "../../actions/products";
+import { unsetErr } from "../../actions/errors";
 
 const Products = () => {
   const dispatch = useDispatch();
-  const { loading, products, categories } = useSelector((state) => state.app);
+  const { loading, products, categories, err } = useSelector((state) => state.app);
   const classes = useStyles();
   const [categoryOpen, setCategoryOpen] = React.useState(false);
 
@@ -34,7 +35,13 @@ const Products = () => {
   };
   const [criteria, setCriteria] = React.useState("1");
   const [searchItem, setSearchItem] = React.useState("");
-  console.log(criteria);
+
+  React.useEffect(() => {
+    return() => {
+      dispatch(unsetErr());
+      window.scroll(0, 0);
+    }
+  }, []);
   return (
     <Container>
       <Box className={classes.productsTitleBox}>

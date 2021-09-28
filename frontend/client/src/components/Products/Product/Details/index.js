@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Grid
-} from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 import { useLocation } from "react-router";
 import { motion } from "framer-motion";
 import { batch, useDispatch, useSelector } from "react-redux";
@@ -17,7 +14,7 @@ import { unsetErr, unsetStatus } from "../../../../actions/errors";
 import Footer from "../../../Footer";
 
 const Detail = () => {
-  const { products, err, status  } = useSelector((state) => state.app);
+  const { products, err, status } = useSelector((state) => state.app);
   const dispatch = useDispatch();
   const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
   const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
@@ -30,7 +27,7 @@ const Detail = () => {
     dispatch(getProducts(undefined, updateProduct));
     // updateProduct();
   }
-  
+
   function updateProduct(prods) {
     let currProductArr = prods.filter((product) => {
       return Boolean(
@@ -41,7 +38,7 @@ const Detail = () => {
       setProduct(currProductArr[0]);
     }
   }
-  
+
   useEffect(() => {
     rehydrateProducts();
     return () => {
@@ -56,18 +53,18 @@ const Detail = () => {
     setErrAlertOpen(Boolean(err.length > 0));
   }, [err]);
 
-  
   // useEffect(() => {
   //   console.log("use effect called updateProduct!!");
   //   updateProduct();
   // }, [products]);
-  
-const nav = {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0
-}
+
+  const nav = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+  };
   const navVariants = {
     hidden: {
       opacity: 0,
@@ -123,8 +120,8 @@ const nav = {
 
   return (
     <>
-      <Container maxwidth="lg" style={{ paddingTop: '120px' }}>
-      <ShowFeedback
+      <Container maxwidth="lg" style={{ paddingTop: "120px" }}>
+        <ShowFeedback
           alertOpen={alertOpen}
           setAlertOpen={setAlertOpen}
           severity={status?.info?.severity}
@@ -141,15 +138,15 @@ const nav = {
             />
           ))}
 
-<motion.div
-style={nav}
-      variants={navVariants}
-      initial="hidden"
-      animate="visible"
-      exit="leave"
-    >
-      <Navbar />
-    </motion.div>
+        <motion.div
+          style={nav}
+          variants={navVariants}
+          initial="hidden"
+          animate="visible"
+          exit="leave"
+        >
+          <Navbar />
+        </motion.div>
 
         <Container maxwidth="lg" className={classes.wrapperContainer}>
           <Grid container>
@@ -182,7 +179,7 @@ style={nav}
           </Grid>
         </Container>
       </Container>
-      <Footer/>
+      <Footer />
     </>
   );
 };

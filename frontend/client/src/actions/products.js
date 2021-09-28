@@ -34,7 +34,7 @@ export const getProducts = (query, cb) => async (dispatch) => {
       dispatch({ type: READPROD, payload: { products } });
       dispatch({ type: READCAT, payload: { categories } });
     });
-    cb(products);
+    cb && cb(products);
   } catch (error) {
     logError(error, dispatch);
   }
@@ -105,6 +105,8 @@ function logError(error, dispatch) {
       dispatch({ type: ERROR, payload: { err } });
     });
   } else {
+    console.error(error);
+    console.log(error.message);
     let err = [
       {
         msg: "Oops! An unknown error occured!",

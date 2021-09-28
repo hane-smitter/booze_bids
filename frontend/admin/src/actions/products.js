@@ -3,7 +3,9 @@ import { batch } from "react-redux";
 import * as api from "../api";
 import {
   CREATE,
-  READPROD,
+  READALLPROD,
+  READBIDDABLEPROD,
+  READUNBIDDABLEPROD,
   READCAT,
   CREATECAT,
   ERROR,
@@ -26,13 +28,27 @@ export const getProducts = () => async (dispatch) => {
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: READPROD, payload: { products } });
+      dispatch({ type: READALLPROD, payload: { products } });
       dispatch({ type: READCAT, payload: { categories } });
     });
   } catch (error) {
     logError(error, dispatch);
   }
 };
+export const getBiddableProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //fetch data
+    const { data:products } = await api.fetchBiddableProducts();
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: READBIDDABLEPROD, payload: { products } });
+    });
+  } catch (error) {
+    logError(error, dispatch);
+  }
+}
 export const getCategories = () => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
