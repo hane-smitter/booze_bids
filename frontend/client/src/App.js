@@ -25,7 +25,7 @@ const easyBg = createTheme({
 const App = () => {
   return (
     <MuiThemeProvider theme={easyBg}>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
     <Router>
       <Switch>
         <Route exact path="/" component={Home} />

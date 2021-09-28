@@ -63,19 +63,19 @@ const LightBox = ({ product }) => {
               <span className={`${classes.countdowntime}`}>
                 {countDownTime.days}
               </span>
-              <span>Days</span>
+              <span>D</span>
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.hours}
               </span>
-              <span>Hrs</span>
+              <span>H</span>
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.minutes}
               </span>
-              <span>minutes</span>
+              <span>M</span>
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.seconds}
               </span>
-              <span>seconds</span>
+              <span>S</span>
             </Typography>
 
             <Grid container alignItems="center">

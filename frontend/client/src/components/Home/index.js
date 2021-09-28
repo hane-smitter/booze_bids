@@ -28,10 +28,11 @@ const Home = () => {
 
     return (
         <div>
-            <Banner />
-                <Navbar/>
+            
                 <Grow in>
-                    <Container maxwidth="xl">
+                    <Container maxwidth="md">
+                        <Navbar/>
+                        <Banner />
                         {/* <Grid container justifyContent="center" className={classes.bg}>
                             <Banner />
                         </Grid> */}

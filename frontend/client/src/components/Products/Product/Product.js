@@ -14,6 +14,7 @@ import { motion } from "framer-motion"
 import useStyles from "./styles";
 import defaultImg from "../../../images/products/defaultImg.jpeg";
 import FutureTimeCalc from "../../utils/FutureTimeCalc";
+import MoneyFormat from "../../utils/MoneyFormat/index.js";
 
 const Product = ({ product }) => {
   const [ cardBlinking, setCardBlinking ] = useState(!Boolean(product.slots));
@@ -73,7 +74,7 @@ const Product = ({ product }) => {
           <CardMedia
             className={classes.media}
             image={product.product.image || defaultImg}
-            title={product.product.name}
+            title='Click to bid'
           />
           <CardContent 
           className={classes.darkBox} 
@@ -89,36 +90,37 @@ const Product = ({ product }) => {
             >
               Ends in:{" "}
               <span className={classes.bomb}>
-              {countDownTime.days &&
+              {countDownTime.days != '00' &&
               <span>
                 <span className={`${classes.countdowntime}`}>
                   {countDownTime.days}
                 </span>
-                <span>:</span>
+                <span>D:</span>
               </span>
               }
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.hours}
               </span>
-              <span>:</span>
+              <span>H:</span>
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.minutes}
               </span>
-              <span>:</span>
+              <span>M:</span>
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.seconds}
               </span>
+              <span>s</span>
               </span>
             </Typography>
             <Typography className={classes.success} variant="caption" component="p">
-              Bid me @ Kes {product.bidPrice} | Slots: {product.totalslots ?? 0}
+              Bid me @ {MoneyFormat(product.bidPrice)} | Slots: {product.totalslots ?? 0}
             </Typography>
             <Typography
               component="div"
-              variant="body2"
-              style={{ fontWeight: "bold" }}
+              variant="l"
+              style={{ fontWeight: "bold", textAlign:'center' }}
             >
-              RRP: KSH {product.product.cost}
+              RRP: {MoneyFormat(product.product.cost)}
             </Typography>
           </CardContent>
         </CardActionArea>

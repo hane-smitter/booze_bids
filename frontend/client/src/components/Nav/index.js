@@ -38,7 +38,7 @@ const Nav = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const displayMobile = () => (
-    <React.Fragment>
+    <React.Fragment>  
       <IconButton
         edge="start"
         color="inherit"
@@ -74,14 +74,16 @@ const Nav = () => {
         </MenuItem>
       </Menu>
 
-      <img alignItems="center" src={Logo} className={classes.image,classes.position} />
+      <Link to="/"><img alignItems="center" src={Logo} className={classes.image,classes.position} /></Link>
     </React.Fragment>
   );
   const displayDesktop = () => (
     <React.Fragment>
       <div>
-        <img src={Logo} className={classes.image} />
-        <img alignItems="center" src={Kenya} className={classes.kenya} />
+        <Link to="/">
+          <img src={Logo} className={classes.image} />
+          <img alignItems="center" src={Kenya} className={classes.kenya} />
+        </Link>
       </div>
       
       <Grid container justifyContent="space-evenly" direction="row" alignItems="center" className={classes.navContainer}>
@@ -91,11 +93,24 @@ const Nav = () => {
         <Grid item xs>
           <Link className={classes.navLink} to="/pastbids">Past Bids</Link>
         </Grid>
+        <Grid item >
+          <span className={classes.time}> 
+            { new Date().toLocaleString('en-US', {
+                                                weekday: 'short', // long, short, narrow
+                                                day: 'numeric', // numeric, 2-digit
+                                                year: 'numeric', // numeric, 2-digit
+                                                month: 'short', // numeric, 2-digit, long, short, narrow
+                                                hour: 'numeric', // numeric, 2-digit
+                                                minute: 'numeric', // numeric, 2-digit
+                                            }) } 
+          </span>
+        </Grid>
       </Grid>
+      
     </React.Fragment>
   );
   return (
-    <AppBar className={classes.appBar} position="fixed" color="inherit"> 
+    <AppBar className={classes.appBar} position="sticky" color="inherit"> 
       <Toolbar className={classes.navigation}>
         {isMobile ? displayMobile() : displayDesktop()}
       </Toolbar>

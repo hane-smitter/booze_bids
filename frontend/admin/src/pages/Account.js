@@ -10,7 +10,7 @@ import AccountProfileDetails from '../components/account/AccountProfileDetails';
 const Account = () => (
   <>
     <Helmet>
-      <title>Account | Booze Bids</title>
+      <title>Account | BidsPesa</title>
     </Helmet>
     <Box
       sx={{

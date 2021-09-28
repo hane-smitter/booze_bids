@@ -21,7 +21,8 @@ const ProductCard = ({ product, ...rest }) => {
   return (
     <Card className={classes.root}>
         <CardHeader
-            subheader="Ends in: 07 Days 19 Hours 45 Mins 53 Secs"
+            color="primary"
+            subheader={product.name}
         />
         <CardActionArea>
             <CardMedia
@@ -30,9 +31,6 @@ const ProductCard = ({ product, ...rest }) => {
                 title={product.name}
             />
             <CardContent>
-                <Typography gutterBottom variant="h5" component="h2" color="primary">
-                {product.name}
-                </Typography>
                 <Typography  variant="h5" component="h2">
                     RRP: KSH {product.cost}
                 </Typography>
