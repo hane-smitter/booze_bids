@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles(() => ({
     appBar: {
         // borderRadius: 15,
-        // marginBlockStart: '10px',
+        marginBlockStart: '0px',
         // marginBlockEnd: '20px',
         backgroundColor: '#020b14',
         color: '#ffffff'
@@ -42,6 +42,21 @@ export default makeStyles(() => ({
         "&:hover": {
             textDecoration:'underline'
           },
+    },
+        kenya:{
+        display: 'block',
+        height: '20px',
+        marginLeft:'170px'
+    },
+    time :{
+        color: '#ff9800',
+        backgroundColor:'#111',
+        fontWeight:'bold',
+        fontFamily: 'Open Sans',
+        fontSize:'13px',
+        textDecoration: 'none',
+        // position:'absolute',
+        // margin:'auto',
     },
     navContainer: {
         maxWidth: '200px',

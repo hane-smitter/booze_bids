@@ -15,7 +15,7 @@ export default makeStyles(() => ({
         marginBlockEnd: '20px',
         // borderBottomLeftRadius: '50%',
         // borderBottomRightRadius: '60%',
-        marginBlockStart:'80px',
+        marginBlockStart:'-90px',
         backgroundColor:'#f0f0f0',
         width:'100%'
     },

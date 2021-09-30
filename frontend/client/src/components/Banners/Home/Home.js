@@ -24,9 +24,8 @@ const Banner = () => {
             <Paper /* elevation={3} */ className={classes.imgContainer}>
                 {/* <img src={banner_img} className={classes.image}/> */}
                 <div >
-        
-        <BannerFile/>
-    </div>
+                    <BannerFile/>
+                </div>
             </Paper>
         </div>
     )

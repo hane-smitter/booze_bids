@@ -47,17 +47,17 @@ const Products = () => {
       <Box className={classes.productsTitleBox}>
         {/* {categories.length && ( */}
         <Grid container rowSpacing={0} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid item xs={12} sm={4}>
-            <Box style={{ flexGrow: 4 }} component="span">
-              <List
+          <Grid style={{ height:40 }} item xs={12} sm={4}>
+            <Box component="span">
+              <List style={{ height:25,padding:0 }} 
                 component="nav"
                 aria-labelledby="categories"
                 className={classes.rootList}
               >
                 <ListItem button onClick={handleCatgoryClick}>
-                  <ListItemIcon>
+                  {/* <ListItemIcon>
                     <CategoryIcon />
-                  </ListItemIcon>
+                  </ListItemIcon> */}
                   <ListItemText primary="Browse categories" />
                   {categoryOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                 </ListItem>
@@ -90,7 +90,7 @@ const Products = () => {
                           );
                         }}
                       >
-                        <ListItemText primary={decode(category.name)} />
+                        <ListItemText primary={decode(category.name ? category.name : '')}  />
                       </ListItem>
                     ))}
                   </List>
@@ -110,7 +110,8 @@ const Products = () => {
                 onRequestSearch={() => console.log("onRequestSearch")}
                 style={{
                   maxWidth: 400,
-                  margin: 10,
+                  margin: 5,
+                  height:30
                 }}
               />
             </Typography>

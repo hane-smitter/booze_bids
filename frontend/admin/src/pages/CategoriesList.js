@@ -7,7 +7,7 @@ import { Outlet } from 'react-router';
 const CategoriesList = () => (
   <>
     <Helmet>
-      <title>Categories | Booze Bids</title>
+      <title>Categories | BidsPesa</title>
     </Helmet>
     <Box
       sx={{

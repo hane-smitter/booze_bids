@@ -204,7 +204,7 @@ const DarkBox = ({ product, updateProducts }) => {
               <>
                 <Alert severity={"info"} sx={{ width: "100%" }}>
                   <AlertTitle>Hello there</AlertTitle>
-                  Chances are high this could be your first bid. Just a little
+                  Chances are this could be your first bid. Just a little
                   more information and get your bid going.
                 </Alert>
                 <Field
