@@ -14,7 +14,7 @@ import { Image } from "@mui/icons-material";
 import * as Yup from "yup";
 import { Formik, Field } from "formik";
 import { useNavigate } from "react-router";
-import { decode } from 'html-entities';
+import { decode } from "html-entities";
 
 import useStyles from "./styles";
 import { createProduct, getProducts } from "src/actions/products";
@@ -22,7 +22,9 @@ import { unsetErr, unsetStatus } from "src/actions/errors";
 import ShowFeedback from "src/utils/ShowFeedback";
 
 const Form = () => {
-  const { categories, err, loading, status } = useSelector((state) => state.app);
+  const { categories, err, loading, status } = useSelector(
+    (state) => state.app
+  );
   const initialValues = {
     name: "",
     brand: "",
@@ -94,7 +96,7 @@ const Form = () => {
     );
     return (
       <Autocomplete
-      value={categoryVal}
+        value={categoryVal}
         options={categories}
         disableClearable
         getOptionLabel={(option) => decode(option.name)}
@@ -143,7 +145,7 @@ const Form = () => {
           onClick={() => hiddenInp.current.click()}
           sx={{
             mt: 2,
-            mb: .5
+            mb: 0.5,
           }}
         >
           choose image
@@ -151,7 +153,9 @@ const Form = () => {
         <FormHelperText error={toShowError}>
           {toShowError ? currentError : value?.name ?? helperText}
         </FormHelperText>
-        {imgPrev && <img src={imgPrev} alt="preview" width={200} height={200} />}
+        {imgPrev && (
+          <img src={imgPrev} alt="preview" width={200} height={200} />
+        )}
         <input
           id="file"
           accept="image/*"
@@ -182,7 +186,7 @@ const Form = () => {
     field: { value, name },
     formErrors,
     formErrorsNames,
-    helperText
+    helperText,
   }) => {
     return (
       <CustomFileInput
@@ -204,7 +208,7 @@ const Form = () => {
     ...others
   }) => {
     const currentError =
-      (form.errors[name]) || formErrors[formErrorsNames.indexOf(name)]?.msg;
+      form.errors[name] || formErrors[formErrorsNames.indexOf(name)]?.msg;
     const toShowError = Boolean(
       (currentError && form.touched[name]) ||
         formErrorsNames.indexOf(name) !== -1
@@ -214,9 +218,7 @@ const Form = () => {
         margin="normal"
         name={name}
         value={value}
-        onChange={(event) =>
-          form.setFieldValue(name, event.target.value)
-        }
+        onChange={(event) => form.setFieldValue(name, event.target.value)}
         error={toShowError}
         helperText={toShowError ? currentError : undefined}
         fullWidth
@@ -228,7 +230,7 @@ const Form = () => {
   return (
     <>
       <Container maxWidth="sm">
-      <ShowFeedback
+        <ShowFeedback
           alertOpen={alertOpen}
           setAlertOpen={setAlertOpen}
           severity={status?.info?.severity}
@@ -254,7 +256,6 @@ const Form = () => {
             }
             actions.setSubmitting(loading);
             dispatch(createProduct(formData));
-
 
             /* console.log("This is the form data from the form");
             for (var value of formData.values()) {

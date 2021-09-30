@@ -47,4 +47,4 @@ const FutureTimeCalc = (startTime, endTime) => {
   return time;
 };
 
-export default FutureTimeCalc;
+export default FutureTimeCalc; 

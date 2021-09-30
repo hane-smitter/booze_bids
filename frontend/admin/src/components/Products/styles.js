@@ -5,10 +5,10 @@ export default makeStyles({
     fontSize: 'inherit',
   },
   media: {
-    height: 0,
-    paddingTop: '56.25%',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    height: 200,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     backgroundBlendMode: 'darken',
+    objectFit: 'contain'
   },
   border: {
     border: 'solid',

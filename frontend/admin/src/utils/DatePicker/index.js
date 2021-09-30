@@ -2,7 +2,7 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 import { TextField } from "@mui/material";
 import { format } from "date-fns";
 
-export function DatePickerField({
+function DatePickerField({
     form,
     field: { value, name },
     maxDate = new Date("2099-12-31"),
@@ -62,3 +62,5 @@ export function DatePickerField({
       />
     );
   }
+
+  export {DatePickerField};

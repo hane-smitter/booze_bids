@@ -12,13 +12,13 @@ import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "./Product/ProductCard";
 import { getProducts } from "src/actions/products";
 
-const AllProducts = () => {
+const AllProducts = ({setModalComponent, setShowModal}) => {
     const dispatch = useDispatch();
   const { products: { allprod:products }, loading } = useSelector((state) => state.app);
 
   React.useEffect(() => {
     dispatch(getProducts());
-  }, [dispatch]);
+  }, []);
 
   return (
     <>
@@ -46,7 +46,7 @@ const AllProducts = () => {
         <Grid container spacing={3}>
           {products.map((product) => (
             <Grid item key={product.id} lg={4} md={6} xs={12}>
-              <ProductCard product={product} />
+              <ProductCard product={product} setModalComponent={setModalComponent} setShowModal={setShowModal} />
             </Grid>
           ))}
         </Grid>

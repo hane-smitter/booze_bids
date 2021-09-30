@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 const BidSchema = mongoose.Schema({
     product: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'Product'
     },
     bidPrice: {
         required: true,
@@ -20,7 +21,8 @@ const BidSchema = mongoose.Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'User'
     }
 }, { toJSON: {virtuals: true}, timestamps: true });
 
@@ -30,11 +32,7 @@ BidSchema.post('validate', function(bid, next) {
     next();
 });
 
-BidSchema.virtual('bidderuser',{
-    ref: 'User',
-    localField: 'user',
-    foreignField: '_id'
-});
+
 
 const Bid = mongoose.model('Bid', BidSchema)
 

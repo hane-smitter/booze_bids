@@ -12,6 +12,7 @@ import {
   LOADING,
   CREATEBID,
   STATUS,
+  READBIDS
 } from "../constants";
 
 //Action creators
@@ -81,6 +82,23 @@ export const createProduct = (body) => async (dispatch) => {
     logError(error, dispatch);
   }
 };
+export const updateProduct = (param, body) => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //create product
+    const { data:status } = await api.updateProduct(param, body);
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({
+        type: STATUS,
+        payload: { status },
+      });
+    });
+  } catch (err) {
+    logError(err, dispatch);
+  }
+}
 
 export const createProductBid = (body) => async (dispatch) => {
   try {
@@ -121,8 +139,9 @@ export const createProductCategory = (body) => async (dispatch) => {
 export const updateProductCategory = (param, body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
-    //create product bid
+    //update product category
     const { data:status } = await api.updateProductCategory(param, body);
+    await api.fetchProductCategories();
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
@@ -132,6 +151,21 @@ export const updateProductCategory = (param, body) => async (dispatch) => {
     logError(error, dispatch);
   }
 };
+
+export const getBids = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //fetch bids made by customers
+    const { data:bids } = await api.fetchBids();
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: READBIDS, payload: { bids } });
+    });
+  } catch (error) {
+    logError(error, dispatch);
+  }
+}
 
 function logError(error, dispatch) {
   if (error.response) {
@@ -144,6 +178,7 @@ function logError(error, dispatch) {
     let err = [
       {
         msg: "Could not contact remote address",
+        hint: "Try checking your internet connection and try again"
       },
     ];
 
@@ -154,7 +189,7 @@ function logError(error, dispatch) {
   } else {
     let err = [
       {
-        msg: "An unknown error occured!",
+        msg: "An unknown error occured",
       },
     ];
 

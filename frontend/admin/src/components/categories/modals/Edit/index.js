@@ -76,10 +76,8 @@ const Edit = ({ categories = [], currentCatIdSelected, setShowModal, fetchCatego
       }}
       onSubmit={(values, actions) => {
         dispatch(updateProductCategory(values.id, values));
-        fetchCategories();
+        // fetchCategories();
         // actions.setSubmitting(loading);
-        console.log("form values");
-        console.log(values);
         actions.setSubmitting(false);
       }}
       validationSchema={catCreationSchema}

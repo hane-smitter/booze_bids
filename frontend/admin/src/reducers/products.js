@@ -9,6 +9,7 @@ import {
   CREATEBID,
   READCAT,
   STATUS,
+  READBIDS,
 } from "../constants";
 
 const initState = {
@@ -19,6 +20,9 @@ const initState = {
   },
   categories: [],
   bidproducts: [],
+  bids: {
+    allbids: [],
+  },
   status: {},
   err: [],
   loading: false,
@@ -31,12 +35,12 @@ export default (app = initState, action) => {
         ...app,
         products: { ...app.products, allprod: action.payload.products },
       };
-      case READBIDDABLEPROD:
+    case READBIDDABLEPROD:
       return {
         ...app,
         products: { ...app.products, biddableprod: action.payload.products },
       };
-      case READUNBIDDABLEPROD:
+    case READUNBIDDABLEPROD:
       return {
         ...app,
         products: { ...app.products, unbiddableprod: action.payload.products },
@@ -61,6 +65,11 @@ export default (app = initState, action) => {
       return {
         ...app,
         categories: [action.payload.category, ...app.categories],
+      };
+    case READBIDS:
+      return {
+        ...app,
+        bids: { ...app.bids, allbids: action.payload.bids },
       };
     case STATUS:
       return {

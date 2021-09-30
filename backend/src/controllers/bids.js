@@ -8,7 +8,13 @@ import User from "../models/User.js";
 
 export const getBids = async (req, res) => {
   try {
-    const bids = await Bid.find({}).populate('bidderuser').sort([["createdAt", -1]]);
+    /* const bids = await Bid.find({}).populate({
+      path: 'prodbiddetails',
+      populate: {
+        path: 'product'
+      }
+    }).populate('user').sort([["createdAt", -1]]); */
+    const bids = await ProductBidDetail.find({}).populate('product').populate('prodbids');
 
     res.json(bids);
   } catch (err) {
@@ -98,7 +104,7 @@ export const createBid = async (req, res) => {
 
 export const getHighestAmountBidder = async (req, res) => {
   try {
-    const bidder = await Bid.findOne({}).populate('bidderuser').sort('-bidAmountTotal');
+    const bidder = await Bid.findOne({}).populate('user').sort('-bidAmountTotal');
 
     res.json({ bidder });
 } catch{

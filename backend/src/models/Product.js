@@ -56,11 +56,9 @@ ProductSchema.virtual('productbidscount',{
 });
 
 ProductSchema.pre('validate', async function(next) {
-    try {
+    if(this.isModified('name')) {
         const product = await Product.findOne({name: this.name});
         if (product) throw new Error("Product with this name already exists");
-    } catch (err) {
-        throw new Error(err.message);
     }
     next();
 });

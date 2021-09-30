@@ -14,6 +14,7 @@ import ProductCategoryCreate from './components/Form/Product/ProductCategoryCrea
 import ProductCreate from './components/Form/Product/ProductCreate';
 import Products from './components/Products/Products';
 import CategoriesListResults from './components/categories/CategoriesListResults';
+import BidsList from './components/bids/BidsList';
 
 const routes = [
   {
@@ -38,6 +39,10 @@ const routes = [
           { path: 'createbid', element: <ProductBidCreate /> },
           // { path: 'createcat', element: <ProductCategoryCreate /> }
         ]
+      },
+      {
+        path: 'bids',
+        element: <BidsList />
       },
       { path: 'settings', element: <Settings /> },
       { path: '', element: <Navigate to="/app/dashboard" /> },

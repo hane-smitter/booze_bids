@@ -1,52 +1,108 @@
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import {
   Chip,
   Card,
   CardActionArea,
   CardActions,
   CardContent,
-  CardHeader,
   CardMedia,
   Divider,
-  Typography
-} from '@mui/material';
+  Typography,
+  IconButton,
+} from "@mui/material";
 
-import useStyles from '../styles';
-import imgDefault from 'src/images/products/default.jpeg';
+import useStyles from "../styles";
+import imgDefault from "src/images/products/default.jpeg";
+import FutureTimeCalc from "src/utils/FutureTimeCalc";
+import { Edit } from "react-feather";
+import EditModal from "./modals/Edit";
 
-const ProductCard = ({ product, ...rest }) => {
+const urlToFileObj = (url, name) => {
+  let data = fetch(url)
+    .then((response) => response.blob())
+    .then((blob) => new File([blob], name, { type: blob.type }));
+  return data;
+};
+
+const ProductCard = ({ product, setModalComponent, setShowModal, ...rest }) => {
   const classes = useStyles();
-  const navigate = useNavigate();
+  
+  const [time, setTime] = useState("00 Days 00 Hours 00 Mins 00 Secs");
+  const [imgPrev, setImgPrev] = useState(null);
+  const [imgObj, setImgObj] = useState("");
+
+  function handleEdit(product) {
+    setShowModal(true);
+    setModalComponent(
+      <EditModal product={product} setShowModal={setShowModal} imgPrev={imgPrev} setImgPrev={setImgPrev} imgObj={imgObj} />
+    );
+  }
+
+  useEffect(() => {
+    urlToFileObj(product.image, product.name).then((val) => {
+      setImgObj(val);
+      const reader = new FileReader();
+      reader.readAsDataURL(val);
+
+      reader.onload = () => {
+        setImgPrev(reader.result);
+      };
+    });
+    if (product.productbids[0]?.startTime) {
+      let interval = setInterval(() => {
+        setTime(
+          FutureTimeCalc(
+            product.productbids[0].startTime,
+            product.productbids[0].endTime
+          )
+        );
+      }, 1000);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+    
+  }, []);
   return (
     <Card className={classes.root}>
-        <CardHeader
-            color="primary"
-            subheader={product.name}
+      {product.productbids[0]?.startTime && (
+        <Typography
+          variant="body2"
+          color="text.secondary"
+        >{`Ends in: ${time}`}</Typography>
+      )}
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          image={product.image ?? imgDefault}
+          className={classes.media}
+          title={product.name}
         />
-        <CardActionArea>
-            <CardMedia
-                image={product.image ?? imgDefault}
-                className={classes.media}
-                title={product.name}
-            />
-            <CardContent>
-                <Typography  variant="h5" component="h2">
-                    RRP: KSH {product.cost}
-                </Typography>
-                
-            </CardContent>
-        </CardActionArea>
-        <Divider />
-        <CardActions className={classes.flexWrap} style={{ height: '50px' }}>
-            {product.productbidscount ? null : <Chip label="No bid details created" color="warning" />}
-        </CardActions>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2" color="primary">
+            {product.name}
+          </Typography>
+          <Typography variant="h5" component="h2">
+            RRP: KSH {product.cost}
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <Divider />
+      <CardActions className={classes.flexWrap} style={{ minHeight: "50px" }}>
+        {product.productbidscount ? null : (
+          <Chip label="No bid details created" color="warning" />
+        )}
+        <IconButton onClick={() => handleEdit(product)}>
+          <Edit />
+        </IconButton>
+      </CardActions>
     </Card>
   );
 };
 
 ProductCard.propTypes = {
-  product: PropTypes.object.isRequired
+  product: PropTypes.object.isRequired,
 };
 
 export default ProductCard;
