@@ -1,63 +1,84 @@
 import { AppBar, Avatar, Container, Grid, List, ListItem, Toolbar, Typography, ListItemText, ListItemAvatar, Divider } from "@material-ui/core";
 import React from "react";
 import useStyles from './styles.js';
-import ContactPhoneIcon from '@material-ui/icons/ContactPhone';
-import ContactMailIcon from '@material-ui/icons/ContactMail';
 import BP from '../../images/favicon.png'; 
 import Logo from '../../images/smoke.png'; 
+import CallIcon from '@mui/icons-material/Call';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import EmailIcon from '@mui/icons-material/Email';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import InstagramIcon from '@mui/icons-material/Instagram';
 
 export default function Footer() {
     const classes = useStyles();
     return (
         <Container className={classes.appBar} position="static" color="primary">
-            <Grid container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-            <Grid item xs={12} sm={4}>
-              <Typography className={classes.headers} gutterBottom variant="h6">
-                ABOUT
-              </Typography>
-              <hr className={classes.divider}/>
+            <Grid  container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid item xs={12} sm={3}>
                 <List>
                     <ListItem>
                         <ListItemAvatar>
                           <img className={classes.logo} src={Logo} />
                         </ListItemAvatar>
                       </ListItem>
-                      <ListItem  className={classes.center}>
+                      <ListItem className={classes.listItem}>
                         <Typography variant="l" color="inherit">
-                          Bidspesa is a licensed bidding company that deals with abcd and is ...
+                          Bidspesa is an online auction company that deals in new goods only. 
+                          This is a dynamic auction based on unique bids on a marked time.
                         </Typography>
                     </ListItem>
                 </List>
             </Grid> 
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={3}>
               <Typography className={classes.headers} gutterBottom variant="h6">
-                CONTACT
+                Contact
               </Typography>
-              <hr className={classes.divider}/>
                 <List >
-                    <ListItem className={classes.center}>
-                        <ListItemText primary={'Phone: 254789XXXXX'} />
+                    <ListItem className={classes.listItem}>
+                    <CallIcon sx={{ color: 'red' }}/> &nbsp;<ListItemText primary={'254717252575'} />
                     </ListItem>
-                    <ListItem  className={classes.center}>
-                        <ListItemText primary={'Email: info@bidspesa.com'} />
+                    <ListItem  className={classes.listItem}>
+                    <LocationOnIcon sx={{ color: 'red' }}/> &nbsp;<ListItemText primary={'Ridgeways Kiambu Kenya'} />
+                    </ListItem>
+                    <ListItem   className={classes.listItem}>
+                    <EmailIcon sx={{ color: 'red' }}/>&nbsp; <ListItemText primary={' info@bidspesa.com'} />
                     </ListItem>
                 </List>
             </Grid> 
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={3}>
               <Typography className={classes.headers} gutterBottom variant="h6">
-                LICENSE
+                Social Media
               </Typography>
-              <hr className={classes.divider}/>
+                <List >
+                    <ListItem  className={classes.listItem}>
+                        <FacebookIcon />&nbsp;<ListItemText primary={'Facebook'} />
+                    </ListItem>
+                    <ListItem  className={classes.listItem}>
+                       <TwitterIcon/> &nbsp;<ListItemText primary={'Twitter'} />
+                    </ListItem>
+                    <ListItem   className={classes.listItem}>
+                        <YouTubeIcon/> &nbsp;<ListItemText primary={'YouTube'} />
+                    </ListItem>
+                    <ListItem   className={classes.listItem}>
+                        <InstagramIcon/>&nbsp; <ListItemText primary={'Instagram'} />
+                    </ListItem>
+                </List>
+            </Grid> 
+            <Grid item xs={12} sm={3}>
+              <Typography className={classes.headers} gutterBottom variant="h6">
+                Licence
+              </Typography>
                 <List>
-                    <ListItem>
-                      <Typography className={classes.center} variant="l" color="inherit">
-                        The Operator of this website, is licensed and regulated by the Auctioneers Board under License number XXXXXXXXX. Held by XXXXXXXX Trading under the name XXXXXXXXXX
+                    <ListItem className={classes.listItem}>
+                      <Typography variant="l" color="inherit">
+                        The Operator of this website, is licensed and regulated by the Auctioneers Board of Kenya under License number 0000000.
                       </Typography>
                     </ListItem>
                 </List>
             </Grid> 
             </Grid>
-            <hr style={{ maxWidth:'97%'}}/>
             <Toolbar>
               <Typography variant="l" className={classes.center} color="inherit">
               Copyright © 2021 bidspesa limited.  &nbsp;&nbsp;All rights reserved ® <br/>

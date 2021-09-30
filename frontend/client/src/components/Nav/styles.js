@@ -59,6 +59,29 @@ export default makeStyles(() => ({
         // margin:'auto',
     },
     navContainer: {
-        maxWidth: '200px',
-    }
+        maxWidth: '400px',
+    },
+    rootTextField: {
+        marginLeft: '5px',
+    "& .MuiInputBase-root, .MuiFormLabel-root": {
+      color: "#555",
+      borderRadius:'0px',
+      margin:'auto'
+    },
+    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#ccc",
+      backgroundColor:'#f0f0f0',
+    },
+    '& .MuiInputBase-root, .Mui-focused': {
+        color: 'transparent',
+      },
+      centar: {
+        margin:'auto'
+      }
+  },
+  btn: {
+      borderRadius:'0px',
+      padding: '8px',
+      marginLeft:'5px',
+  }
 }));

@@ -42,9 +42,10 @@ const Home = () => {
                                 <Form/>
                             </Grid> 
                         </Grid> */}
+                        <Footer/>
                     </Container>
                 </Grow> 
-                <Footer/>
+               
         </div>
     );
 }
