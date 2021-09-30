@@ -195,17 +195,38 @@ export const updateProduct = async (req, res) => {
       product[validFields[i]] = req.body[validFields[i]];
     }
 
+    if(req.file) {
+      const URL = process.env.APP_URL ?? "http://localhost:5000";
+      const filePath = `${URL}/imgs/products/${req.file.filename}`;
+      const imageUrl = product.image;
+      let capturingRegex = /\/(?<img>[a-zA-Z0-9]+[_]\d+\.(jpe?g|png))$/;
+      const { groups } = imageUrl.match(capturingRegex);
+      const imageName = groups.img;
+      if(imageName) {
+        fs.unlink(`public/imgs/products/${imageName}`, (error) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('file deleted successfully');
+          };
+        });
+      }
+      product.image = filePath;
+    }
+
     await product.save();
+
     res.json({
       info: {
         message: "Product has been updated successfully!",
+        severity: "success",
         code: "updateproduct",
       },
     });
   } catch (err) {
     console.log(err);
     res.status(400).json({ err: [{
-      msg: "Could not complete requested operation"
+      msg: err.message
     }] });
   }
 }

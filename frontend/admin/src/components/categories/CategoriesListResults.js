@@ -27,7 +27,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 /* import getInitials from '../../utils/getInitials'; */
 import customers from "src/__mocks__/customers";
-import { getProducts, getCategories } from "src/actions/products";
+import { getCategories } from "src/actions/products";
 import { unsetErr, unsetStatus } from "src/actions/errors";
 import Modal from "src/utils/modal";
 import EditModal from "./modals/Edit";

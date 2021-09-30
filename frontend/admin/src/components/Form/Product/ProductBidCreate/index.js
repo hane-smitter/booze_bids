@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 
 import useStyles from "./styles";
-import { DatePickerField } from "../../DatePicker";
+import { DatePickerField } from "../../../../utils/DatePicker";
 import { createProductBid } from "src/actions/products";
 import { unsetErr, unsetStatus } from "src/actions/errors";
 import ShowFeedback from "src/utils/ShowFeedback";

@@ -62,6 +62,18 @@ ProductBidDetailSchema.virtual('totalslots').get(function () {
     return this.slots + this.extraSlots;
 });
 
+ProductBidDetailSchema.virtual('prodbids', {
+    ref: 'Bid',
+    localField: 'product',
+    foreignField: 'product'
+});
+ProductBidDetailSchema.virtual('prodbidscount', {
+    ref: 'Bid',
+    localField: 'product',
+    foreignField: 'product',
+    count: true
+});
+
 const ProductBidDetail = mongoose.model('ProductBidDetail', ProductBidDetailSchema);
 
 export default ProductBidDetail;

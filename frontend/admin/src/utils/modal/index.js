@@ -38,14 +38,14 @@ const Modal = ({ isVisible, toggler, component, title, ...others }) => {
         <>
         <Box
             component={motion.div}
-            style={{
+            sx={{
                 position: 'fixed',
                 top: 0,
                 left: 0,
                 width: '100%',
                 height: '100%',
-                background: 'rgba(0, 0, 0, 0.6',
-                zIndex: 99
+                background: 'rgba(0, 0, 0, 0.6)',
+                zIndex: (theme) =>  theme.zIndex.modal
              }}
              variants={backdrop}
              initial="hidden"
