@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Container, Grid, List, ListItem, Toolbar, Typography, ListItemText, ListItemAvatar, Divider } from "@material-ui/core";
+import { AppBar, Avatar, Container, Grid, List, ListItem, Toolbar, Typography, ListItemText, ListItemAvatar, Divider, useMediaQuery, useTheme } from "@material-ui/core";
 import React from "react";
 import useStyles from './styles.js';
 import BP from '../../images/favicon.png'; 
@@ -13,6 +13,8 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 
 export default function Footer() {
     const classes = useStyles();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     return (
         <Container className={classes.appBar} position="static" color="primary">
             <Grid  container rowSpacing={2} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -32,10 +34,10 @@ export default function Footer() {
                 </List>
             </Grid> 
             <Grid item xs={12} sm={3}>
-              <Typography className={classes.headers} gutterBottom variant="h6">
+              <Typography className={classes.headers, !isMobile && classes.marginUndo } style={{textDecoration:'underline'}} gutterBottom variant="h6">
                 Contact
               </Typography>
-                <List >
+                <List  className={!isMobile && classes.marginUndo }>
                     <ListItem className={classes.listItem}>
                     <CallIcon/> &nbsp;<ListItemText primary={'(254) 717 25 25 75'} />
                     </ListItem>
@@ -48,10 +50,10 @@ export default function Footer() {
                 </List>
             </Grid> 
             <Grid item xs={12} sm={3}>
-              <Typography className={classes.headers} gutterBottom variant="h6">
+              <Typography className={classes.headers, !isMobile && classes.marginUndo } style={{textDecoration:'underline'}} gutterBottom variant="h6">
                 Social Media
               </Typography>
-                <List >
+                <List className={!isMobile && classes.marginUndo }>
                     <ListItem  className={classes.listItem}>
                         <FacebookIcon />&nbsp;<ListItemText primary={'Facebook'} />
                     </ListItem>
@@ -81,7 +83,6 @@ export default function Footer() {
             </Grid>
             <hr/>
             <Toolbar>
-              
               <Typography variant="body1" className={classes.center} color="inherit">
               Copyright © 2021 bidspesa limited.  &nbsp;&nbsp;All rights reserved ® <br/>
               Version 1.0.1 2021-09-24

@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
   topStart: {
-    marginBlockStart:'100px'
+    // marginBlockStart:'100px'
   },
   darkBox: {
     color: "#fff",
@@ -15,7 +15,7 @@ export default makeStyles((theme) => ({
     alignItems: "stretch",
   },
   wrapperContainer: {
-    paddingTop: '90px',
+    // paddingTop: '90px',
     background: theme.palette.background.default
   },
   rootTextField: {

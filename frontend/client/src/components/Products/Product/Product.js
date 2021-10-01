@@ -8,6 +8,9 @@ import {
   CardMedia,
   Typography,
   TextField,
+  List,
+  ListItem,
+  ListItemText,
   CircularProgress
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
@@ -15,7 +18,7 @@ import { motion } from "framer-motion"
 import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { makeBid } from "../../../actions/products";
+import { makeBid, fetchTopBidder } from "../../../actions/products";
 import { unsetErr } from "../../../actions/errors";
 import useStyles from "./styles";
 import defaultImg from "../../../images/products/defaultImg.jpeg";
@@ -56,10 +59,29 @@ const Product = ({ product }) => {
     bidAmount: Yup.number()
       .required("Bidding amount is required")
       .positive("This amount is not allowed")
-      .positive(),
-    phone: Yup.number().required("Phone number is required").integer(),
+      .min(product.bidPrice, `Minimum bidding amount is ${product.bidPrice}`)
+      .integer(),
+    bidder: Yup.object().shape({
+      phone: Yup.number("You phone number should be numerical")
+        .required("Phone number is required")
+        .integer(),
+      acknowledgeNew: Yup.boolean(),
+      firstname: Yup.string().when("acknowledgeNew", {
+        is: true,
+        then: Yup.string().required("Your other name(firstname) is required"),
+      }),
+      lastname: Yup.string().when("acknowledgeNew", {
+        is: true,
+        then: Yup.string().required("Your surname is required"),
+      }),
+      location: Yup.string().when("acknowledgeNew", {
+        is: true,
+        then: Yup.string().required(
+          "Your location(e.g nearest town) is required"
+        ),
+      }),
+    }),
   });
-
   const Input = ({
     form,
     field: { value, name },
@@ -126,43 +148,44 @@ const Product = ({ product }) => {
           subheader={product.product.name}
         />
         <CardActionArea>
-          <Button component={Link} to={location}>
+          <Link to={location}>
             <CardMedia
               className={classes.media}
               image={product.product.image || defaultImg}
               title={product.product.name}
             />
-          </Button>
+          </Link>
           <CardContent 
           className={classes.darkBox} 
           component={motion.div}
           variants={cardVariants}
           animate={cardBlinking ?  "blink" : ""} > 
+          <Link to={location} style={{ textDecoration:'none',color:'black',fontWeight:'bold' }}>
             <Typography
-            className={cardBlinking ? classes.danger: classes.warning}
+            className={cardBlinking ? classes.danger: ''}
               gutterBottom
-              variant="body2"
+              variant="body"
               component="p"
               
             >
               Ends in:{" "}
-              <span className={classes.bomb}>
+              <span style={{fontWeight:'bold'}} className={classes.bomb}>
               {countDownTime.days != '00' &&
               <span>
                 <span className={`${classes.countdowntime}`}>
                   {countDownTime.days}
                 </span>
-                <span>Days:</span>
+                <span>Days</span>
               </span>
               }
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.hours}
               </span>
-              <span>Hrs:</span>
+              <span>Hrs</span>
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.minutes}
               </span>
-              <span>Mins:</span>
+              <span>Mins</span>
               <span className={`${classes.countdowntime} ${classes.countdown}`}>
                 {countDownTime.seconds}
               </span>
@@ -174,11 +197,15 @@ const Product = ({ product }) => {
               variant="l"
               style={{ textAlign:'center' }}
             >
-              RRP: {MoneyFormat(product.product.cost)} | Slots: {product.totalslots ?? 0}
+              RRP@ {MoneyFormat(product.product.cost)} | Lots {product.totalslots ?? 0}
             </Typography>
-            <Typography className={classes.success} variant="caption" component="p">
+            <Typography  style={{ fontSize:'11px'}}  component="l">
+              Last Bidder: Anthony
+            </Typography>
+            <Typography style={{ fontSize:'16px'}} className={classes.success} variant="caption" component="p">
               Bid starts @ {MoneyFormat(product.bidPrice)}
             </Typography>
+            </Link>
             {/* form */}
             <Formik
               initialValues={{
@@ -203,26 +230,31 @@ const Product = ({ product }) => {
             >
               {(props) => (
                 <form onSubmit={props.handleSubmit} id={"bid4m-" + product._id} autoComplete="off" noValidate data-id={product._id}>
+                  
                   <Field
+                    style={{ padding:0,margin:0 }}
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     name="bidAmount"
-                    placeholder="e.g 1000"
+                    placeholder="Bid Amount"
                     component={Input}
+                    size="small"
+                    inputProps={{ min: product.bidPrice }}
+                    type="number"
                   />
-                  <Field
-                    formErrors={formErrors}
-                    formErrorsName={formErrorsName}
-                    name="phone"
-                    placeholder="e.g 2547XXXXXXXX"
-                    component={Input}
-                  />
-
+                    <Field
+                      formErrors={formErrors}
+                      formErrorsName={formErrorsName}
+                      name="phone"
+                      placeholder="Phone Number"
+                      component={Input}
+                      size="small"
+                    />
+                      
                   <Button
                     type="submit"
                     variant="contained"
                     style = {{ backgroundColor:'#f79224',color:'#fff' }}
-                    fullWidth
                   >
                     {nowLoading ? (
                       <CircularProgress style={{ color: "white" }} />

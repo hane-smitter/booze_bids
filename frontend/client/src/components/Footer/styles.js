@@ -32,5 +32,10 @@ export default makeStyles(() => ({
     listItem: {
         padding:0,
         fontSize:'16px',
+    },
+    marginUndo: {
+        marginBlockStart: '15px',
+        marginLeft: 30,
+        fontSize: '18px',
     }
 }));

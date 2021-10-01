@@ -4,8 +4,9 @@ import '../../Fonts/TickingTimebombBB.ttf';
 export default makeStyles({
   root: {
     fontSize: 'inherit',
-    // height: '300px',
-    // width: '200px'
+    // minHeight: '600px',
+    // maxHeight:'700px',
+    // overflow:'hidden',
   },
   media: {
     height: 0,
@@ -24,6 +25,9 @@ export default makeStyles({
   darkBox: {
     color: "#000",
     backgroundColor: "#f0f0f0"
+  },
+  tiny: {
+    fontSize:'8px'
   },
   fullHeightCard: {
     height: '100%',

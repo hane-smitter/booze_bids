@@ -128,12 +128,12 @@ const Products = () => {
       </Box>
 
       {loading && (
-        <Box style={{ width: "100%" }} display="flex" justify-content="center">
-          <CircularProgress />
-        </Box>
+        <Paper variant="outlined" className={classes.center}>
+          <CircularProgress align='center'/>
+        </Paper>
       )}
 
-      {products.length < 1 ? (
+      {!loading && products.length < 1 ? (
         <Paper variant="outlined" className={classes.center}>
           <Typography variant="h5" color="textSecondary" align="center">
             Sorry! No Products are available!!
@@ -145,12 +145,13 @@ const Products = () => {
           justifyContent="space-around"
           alignItems="stretch"
           spacing={3}
+          style={{marginBlock:20}}
         >
           {products.map((product) => {
             let content = null;
             if (Boolean(product.product)) {
               content = (
-                <Grid style={{ maxWidth:250}} item xs={12} sm={6} md={4} lg={3} key={product._id}>
+                <Grid style={{ maxWidth:250 }} item xs={12} sm={6} md={4} lg={3} key={product._id}>
                   <Product product={product} />
                 </Grid>
               );

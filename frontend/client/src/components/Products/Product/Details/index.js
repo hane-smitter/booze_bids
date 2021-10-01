@@ -120,7 +120,7 @@ const Detail = () => {
 
   return (
     <>
-      <Container maxwidth="lg" style={{ paddingTop: "120px" }}>
+      <Container maxwidth="lg">
         <ShowFeedback
           alertOpen={alertOpen}
           setAlertOpen={setAlertOpen}
@@ -138,15 +138,15 @@ const Detail = () => {
             />
           ))}
 
-        <motion.div
+        {/* <motion.div
           style={nav}
           variants={navVariants}
           initial="hidden"
           animate="visible"
           exit="leave"
-        >
+        > */}
           <Navbar />
-        </motion.div>
+        {/* </motion.div> */}
 
         <Container maxwidth="lg" className={classes.wrapperContainer}>
           <Grid container>
@@ -178,8 +178,8 @@ const Detail = () => {
             </Grid>
           </Grid>
         </Container>
+        <Footer />
       </Container>
-      <Footer />
     </>
   );
 };
