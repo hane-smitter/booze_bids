@@ -4,8 +4,8 @@ import '../../Fonts/TickingTimebombBB.ttf';
 export default makeStyles({
   root: {
     fontSize: 'inherit',
-    minHeight: '300px',
-    minWidth: '200px'
+    // height: '300px',
+    // width: '200px'
   },
   media: {
     height: 0,

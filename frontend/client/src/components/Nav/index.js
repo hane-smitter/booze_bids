@@ -151,7 +151,7 @@ const Nav = () => {
       </div>
       <Box>
       <Link to="/">
-        <Typography align="right" className={classes.navLink} style={{ fontSize:'12px',padding:'2px' }} component="body"> Register now!</Typography>
+        <Typography align="right" className={classes.navLink} style={{ fontSize:'12px',padding:'2px' }} component="body" variant="body1"> Register now!</Typography>
       </Link>
       <Grid container rowSpacing={2} direction="row"  align="right" className={classes.navContainer}>
         {/* <Grid item xs>

@@ -32,6 +32,5 @@ export default makeStyles(() => ({
     listItem: {
         padding:0,
         fontSize:'16px',
-
     }
 }));

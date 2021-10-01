@@ -24,7 +24,7 @@ export default function Footer() {
                         </ListItemAvatar>
                       </ListItem>
                       <ListItem className={classes.listItem}>
-                        <Typography variant="l" color="inherit">
+                        <Typography variant="body1" color="inherit">
                           Bidspesa is an online auction company that deals in new goods only. 
                           This is a dynamic auction based on unique bids on a marked time.
                         </Typography>
@@ -37,13 +37,13 @@ export default function Footer() {
               </Typography>
                 <List >
                     <ListItem className={classes.listItem}>
-                    <CallIcon sx={{ color: 'red' }}/> &nbsp;<ListItemText primary={'254717252575'} />
+                    <CallIcon/> &nbsp;<ListItemText primary={'(254) 717 25 25 75'} />
                     </ListItem>
                     <ListItem  className={classes.listItem}>
-                    <LocationOnIcon sx={{ color: 'red' }}/> &nbsp;<ListItemText primary={'Ridgeways Kiambu Kenya'} />
+                    <LocationOnIcon/> &nbsp;<ListItemText primary={'Ridgeways Kiambu Kenya'} />
                     </ListItem>
                     <ListItem   className={classes.listItem}>
-                    <EmailIcon sx={{ color: 'red' }}/>&nbsp; <ListItemText primary={' info@bidspesa.com'} />
+                    <EmailIcon/>&nbsp; <ListItemText primary={' info@bidspesa.com'} />
                     </ListItem>
                 </List>
             </Grid> 
@@ -72,15 +72,17 @@ export default function Footer() {
               </Typography>
                 <List>
                     <ListItem className={classes.listItem}>
-                      <Typography variant="l" color="inherit">
+                      <Typography variant="body1" color="inherit">
                         The Operator of this website, is licensed and regulated by the Auctioneers Board of Kenya under License number 0000000.
                       </Typography>
                     </ListItem>
                 </List>
             </Grid> 
             </Grid>
+            <hr/>
             <Toolbar>
-              <Typography variant="l" className={classes.center} color="inherit">
+              
+              <Typography variant="body1" className={classes.center} color="inherit">
               Copyright © 2021 bidspesa limited.  &nbsp;&nbsp;All rights reserved ® <br/>
               Version 1.0.1 2021-09-24
               </Typography>

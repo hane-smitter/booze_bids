@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'http://api.bidspesa.com:5000';
+const url = 'https://api.bidspesa.com:5000';
 
 export const fetchBiddableProducts = (query) => axios.get(`${url}/products/bids${query}`);
 export const fetchProductCategories = () => axios.get(`${url}/categories`);

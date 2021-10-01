@@ -49,7 +49,7 @@ export default makeStyles(() => ({
         marginLeft:'170px'
     },
     time :{
-        color: '#ff9800',
+        color: 'lime',
         backgroundColor:'#111',
         fontWeight:'bold',
         fontFamily: 'Open Sans',
