@@ -24,7 +24,7 @@ import Logo from '../../images/smoke.png';
 import Kenya from '../../images/kenya.png';
 import { Link } from "react-router-dom";
 import SearchBar from "material-ui-search-bar";
-import { alpha } from "@mui/material";
+import { alpha, fabClasses } from "@mui/material";
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { Field } from "formik";
@@ -122,10 +122,10 @@ const Nav = () => {
         onClose={handleMenuClose}
       >
         <MenuItem onClick={handleMenuClose}>
-          <Link to="/">Home</Link>
+          <Link className={classes.navLinkMobi} to="/">Home</Link>
         </MenuItem>
         <MenuItem onClick={handleMenuClose}>
-          <Link to="/pastbids">Past Bids</Link>
+          <Link className={classes.navLinkMobi} to="/pastbids">Past Bids</Link>
         </MenuItem>
       </Menu>
 
@@ -151,7 +151,7 @@ const Nav = () => {
         </Link>
       </div>
       <Box>
-      <Link to="/">
+      <Link to="/register">
         <Typography align="right" className={classes.navLink} style={{ fontSize:'12px',padding:'2px' }} component="body" variant="body1"> Register now!</Typography>
       </Link>
       <Grid container rowSpacing={2} direction="row"  align="right" className={classes.navContainer}>

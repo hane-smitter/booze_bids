@@ -35,7 +35,7 @@ export default makeStyles(() => ({
     },
     marginUndo: {
         marginBlockStart: '15px',
-        marginLeft: 30,
+        marginLeft: 80,
         fontSize: '18px',
     }
 }));

@@ -11,13 +11,14 @@ import Home from "./components/Home";
 import Form from './components/Form/Form';
 import Faqs from './components/Faqs';
 import PastBids from './components/PastBids';
+import Register from './components/Register';
 import Detail from './components/Products/Product/Details';
 
 const easyBg = createTheme({
   palette: {
     background: {
       default: "rgb(250, 249, 252)"
-    }
+    },
   },
   fontFamily: 'Open Sans'
   })
@@ -29,6 +30,7 @@ const App = () => {
     <Router>
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route path="/register" component={Register} />
         <Route path="/faqs" component={Faqs} />
         <Route path="/pastbids" component={PastBids} />
         <Route path="/product/create" component={Form} />

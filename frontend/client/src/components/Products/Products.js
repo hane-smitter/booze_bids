@@ -110,7 +110,10 @@ const Products = () => {
               <SearchBar
                 value={searchItem}
                 onChange={(value) => {
-                  setSearchItem(value);
+                  setCategoryOpen(false);
+                  dispatch(
+                    getProducts(`search=${value}`)
+                  );
                 }}
                 onRequestSearch={() => console.log("onRequestSearch")}
                 style={{
@@ -142,7 +145,7 @@ const Products = () => {
       ) : (
         <Grid
           container
-          justifyContent="space-around"
+          justifyContent={isMobile ? "space-around" : "left"}
           alignItems="stretch"
           spacing={3}
           style={{marginBlock:20}}

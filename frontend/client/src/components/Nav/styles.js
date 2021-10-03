@@ -43,6 +43,16 @@ export default makeStyles(() => ({
             textDecoration:'underline'
           },
     },
+    navLinkMobi: {
+        marginInline: '5px',
+        fontWeight:'bold',
+        fontFamily: 'Open Sans',
+        fontSize:'18px',
+        textDecoration: 'none',
+        "&:hover": {
+            textDecoration:'underline'
+          },
+    },
         kenya:{
         display: 'block',
         height: '20px',

@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core/styles';
-import '../../Fonts/TickingTimebombBB.ttf';
 
 export default makeStyles({
   root: {
@@ -14,7 +13,7 @@ export default makeStyles({
     backgroundSize:'contain'
   },
   bomb: {
-    fontFamily: 'ticking-timebomb-bb'
+    fontFamily: 'TickingTimeBomb'
   },
   border: {
     border: 'solid',

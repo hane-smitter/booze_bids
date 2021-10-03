@@ -12,6 +12,10 @@ import {
   ListItemText,
   ListItemAvatar,
   Snackbar,
+  CardContent,
+  CardActionArea,
+  CardHeader,
+  Card,
 } from "@material-ui/core";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { Alert, AlertTitle } from "@material-ui/lab";
@@ -121,143 +125,152 @@ const DarkBox = ({ product, updateProducts }) => {
   }, [status, dispatch]);
   return (
     <Box className={classes.darkBox}>
-      <Typography gutterBottom variant="h5">
-        Highest Bidder
-      </Typography>
-      {/*highest bidder  details*/}
-      <List>
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <ImageIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={topBidder.bidder?.bidderuser[0]?.fullname ?? "__"}
-          />
-          <ListItemText
-            primary={`KES ${topBidder?.bidder?.bidAmountTotal ?? 0}`}
-          />
-        </ListItem>
-      </List>
-      <Divider color="grey" />
-      <Typography gutterBottom variant="h5">
-        <b>{product.product.brand}</b>
-      </Typography>
-      <Typography gutterBottom variant="body2" color="inherit" component="p">
-        Place your bid Bid. Minimum Bid amount is {product.bidPrice}
-        /= . Enter phone number then standby to pay via Mpesa
-      </Typography>
-
-      <Formik
-        enableReinitialize={true}
-        initialValues={{
-          bidAmount: product.bidPrice,
-          bidder: {
-            phone: "",
-            acknowledgeNew: newBidder,
-            firstname: "",
-            lastname: "",
-            location: "",
-          },
-          bidPrice: product.bidPrice,
-          productId: product.product._id,
-        }}
-        onSubmit={function (values, actions) {
-          function shouldClearForm(newBidder = false) {
-            if (newBidder) {
-              actions.resetForm({ values: values });
-            } else {
-              actions.resetForm();
-            }
-          }
-          let currentCard = document.querySelector(`#bid4m-${product._id}`);
-          currentCard.dataset.id === product._id &&
-            batch(() => {
-              dispatch(makeBid(values));
-              updateProducts();
-              dispatch(fetchTopBidder());
-            });
-          window.shouldClearForm = shouldClearForm;
-          if (newBidder) {
-            actions.resetForm();
-          }
-          // actions.resetForm();
-
-          // newBidder && actions.resetForm({ values });
-          /* setTimeout(() => {
-                    alert(JSON.stringify(values, null, 2));
-                    actions.setSubmitting(false);
-                  }, 1000); */
-        }}
-        validationSchema={makeBidSchema}
-      >
-        {(props) => (
-          <form
-            onSubmit={props.handleSubmit}
-            id={"bid4m-" + product._id}
-            autoComplete="off"
-            noValidate
-            data-id={product._id}
-          >
-            {newBidder ? (
-              <>
-                <Alert severity={"info"} sx={{ width: "100%" }}>
-                  <AlertTitle>Hello there</AlertTitle>
-                  Chances are this could be your first bid. Just a little
-                  more information and get your bid going.
-                </Alert>
-                <Field
-                  name="bidder.lastname"
-                  label="surname name"
-                  formErrors={formErrors}
-                  formErrorsName={formErrorsName}
-                  component={Input}
+      <Card className={classes.cardRoot}>
+        <Typography
+          className={classes.white}
+          style={{ padding:8,margin:5}}
+          variant="h5"
+        >Place your bid now
+        </Typography>
+        <CardActionArea>
+          <CardContent>
+            <Typography gutterBottom variant="body1">
+              Highest Bidder
+            </Typography>
+            {/*highest bidder  details*/}
+            <List>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <ImageIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={topBidder.bidder?.bidderuser[0]?.fullname ?? "__"}
                 />
-                <Field
-                  name="bidder.firstname"
-                  label="other name"
-                  formErrors={formErrors}
-                  formErrorsName={formErrorsName}
-                  component={Input}
+                <ListItemText
+                  primary={`KES ${topBidder?.bidder?.bidAmountTotal ?? 0}`}
                 />
-                <Field
-                  name="bidder.location"
-                  label="Your location"
-                  formErrors={formErrors}
-                  formErrorsName={formErrorsName}
-                  component={Input}
-                />
-              </>
-            ) : null}
-            <Field
-              formErrors={formErrors}
-              formErrorsName={formErrorsName}
-              name="bidAmount"
-              label="Bid amount"
-              placeholder="for example 237"
-              inputProps={{ min: product.bidPrice }}
-              type="number"
-              component={Input}
-            />
-            <Field
-              formErrors={formErrors}
-              formErrorsName={formErrorsName}
-              name="bidder.phone"
-              label="Phone number"
-              component={Input}
-            />
+              </ListItem>
+            </List>
+            <Divider color="grey" />
+            <Typography gutterBottom variant="body2" color="inherit" component="p">
+              Place your bid Bid. Minimum Bid amount is {product.bidPrice}
+              /= . Enter phone number then standby to pay via Mpesa
+            </Typography>
 
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              {loading ? (
-                <CircularProgress style={{ color: "white" }} />
-              ) : (
-                "Place your bid"
+            <Formik
+              enableReinitialize={true}
+              initialValues={{
+                bidAmount: product.bidPrice,
+                bidder: {
+                  phone: "",
+                  acknowledgeNew: newBidder,
+                  firstname: "",
+                  lastname: "",
+                  location: "",
+                },
+                bidPrice: product.bidPrice,
+                productId: product.product._id,
+              }}
+              onSubmit={function (values, actions) {
+                function shouldClearForm(newBidder = false) {
+                  if (newBidder) {
+                    actions.resetForm({ values: values });
+                  } else {
+                    actions.resetForm();
+                  }
+                }
+                let currentCard = document.querySelector(`#bid4m-${product._id}`);
+                currentCard.dataset.id === product._id &&
+                  batch(() => {
+                    dispatch(makeBid(values));
+                    updateProducts();
+                    dispatch(fetchTopBidder());
+                  });
+                window.shouldClearForm = shouldClearForm;
+                if (newBidder) {
+                  actions.resetForm();
+                }
+                // actions.resetForm();
+
+                // newBidder && actions.resetForm({ values });
+                /* setTimeout(() => {
+                          alert(JSON.stringify(values, null, 2));
+                          actions.setSubmitting(false);
+                        }, 1000); */
+              }}
+              validationSchema={makeBidSchema}
+            >
+              {(props) => (
+                <form
+                  onSubmit={props.handleSubmit}
+                  id={"bid4m-" + product._id}
+                  autoComplete="off"
+                  noValidate
+                  data-id={product._id}
+                >
+                  {newBidder ? (
+                    <>
+                      <Alert severity={"info"} sx={{ width: "100%" }}>
+                        <AlertTitle>Hello there</AlertTitle>
+                        Chances are this could be your first bid. Just a little
+                        more information and get your bid going.
+                      </Alert>
+                      <Field
+                        name="bidder.lastname"
+                        label="surname name"
+                        formErrors={formErrors}
+                        formErrorsName={formErrorsName}
+                        component={Input}
+                      />
+                      <Field
+                        name="bidder.firstname"
+                        label="other name"
+                        formErrors={formErrors}
+                        formErrorsName={formErrorsName}
+                        component={Input}
+                      />
+                      <Field
+                        name="bidder.location"
+                        label="Your location"
+                        formErrors={formErrors}
+                        formErrorsName={formErrorsName}
+                        component={Input}
+                      />
+                    </>
+                  ) : null}
+                  <Field
+                    formErrors={formErrors}
+                    formErrorsName={formErrorsName}
+                    name="bidAmount"
+                    label="Bid amount"
+                    placeholder="for example 237"
+                    inputProps={{ min: product.bidPrice }}
+                    type="number"
+                    component={Input}
+                  />
+                  <Field
+                    formErrors={formErrors}
+                    formErrorsName={formErrorsName}
+                    name="bidder.phone"
+                    label="Phone number"
+                    component={Input}
+                  />
+
+                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                    {loading ? (
+                      <CircularProgress style={{ color: "white" }} />
+                    ) : (
+                      "Place your bid"
+                    )}
+                  </Button>
+                </form>
               )}
-            </Button>
-          </form>
-        )}
-      </Formik>
+            </Formik>
+          </CardContent>
+        </CardActionArea>
+      </Card>
     </Box>
   );
 };

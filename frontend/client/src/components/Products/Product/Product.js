@@ -109,19 +109,16 @@ const Product = ({ product }) => {
       {...others}
     />
   );
+  function updateTime() {
+    setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
+  }
   useEffect(() => {
-    let interval = setInterval(() => {
-      upDateTime();
-    }, 1000);
-    return () => clearInterval(interval);
+    let interval = setInterval(() => {updateTime()}, 1000);
     return () => {
-      dispatch(unsetErr());
+      clearInterval(interval);
     };
   }, []);
 
-  function upDateTime() {
-    setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
-  }
 
   const cardVariants = {
     blink: {
@@ -209,7 +206,7 @@ const Product = ({ product }) => {
             {/* form */}
             <Formik
               initialValues={{
-                bidAmount: "",
+                bidAmount: product.bidPrice,
                 phone: "",
                 bidPrice: product.bidPrice,
                 productId: product.product._id,
