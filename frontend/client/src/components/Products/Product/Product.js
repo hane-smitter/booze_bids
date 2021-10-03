@@ -166,7 +166,7 @@ const Product = ({ product }) => {
               
             >
               Ends in:{" "}
-              <span style={{fontWeight:'bold'}} className={classes.bomb}>
+              <span style={{ fontFamily:'ticking-time-bomb', fontWeight:'bold', fontSize:'16px'}}>
               {countDownTime.days != '00' &&
               <span>
                 <span className={`${classes.countdowntime}`}>

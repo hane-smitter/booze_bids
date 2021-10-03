@@ -63,7 +63,7 @@ const LightBox = ({ product }) => {
               style={{fontWeight:'bold'}} 
             >
               Ends in:{" "}
-              <span className={classes.bomb}>
+              <span style={{ fontFamily:'ticking-time-bomb', fontSize:'16px', fontWeight:'bold' }}>
                 {countDownTime.days != '00' &&
                 <span>
                   <span className={`${classes.countdowntime}`}>
