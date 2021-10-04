@@ -151,7 +151,7 @@ const Nav = () => {
         </Link>
       </div>
       <Box>
-      <Link to="/register">
+      <Link to="/">
         <Typography align="right" className={classes.navLink} style={{ fontSize:'12px',padding:'2px' }} component="body" variant="body1"> Register now!</Typography>
       </Link>
       <Grid container rowSpacing={2} direction="row"  align="right" className={classes.navContainer}>
@@ -192,7 +192,7 @@ const Nav = () => {
         <Grid item xs={12} sm={3}></Grid>
         <Grid item xs={12} sm={3}></Grid>
         <Grid item xs={12} sm={6}>
-          <span className={classes.time}> 
+          <span className={classes.time} style={{ fontFamily:'ticking-time-bomb'}}> 
             { new Date().toLocaleString('en-US', {
                                                 weekday: 'short', // long, short, narrow
                                                 day: 'numeric', // numeric, 2-digit

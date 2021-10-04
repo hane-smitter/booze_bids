@@ -24,22 +24,60 @@ export const getProducts = async (req, res) => {
 };
 
 export const getBiddableProducts = async (req, res) => {
+  
   try {
+    const {page} = req.query;
+    
+    const LIMIT = 40;
+    const startIndex = (Number(page) - 1) * LIMIT;//get starting index of every page
+    const total =  await ProductBidDetail.countDocuments({
+      endTime: { $gt: new Date().toISOString() },
+      status: "Active",
+    }
+    );
+
     const match = new Object();
     if (req.query.category) {
       let category = req.query.category;
       match.category_slug = category;
     }
-    const biddableProducts = await ProductBidDetail.find({
-      endTime: { $gt: new Date().toISOString() },
-      status: "Active",
-    })
+    if (req.query.search) {
+      const search = new RegExp(req.query.search, "i");
+
+      const biddableProducts = await ProductBidDetail.find({
+        endTime: { $gt: new Date().toISOString() },
+        status: "Active",
+      })
+        .populate({
+          path: "product",
+          match,
+        })
+        .sort([["endTime", 1]]);
+    }
+    else
+    {
+      const biddableProducts = await ProductBidDetail.find({
+        endTime: { $gt: new Date().toISOString() },
+        status: "Active",
+      })
       .populate({
         path: "product",
         match,
       })
-      .sort([["endTime", 1]]);
-    res.json(biddableProducts);
+      .sort([["endTime", 1]]).limit(LIMIT).skip(startIndex);
+      res.json({ data: biddableProducts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT)});
+      // const biddableProducts = await ProductBidDetail.find({
+      //   endTime: { $gt: new Date().toISOString() },
+      //   status: "Active",
+      // })
+      //   .populate({
+      //     path: "product",
+      //     match,
+      //   })
+      //   .sort([["endTime", 1]]);
+    }
+
+    // res.json(biddableProducts);
   } catch (err) {
     console.log(err);
     res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });

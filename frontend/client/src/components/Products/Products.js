@@ -136,7 +136,7 @@ const Products = () => {
         </Paper>
       )}
 
-      {!loading && products.length < 1 ? (
+      {!loading && !products?.length ? (
         <Paper variant="outlined" className={classes.center}>
           <Typography variant="h5" color="textSecondary" align="center">
             Sorry! No Products are available!!

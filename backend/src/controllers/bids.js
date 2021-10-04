@@ -107,8 +107,18 @@ export const getHighestAmountBidder = async (req, res) => {
     const bidder = await Bid.findOne({}).populate('user').sort('-bidAmountTotal');
 
     res.json({ bidder });
-} catch{
-  console.log(err);
-  res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+  } catch{
+    console.log(err);
+    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+  }
 }
+export const getLastBidder = async (req, res) => {
+  try {
+    const bidder = await Bid.findOne({}).populate('user').sort('-bidsCount');
+
+    res.json({ bidder });
+  } catch{
+    console.log(err);
+    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+  }
 }

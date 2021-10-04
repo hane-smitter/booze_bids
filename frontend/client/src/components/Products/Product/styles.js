@@ -3,9 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles({
   root: {
     fontSize: 'inherit',
-    // minHeight: '600px',
-    // maxHeight:'700px',
-    // overflow:'hidden',
+    height:'300px',
+    overflow:'hidden',
   },
   media: {
     height: 0,

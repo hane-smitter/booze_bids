@@ -62,6 +62,7 @@ export default makeStyles((theme) => ({
     border:'solid 1px black'
   },
   borderBlue: {
-    border:'solid 2px #2b5681'
+    borderLeft:'solid 2px #2b5681',
+    borderRight:'solid 2px #2b5681',
   },
 }));
