@@ -4,6 +4,13 @@ export default makeStyles((theme) => ({
   darkBox: {
     color: "#fff",
     width: "100%",
+    padding: "10px",
+    backgroundColor:'#181D32',
+    objectFit:'contain'
+  },
+  lightBox: {
+    backgroundColor: theme.palette.background.paper,
+    color: "#000",
     padding: "20px",
   },
   white: {
@@ -11,10 +18,11 @@ export default makeStyles((theme) => ({
   },
   cardRoot: {
     // fontSize: "small",
-    color: "#fff",
+    color: "#000",
     backgroundColor: "#181D32",
   },
   rootTextField: {
+    padding:0,
     "& .MuiInputBase-root, .MuiFormLabel-root": {
       color: "rgba(245, 245, 245, 1)",
     },

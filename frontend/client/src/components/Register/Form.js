@@ -86,7 +86,6 @@ const Form = () => {
         onBlur={form.handleBlur}
         variant="outlined"
         margin="normal"
-        className={classes.rootTextField}
         fullWidth
         {...others}
       />
@@ -104,10 +103,9 @@ const Form = () => {
     }
   }, [status, dispatch]);
   return (
-    <Box className={classes.darkBox}>
-      <Card className={classes.cardRoot}>
+    <Box >
+      <Card className={classes.lightBox}>
         <Typography
-          className={classes.white}
           style={{ padding:8,margin:5}}
           variant="h5"
         >Register now
@@ -142,10 +140,7 @@ const Form = () => {
                   noValidate
                 >
                     <>
-                    <Alert severity={"info"} sx={{ width: "100%" }}>
-                    <AlertTitle>Alert</AlertTitle>
-                    By clicking register, you consent to provide your information to us.
-                    </Alert>
+                    
                     <Field
                     name="lastname"
                     label="surname name"
@@ -184,6 +179,10 @@ const Form = () => {
                       "Register"
                     )}
                   </Button>
+                    <Alert severity={"info"} sx={{ width: "100%" }}>
+                    <AlertTitle>Note</AlertTitle>
+                    By clicking register, you consent to provide your information to us.
+                    </Alert>
                 </form>
               )}
             </Formik>

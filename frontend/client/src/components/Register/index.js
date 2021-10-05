@@ -9,7 +9,7 @@ import useStyles from "./styles.js";
 import Footer from "../Footer";
 import { unsetErr, unsetStatus } from "../../actions/errors";
 import ShowFeedback from "../utils/ShowFeedback";
-import { Form } from "formik";
+import Form from "./Form";
 
 const Detail = () => {
   const { products, err, status } = useSelector((state) => state.app);
@@ -78,7 +78,7 @@ const Detail = () => {
 
   return (
     <>
-      <Container maxwidth="lg">
+      <Container maxwidth="md">
         <ShowFeedback
           alertOpen={alertOpen}
           setAlertOpen={setAlertOpen}
@@ -105,13 +105,15 @@ const Detail = () => {
         > */}
           <Navbar />
         {/* </motion.div> */}
-
-        <Container maxwidth="lg" className={classes.wrapperContainer}>
-          <Grid container>
+          <Grid container  className={classes.darkBox} justifyContent="center">
+          <Grid
+              item
+              xs={12} sm={4}>
+              </Grid>
             <Grid
               item
               xs={12}
-              md={6}
+              sm={4}
               className={classes.flex}
               // component={motion.div}
               variants={darkVariants}
@@ -121,8 +123,11 @@ const Detail = () => {
             >
               <Form/>
             </Grid>
+            <Grid xs={12} sm={4}
+              item>
+                
+              </Grid>
           </Grid>
-        </Container>
         <Footer />
       </Container>
     </>
