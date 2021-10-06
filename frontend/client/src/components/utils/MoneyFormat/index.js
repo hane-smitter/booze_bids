@@ -10,6 +10,9 @@ function moneyFormatSupport(money) {
 }
 const MoneyFormat = ( money ) => {
     let val = moneyFormatSupport(money);
-    return val;
+    let n = val.length;
+    let valStrim = val.substr(0,n-3);
+    let vaStrim2 = valStrim.substr(3,n);
+    return vaStrim2+'/=';
 };
 export default MoneyFormat;

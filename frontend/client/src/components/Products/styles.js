@@ -28,7 +28,7 @@ export default makeStyles((theme) => ({
     alignItems: 'center',
     flexWrap: 'nowrap',
     marginBlockEnd: '20px',
-    backgroundColor:'#d0d0d0',  
+    backgroundColor:'#2b5681',  
   },
   w100: {
     // width: '100%'
@@ -39,8 +39,9 @@ export default makeStyles((theme) => ({
       paddingBlockEnd: '10px'
     },
     width: '100%',
-    maxWidth: 300,
-    backgroundColor: '#d0d0d0',
+    maxWidth: 200,
+    color: '#fff',
+    // backgroundColor: '#d0d0d0',
     position: 'relative',
   },
   nested: {
@@ -49,9 +50,19 @@ export default makeStyles((theme) => ({
   collapse: {
     width: '100%',
     position: 'absolute',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#2b5681',
     zIndex: 10,
     overflow: 'auto',
     maxHeight: 300
+  },
+  border: {
+    border: 'solid',
+  },
+  borderBlack: {
+    border:'solid 1px black'
+  },
+  borderBlue: {
+    borderLeft:'solid 2px #2b5681',
+    borderRight:'solid 2px #2b5681',
   },
 }));

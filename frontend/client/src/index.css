@@ -1,0 +1,6 @@
+@font-face {
+    font-family: 'ticking-time-bomb';
+    src: local('ticking-time-bomb'), url('./components/Fonts/TickingTimebombBB.ttf') format('truetype');
+    /* other formats include: 'woff2', 'truetype, 'opentype',
+                              'embedded-opentype', and 'svg' */
+  }

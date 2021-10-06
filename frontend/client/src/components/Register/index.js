@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Container, Grid } from "@material-ui/core";
+import { CircularProgress, Container, Grid } from "@material-ui/core";
 import { useLocation } from "react-router";
 import { motion } from "framer-motion";
 import { batch, useDispatch, useSelector } from "react-redux";
 
-import Navbar from "../../../Nav";
+import Navbar from "../Nav";
 import useStyles from "./styles.js";
-import { getProducts } from "../../../../actions/products";
-import LightBox from "./LightBox";
-import DarkBox from "./DarkBox";
-import ShowFeedback from "../../../utils/ShowFeedback";
-import { unsetErr, unsetStatus } from "../../../../actions/errors";
-import Footer from "../../../Footer";
+import Footer from "../Footer";
+import { unsetErr, unsetStatus } from "../../actions/errors";
+import ShowFeedback from "../utils/ShowFeedback";
+import Form from "./Form";
 
 const Detail = () => {
   const { products, err, status } = useSelector((state) => state.app);
@@ -19,28 +17,9 @@ const Detail = () => {
   const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
   const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
   const locationRouter = useLocation();
-  let initialProduct = locationRouter.state.product;
-  const [product, setProduct] = useState(initialProduct);
   const classes = useStyles();
 
-  function rehydrateProducts() {
-    dispatch(getProducts(undefined, updateProduct));
-    // updateProduct();
-  }
-
-  function updateProduct(prods) {
-    let currProductArr = prods.filter((product) => {
-      return Boolean(
-        product?.product?._id === locationRouter.state.product?.product?._id
-      );
-    });
-    if (currProductArr.length > 0) {
-      setProduct(currProductArr[0]);
-    }
-  }
-
   useEffect(() => {
-    rehydrateProducts();
     return () => {
       dispatch(unsetErr());
       dispatch(unsetStatus());
@@ -53,10 +32,6 @@ const Detail = () => {
     setErrAlertOpen(Boolean(err.length > 0));
   }, [err]);
 
-  // useEffect(() => {
-  //   console.log("use effect called updateProduct!!");
-  //   updateProduct();
-  // }, [products]);
 
   const nav = {
     position: "fixed",
@@ -83,23 +58,6 @@ const Detail = () => {
     },
   };
 
-  const lightVariants = {
-    hidden: {
-      opacity: 0,
-      x: "-100vw",
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: "spring",
-        delay: 1.5,
-      },
-    },
-    leave: {
-      opacity: 0,
-    },
-  };
   const darkVariants = {
     hidden: {
       opacity: 0,
@@ -120,7 +78,7 @@ const Detail = () => {
 
   return (
     <>
-      <Container maxwidth="lg">
+      <Container maxwidth="md">
         <ShowFeedback
           alertOpen={alertOpen}
           setAlertOpen={setAlertOpen}
@@ -147,26 +105,15 @@ const Detail = () => {
         > */}
           <Navbar />
         {/* </motion.div> */}
-
-        <Container maxwidth="lg" className={classes.wrapperContainer}>
-          <Grid container>
+          <Grid container  className={classes.darkBox} justifyContent="center">
+          <Grid
+              item
+              xs={12} sm={4}>
+              </Grid>
             <Grid
               item
               xs={12}
-              md={6}
-              className={classes.flex}
-              // component={motion.div}
-              variants={lightVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-            >
-              <LightBox product={product} />
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
+              sm={4}
               className={classes.flex}
               // component={motion.div}
               variants={darkVariants}
@@ -174,10 +121,13 @@ const Detail = () => {
               animate="visible"
               exit="hidden"
             >
-              <DarkBox updateProducts={rehydrateProducts} product={product} />
+              <Form/>
             </Grid>
+            <Grid xs={12} sm={4}
+              item>
+                
+              </Grid>
           </Grid>
-        </Container>
         <Footer />
       </Container>
     </>

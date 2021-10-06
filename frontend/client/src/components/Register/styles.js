@@ -1,24 +1,28 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core";
 
 export default makeStyles((theme) => ({
-  topStart: {
-    // marginBlockStart:'100px'
-  },
   darkBox: {
     color: "#fff",
-    backgroundColor: "#181D32",
     width: "100%",
+    padding: "10px",
+    backgroundColor:'#181D32',
+    objectFit:'contain'
+  },
+  lightBox: {
+    backgroundColor: theme.palette.background.paper,
+    color: "#000",
     padding: "20px",
   },
-  flex: {
-    display: "flex",
-    alignItems: "stretch",
+  white: {
+    color:'white'
   },
-  wrapperContainer: {
-    // paddingTop: '90px',
-    background: theme.palette.background.default
+  cardRoot: {
+    // fontSize: "small",
+    color: "#000",
+    backgroundColor: "#181D32",
   },
   rootTextField: {
+    padding:0,
     "& .MuiInputBase-root, .MuiFormLabel-root": {
       color: "rgba(245, 245, 245, 1)",
     },
@@ -29,12 +33,5 @@ export default makeStyles((theme) => ({
   warning: {
     color: "#ff9800",
     fontWeight: "bold",
-  },
-  success: {
-    color: '#42b449',
-    fontWeight:'bold',
-  },
-  bold: {
-    fontWeight:'bold',
   },
 }));

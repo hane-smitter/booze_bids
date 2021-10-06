@@ -5,6 +5,10 @@ import useStyles from './style/BannerFile.js';
 import BgImage from '../../../images/boy.png';
 import GgImage from '../../../images/girl.png';
 import BannerBg from '../../../images/bannerbg.png';
+import p1 from '../../../images/products/AustralianPassion.jpeg';
+import p2 from '../../../images/products/Chardonnay.jpeg';
+import p3 from '../../../images/products/chivas1ltr.jpeg';
+import p4 from '../../../images/products/jb1liter.jpeg';
 import {
     Card,
     CardContent,
@@ -31,13 +35,12 @@ function Banner(props) {
     const content = (
         <Grid item xs={12 / totalItems} >
             <CardMedia
-                className={classes.Content}
-                style={{ width:150, objectFit:'contain'}}
+                className={classes.Media}
                 image={props.item.image}
                 title={props.item.Name}
             >
                 {/* <Typography className={classes.MediaCaption}>
-                    {item.Name}
+                    {props.item.Name}
                 </Typography> */}
             </CardMedia>
 
@@ -55,9 +58,9 @@ function Banner(props) {
                     image={item.Image}
                     title={item.Name}
                 >
-                    {/* <Typography className={classes.MediaCaption}>
+                    <Typography className={classes.MediaCaption}>
                         {item.Name}
-                    </Typography> */}
+                    </Typography>
                 </CardMedia>
 
             </Grid>
@@ -91,12 +94,12 @@ const items = [
         contentPosition: "left",
         Items: [
             {
-                Name: "Macbook Pro",
-                Image: "https://source.unsplash.com/featured/?macbook"
+                Name: "A Passion",
+                Image: p1// "https://source.unsplash.com/featured/?macbook"
             },
             {
-                Name: "iPhone",
-                Image: "https://source.unsplash.com/featured/?iphone"
+                Name: "Chardonnay",
+                Image: p2//"https://source.unsplash.com/featured/?iphone"
             }
         ]
     },
@@ -107,12 +110,12 @@ const items = [
         image:GgImage,
         Items: [
             {
-                Name: "Washing Machine WX9102",
-                Image: "https://source.unsplash.com/featured/?washingmachine"
+                Name: "Chivas",
+                Image: p3//"https://source.unsplash.com/featured/?washingmachine"
             },
             {
-                Name: "Learus Vacuum Cleaner",
-                Image: "https://source.unsplash.com/featured/?vacuum,cleaner"
+                Name: "JB 1000ML",
+                Image: p4//"https://source.unsplash.com/featured/?vacuum,cleaner"
             }
         ]
     },
@@ -123,12 +126,12 @@ const items = [
         image:BgImage,
         Items: [
             {
-                Name: "Living Room Lamp",
-                Image: "https://source.unsplash.com/featured/?lamp"
+                Name: "A Passion",
+                Image: p1//"https://source.unsplash.com/featured/?lamp"
             },
             {
-                Name: "Floral Vase",
-                Image: "https://source.unsplash.com/featured/?vase"
+                Name: "Chardonnay",
+                Image: p2//"https://source.unsplash.com/featured/?vase"
             }
         ]
     }

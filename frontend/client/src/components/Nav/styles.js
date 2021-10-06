@@ -43,13 +43,23 @@ export default makeStyles(() => ({
             textDecoration:'underline'
           },
     },
+    navLinkMobi: {
+        marginInline: '5px',
+        fontWeight:'bold',
+        fontFamily: 'Open Sans',
+        fontSize:'18px',
+        textDecoration: 'none',
+        "&:hover": {
+            textDecoration:'underline'
+          },
+    },
         kenya:{
         display: 'block',
         height: '20px',
         marginLeft:'170px'
     },
     time :{
-        color: '#ff9800',
+        color: 'lime',
         backgroundColor:'#111',
         fontWeight:'bold',
         fontFamily: 'Open Sans',
@@ -59,6 +69,29 @@ export default makeStyles(() => ({
         // margin:'auto',
     },
     navContainer: {
-        maxWidth: '200px',
-    }
+        maxWidth: '400px',
+    },
+    rootTextField: {
+        marginLeft: '5px',
+    "& .MuiInputBase-root, .MuiFormLabel-root": {
+      color: "#555",
+      borderRadius:'0px',
+      margin:'auto'
+    },
+    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#ccc",
+      backgroundColor:'#f0f0f0',
+    },
+    '& .MuiInputBase-root, .Mui-focused': {
+        color: 'transparent',
+      },
+      centar: {
+        margin:'auto'
+      }
+  },
+  btn: {
+      borderRadius:'0px',
+      padding: '8px',
+      marginLeft:'5px',
+  }
 }));

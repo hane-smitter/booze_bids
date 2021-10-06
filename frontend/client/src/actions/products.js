@@ -26,15 +26,15 @@ export const getProducts = (query, cb) => async (dispatch) => {
       api.fetchBiddableProducts(query),
       api.fetchProductCategories(),
     ]);
-    const { data: products } = productsData;
+    const { data: {data, currentPage, numberOfPages} } = productsData;
     const { data: categories } = categoriesData;
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: READPROD, payload: { products } });
+      dispatch({ type: READPROD, payload: { data } });
       dispatch({ type: READCAT, payload: { categories } });
     });
-    cb && cb(products);
+    cb && cb(data);
   } catch (error) {
     logError(error, dispatch);
   }
@@ -76,6 +76,21 @@ export const fetchTopBidder = () => async (dispatch) => {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch top bidder
     const { data } = await api.fetchTopBidder();
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: FETCHTB, payload: { bidder: data } });
+    });
+  } catch (error) {
+    logError(error, dispatch);
+  }
+};
+//get last bidder
+export const fetchLastBidder = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //fetch top bidder
+    const { data } = await api.fetchLastBidder();
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });

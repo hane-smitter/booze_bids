@@ -8,6 +8,7 @@ import {
   LOADING,
   STATUS,
   FETCHTB,
+  FETCHLB,
 } from "../constants";
 
 export default (
@@ -27,7 +28,11 @@ export default (
     /* case READPROD:
             return action.payload.products; */
     case READPROD:
-      return { ...app, products: action.payload.products };
+      return { ...app, 
+        products: action.payload.data, 
+        currentPage: action.payload.currentPage,
+        numberOfPages: action.payload.numberOfPages,
+       };
     case CREATE:
       return {
         ...app,
@@ -42,6 +47,11 @@ export default (
       return {
         ...app,
         bidder: { ...app.bidder, topBidder: action.payload.bidder },
+      };
+    case FETCHLB:
+      return {
+        ...app,
+        bidder: { ...app.bidder, lastBidder: action.payload.bidder },
       };
     case STATUS:
       return {

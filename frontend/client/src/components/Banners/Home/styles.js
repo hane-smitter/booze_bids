@@ -3,7 +3,7 @@ import Background from '../../../images/bannerbg.png';
 
 export default makeStyles(() => ({
     root: {
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#2b5681',
         fontFamily:'Open Sans',
     },
     imgContainer: {
@@ -12,11 +12,11 @@ export default makeStyles(() => ({
         backgroundSize: 'contain',
         backgroundRepeat: 'yes',
         height: '200px',
-        marginBlockEnd: '20px',
+        // marginBlockEnd: '20px',
         // borderBottomLeftRadius: '50%',
         // borderBottomRightRadius: '60%',
-        marginBlockStart:'-90px',
-        backgroundColor:'#f0f0f0',
+        marginBlockStart:'-100px',
+        backgroundColor:'#2b5681',
         width:'100%'
     },
     image: {

@@ -1,12 +1,14 @@
-import React , { useEffect } from 'react';
+import React , { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { 
     Container,
     Grow,
+    Box,
     Grid,
-    Typography
+    Typography,
+    Paper
 } from '@material-ui/core';
-
+import ChipInput from 'material-ui-chip-input';
 
 import { getProducts } from '../../actions/products';
 import Users from '../Users/Users.js';
@@ -15,16 +17,26 @@ import Banner from '../Banners/Home/Home';
 import useStyles from './styles';
 import Products from '../Products/Products';
 import Footer from '../Footer';
+import Pagination from '../Pagination';
+import { useLocation } from 'react-router-dom';
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search)
+}
 const Home = () => {
-    
-
     const classes = useStyles();
+    const query = useQuery();
+    const page = query.get('page') || 1;
+    const searchQuery = query.get('searchQuery');
+    const [currentId, setCurrentId] = useState(0);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(getProducts());
-    }, [dispatch]);
+    const [search, setSearch] = useState('');
+    const [tags, setTags] = useState([]);
+
+    // useEffect(() => {
+    //     dispatch(getProducts());
+    // }, [dispatch]);
 
     return (
         <div>
@@ -37,14 +49,18 @@ const Home = () => {
                             <Banner />
                         </Grid> */}
                         <Products/>
-                        {/* <Grid container justifyContent="space-between" alignItems="stretch" spacing="3">
-                            <Grid item xs={12} sm={4}>
-                                <Form/>
+                        <Box style={{ borderLeft:'solid 2px #2b5681',borderRight:'solid 2px #2b5681',marginTop:'-20px'}}>
+                        <Grid container justifyContent="center" alignItems="stretch" spacing="3">
+                            <Grid item xs={12} sm={6} md={3}>
+                                    <Pagination page={page}/>
                             </Grid> 
-                        </Grid> */}
+                        </Grid>
+                        </Box>
+                        {/* pagination */}
+                        <Footer/>
                     </Container>
                 </Grow> 
-                <Footer/>
+               
         </div>
     );
 }

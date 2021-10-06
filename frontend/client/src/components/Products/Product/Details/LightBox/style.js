@@ -29,4 +29,8 @@ export default makeStyles((theme) => ({
     color: "#ff9800",
     fontWeight: "bold",
   },
+  danger :{
+    color: 'red',
+    fontWeight:'bold',
+  }
 }));

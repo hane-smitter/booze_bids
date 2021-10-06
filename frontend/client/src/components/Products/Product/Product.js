@@ -7,43 +7,33 @@ import {
   CardHeader,
   CardMedia,
   Typography,
+  TextField,
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion"
-
+import { Formik, Field, Form } from "formik";
+import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { makeBid, fetchTopBidder } from "../../../actions/products";
+import { unsetErr } from "../../../actions/errors";
 import useStyles from "./styles";
 import defaultImg from "../../../images/products/defaultImg.jpeg";
 import FutureTimeCalc from "../../utils/FutureTimeCalc";
 import MoneyFormat from "../../utils/MoneyFormat/index.js";
+import BidForm from "./Form";
+import ProductDetail from "./ProductDetail";
 
 const Product = ({ product }) => {
-  const [ cardBlinking, setCardBlinking ] = useState(!Boolean(product.slots));
   const classes = useStyles();
 
   const location = {
     pathname: "/detail",
     state: { product },
   };
-
-  const defaultRemainingTime = {
-    seconds: "00",
-    minutes: "00",
-    hours: "00",
-    days: "00",
-  };
-
-  const [countDownTime, setCountDownTime] = useState(defaultRemainingTime);
-
-  useEffect(() => {
-    let interval = setInterval(() => {
-      upDateTime();
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  function upDateTime() {
-    setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
-  }
 
   const cardVariants = {
     blink: {
@@ -59,7 +49,6 @@ const Product = ({ product }) => {
   }
 
   return (
-    <Button component={Link} to={location}>
       <Card
         className={classes.root,classes.borderBlack}
         component={motion.div}
@@ -68,64 +57,26 @@ const Product = ({ product }) => {
         <CardHeader
           className={classes.capitalize}
           color="primary"
-          subheader={product.product.name}
+          subheader={product.product.name.length > 20 ? product.product.name.substr(0,20)+'...' : product.product.name}
         />
         <CardActionArea>
-          <CardMedia
-            className={classes.media}
-            image={product.product.image || defaultImg}
-            title='Click to bid'
-          />
-          <CardContent 
-          className={classes.darkBox} 
-          component={motion.div}
-          variants={cardVariants}
-          animate={cardBlinking ?  "blink" : ""} > 
-            <Typography
-            className={cardBlinking ? classes.danger: classes.warning}
-              gutterBottom
-              variant="body2"
-              component="p"
-              
-            >
-              Ends in:{" "}
-              <span className={classes.bomb}>
-              {countDownTime.days != '00' &&
-              <span>
-                <span className={`${classes.countdowntime}`}>
-                  {countDownTime.days}
-                </span>
-                <span>D:</span>
-              </span>
-              }
-              <span className={`${classes.countdowntime} ${classes.countdown}`}>
-                {countDownTime.hours}
-              </span>
-              <span>H:</span>
-              <span className={`${classes.countdowntime} ${classes.countdown}`}>
-                {countDownTime.minutes}
-              </span>
-              <span>M:</span>
-              <span className={`${classes.countdowntime} ${classes.countdown}`}>
-                {countDownTime.seconds}
-              </span>
-              <span>s</span>
-              </span>
-            </Typography>
-            <Typography className={classes.success} variant="caption" component="p">
-              Bid me @ {MoneyFormat(product.bidPrice)} | Slots: {product.totalslots ?? 0}
-            </Typography>
-            <Typography
-              component="div"
-              variant="l"
-              style={{ fontWeight: "bold", textAlign:'center' }}
-            >
-              RRP: {MoneyFormat(product.product.cost)}
-            </Typography>
+          <Link to={location}>
+            <CardMedia
+              className={classes.media}
+              image={product.product.image || defaultImg}
+              title={product.product.name}
+            />
+          </Link>
+          <CardContent className={classes.darkBox}> 
+            {/* product details */}
+            <ProductDetail product={product}/>
+            {/* product details */}
+            {/* form */}
+            <BidForm product={product}/>
+            {/* .end of form */}
           </CardContent>
         </CardActionArea>
       </Card>
-    </Button>
   );
 };
 

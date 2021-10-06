@@ -1,11 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
-import '../../Fonts/TickingTimebombBB.ttf';
 
 export default makeStyles({
   root: {
     fontSize: 'inherit',
-    minHeight: '300px',
-    minWidth: '200px'
+    height:'300px',
+    overflow:'hidden',
   },
   media: {
     height: 0,
@@ -13,7 +12,7 @@ export default makeStyles({
     backgroundSize:'contain'
   },
   bomb: {
-    fontFamily: 'ticking-timebomb-bb'
+    fontFamily: 'TickingTimeBomb'
   },
   border: {
     border: 'solid',
@@ -24,6 +23,9 @@ export default makeStyles({
   darkBox: {
     color: "#000",
     backgroundColor: "#f0f0f0"
+  },
+  tiny: {
+    fontSize:'8px'
   },
   fullHeightCard: {
     height: '100%',

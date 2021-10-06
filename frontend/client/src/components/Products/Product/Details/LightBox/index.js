@@ -14,9 +14,11 @@ import {
 import FutureTimeCalc from "../../../../utils/FutureTimeCalc";
 import useStyles from './style';
 import defaultImg from "../../../../../images/products/defaultImg.jpeg";
+import MoneyFormat from "../../../../utils/MoneyFormat";
 
 
 const LightBox = ({ product }) => {
+  const [ cardBlinking, setCardBlinking ] = useState(!Boolean(product.slots));
     const classes = useStyles();
     const defaultCountDownTime = {
     seconds: '00',
@@ -57,35 +59,42 @@ const LightBox = ({ product }) => {
               gutterBottom
               variant="body2"
               component="p"
-              className={classes.warning}
+              className={cardBlinking ? classes.danger: ''}
+              style={{fontWeight:'bold'}} 
             >
               Ends in:{" "}
-              <span className={`${classes.countdowntime}`}>
-                {countDownTime.days}
+              <span style={{ fontFamily:'ticking-time-bomb', fontSize:'16px', fontWeight:'bold' }}>
+                {countDownTime.days != '00' &&
+                <span>
+                  <span className={`${classes.countdowntime}`}>
+                    {countDownTime.days}
+                  </span>
+                  <span>Days</span>
+                </span>
+                }
+                <span className={`${classes.countdowntime} ${classes.countdown}`}>
+                  {countDownTime.hours}
+                </span>
+                <span>Hrs</span>
+                <span className={`${classes.countdowntime} ${classes.countdown}`}>
+                  {countDownTime.minutes}
+                </span>
+                <span>Mins</span>
+                <span className={`${classes.countdowntime} ${classes.countdown}`}>
+                  {countDownTime.seconds}
+                </span>
+                <span>Secs</span>
               </span>
-              <span>D</span>
-              <span className={`${classes.countdowntime} ${classes.countdown}`}>
-                {countDownTime.hours}
-              </span>
-              <span>H</span>
-              <span className={`${classes.countdowntime} ${classes.countdown}`}>
-                {countDownTime.minutes}
-              </span>
-              <span>M</span>
-              <span className={`${classes.countdowntime} ${classes.countdown}`}>
-                {countDownTime.seconds}
-              </span>
-              <span>S</span>
             </Typography>
 
-            <Grid container alignItems="center">
+            <Grid container alignItems="center"  >
               <Grid item xs>
-                <Typography variant="body2" component="p">
-                  RRP: KSH {product.product.cost}
+                <Typography variant="body2" component="p" style={{fontWeight:'bold'}}>
+                  RRP @ {MoneyFormat(product.product.cost)}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="body2" component="p">
+                <Typography variant="body2" component="p" style={{fontWeight:'bold'}}>
                   Slots Remaining: {product.totalslots ?? 0}
                 </Typography>
               </Grid>

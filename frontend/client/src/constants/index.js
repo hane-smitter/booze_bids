@@ -7,3 +7,4 @@ export const LOADING = 'LOADING';
 export const READCAT = 'FETCH_CATEGORIES';
 export const STATUS = 'STATUS';
 export const FETCHTB = 'FETCH_TOP_BIDDER';
+export const FETCHLB = 'FETCH_LAST_BIDDER';

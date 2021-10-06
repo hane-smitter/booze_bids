@@ -12,6 +12,8 @@ import {
   ListItemText,
   Collapse,
   List,
+  useMediaQuery,
+  useTheme,
 } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
@@ -42,11 +44,14 @@ const Products = () => {
       window.scroll(0, 0);
     }
   }, []);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   return (
-    <Container>
+    <div align="center" className={classes.borderBlue}>
       <Box className={classes.productsTitleBox}>
-        {/* {categories.length && ( */}
+        
         <Grid container rowSpacing={0} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          
           <Grid style={{ height:40 }} item xs={12} sm={4}>
             <Box component="span">
               <List style={{ height:25,padding:0 }} 
@@ -58,7 +63,7 @@ const Products = () => {
                   {/* <ListItemIcon>
                     <CategoryIcon />
                   </ListItemIcon> */}
-                  <ListItemText primary="Browse categories" />
+                  <ListItemText primary="Browse Categories" />
                   {categoryOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                 </ListItem>
                 <Collapse
@@ -99,33 +104,39 @@ const Products = () => {
             </Box>
           </Grid>
           <Grid item xs={12} sm={4}></Grid>
-          {/* )} */}
+          {!isMobile && (
           <Grid item style={{ flexGrow: 1 }} xs={12} sm={4}>
             <Typography>
               <SearchBar
                 value={searchItem}
                 onChange={(value) => {
-                  setSearchItem(value);
+                  setCategoryOpen(false);
+                  dispatch(
+                    getProducts(`search=${value}`)
+                  );
                 }}
                 onRequestSearch={() => console.log("onRequestSearch")}
                 style={{
                   maxWidth: 400,
                   margin: 5,
-                  height:30
+                  height:30,
+                  backgroundColor:'#4472c4',
+                  color:'#ffffff',
                 }}
               />
             </Typography>
           </Grid>
+          )}
         </Grid>
       </Box>
 
       {loading && (
-        <Box style={{ width: "100%" }} display="flex" justify-content="center">
-          <CircularProgress />
-        </Box>
+        <Paper variant="outlined" className={classes.center}>
+          <CircularProgress align='center'/>
+        </Paper>
       )}
 
-      {products.length < 1 ? (
+      {!loading && !products?.length ? (
         <Paper variant="outlined" className={classes.center}>
           <Typography variant="h5" color="textSecondary" align="center">
             Sorry! No Products are available!!
@@ -134,15 +145,16 @@ const Products = () => {
       ) : (
         <Grid
           container
-          justifyContent="space-around"
+          justifyContent={isMobile ? "space-around" : "left"}
           alignItems="stretch"
-          spacing={6}
+          spacing={3}
+          style={{marginBlock:20}}
         >
           {products.map((product) => {
             let content = null;
             if (Boolean(product.product)) {
               content = (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
+                <Grid style={{ maxWidth:250 }} item xs={12} sm={6} md={4} lg={3} key={product._id}>
                   <Product product={product} />
                 </Grid>
               );
@@ -151,7 +163,7 @@ const Products = () => {
           })}
         </Grid>
       )}
-    </Container>
+    </div>
   );
 };
 
