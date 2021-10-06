@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { decode } from "html-entities";
 import * as Yup from "yup";
 import { Formik, Field } from "formik";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   Autocomplete,
   Button,
@@ -18,18 +18,16 @@ import useStyles from "./styles";
 import { updateProduct, getProducts } from "src/actions/products";
 
 const getChangedValues = (values, initialValues) => {
-  return Object
-    .entries(values)
-    .reduce((acc, [key, value]) => {
-      const hasChanged = initialValues[key] !== value;
+  return Object.entries(values).reduce((acc, [key, value]) => {
+    const hasChanged = initialValues[key] !== value;
 
-      if (hasChanged) {
-        acc[key] = value
-      }
+    if (hasChanged) {
+      acc[key] = value;
+    }
 
-      return acc
-    }, {})
-}
+    return acc;
+  }, {});
+};
 
 const Edit = ({ product, toggle, imgPrev, setImgPrev, imgObj, dispatch }) => {
   const classes = useStyles();
@@ -144,7 +142,7 @@ const Edit = ({ product, toggle, imgPrev, setImgPrev, imgObj, dispatch }) => {
         <FormHelperText error={toShowError}>
           {toShowError ? currentError : value?.name ?? helperText}
         </FormHelperText>
-        {(imgPrev) && (
+        {imgPrev && (
           <img src={imgPrev} alt="preview" width={200} height={200} />
         )}
         <input
@@ -225,15 +223,16 @@ const Edit = ({ product, toggle, imgPrev, setImgPrev, imgObj, dispatch }) => {
         onSubmit={(values, actions) => {
           const changedValues = getChangedValues(values, initialValues);
 
-          if(Object.keys(changedValues).length === 0) return actions.setSubmitting(false);;
+          if (Object.keys(changedValues).length === 0)
+            return actions.setSubmitting(false);
           let formData = new FormData();
           for (let key in changedValues) {
             formData.append(key, changedValues[key]);
           }
+          (async () => dispatch(updateProduct(product._id, formData)))().then(
+            () => dispatch(getProducts())
+          );
           actions.setSubmitting(loading);
-          (async () => dispatch(updateProduct(product._id, formData)))().then(() => dispatch(getProducts()))
-          
-
         }}
         validationSchema={prodUpdateSchema}
       >

@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import ProductCard from "./Product/ProductCard";
 import { getProducts } from "src/actions/products";
 
-const AllProducts = ({imgObj, setImgObj, imgPrev, setImgPrev, setProduct, toggle, dispatch}) => {
+const AllProducts = ({ setImgObj, setImgPrev, setProduct, toggle, dispatch}) => {
   const { products: { allprod:products }, loading } = useSelector((state) => state.app); 
 
   React.useEffect(() => {

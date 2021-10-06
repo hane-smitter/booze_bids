@@ -29,7 +29,11 @@ const routes = [
       </RouteProtect>
     ),
     children: [
-      { path: "account", element: <Account /> },
+      { path: "account", element: (
+        <RouteProtect>
+          <Account />
+        </RouteProtect>
+      ) },
       {
         path: "categories",
         element: <CategoriesList />,
@@ -78,7 +82,7 @@ const routes = [
         ),
       },
       { path: "forgotpassword", element: <ForgotPassword /> },
-      { path: "resetpassword:resetToken", element: <ResetPassword /> },
+      { path: "passwordreset/:resetToken", element: <ResetPassword /> },
       { path: "404", element: <NotFound /> },
       { path: '', element: <Navigate to="/app/dashboard" /> },
       { path: "*", element: <Navigate to="/404" /> },

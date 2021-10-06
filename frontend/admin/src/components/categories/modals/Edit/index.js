@@ -1,4 +1,3 @@
-import React from "react";
 import { decode } from "html-entities";
 import * as Yup from "yup";
 import { Formik, Field } from "formik";
@@ -10,10 +9,26 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProductCategory } from "src/actions/products";
+import { updateProductCategory, getCategories } from "src/actions/products";
 
-const Edit = ({ categories = [], currentCatIdSelected, setShowModal, fetchCategories }) => {
-  const dispatch = useDispatch();
+const getChangedValues = (values, initialValues) => {
+  return Object.entries(values).reduce((acc, [key, value]) => {
+    const hasChanged = initialValues[key] !== value;
+
+    if (hasChanged) {
+      acc[key] = value;
+    }
+
+    return acc;
+  }, {});
+};
+
+const Edit = ({
+  categories = [],
+  currentCatIdSelected,
+  toggle,
+  dispatch
+}) => {
   const { loading, err } = useSelector((state) => state.app);
 
   let categoryId = currentCatIdSelected;
@@ -21,6 +36,13 @@ const Edit = ({ categories = [], currentCatIdSelected, setShowModal, fetchCatego
   let category = categories.filter(
     (category) => category._id === categoryId
   )[0];
+
+  const initialValues = {
+    id: category._id,
+    name: category.name,
+    description: category.description,
+  }
+
   category.name = decode(category.name);
   category.description = decode(category.description);
 
@@ -69,16 +91,16 @@ const Edit = ({ categories = [], currentCatIdSelected, setShowModal, fetchCatego
   };
   return (
     <Formik
-      initialValues={{
-          id: category._id,
-        name: category.name,
-        description: category.description,
-      }}
+      initialValues={initialValues}
       onSubmit={(values, actions) => {
-        dispatch(updateProductCategory(values.id, values));
-        // fetchCategories();
-        // actions.setSubmitting(loading);
-        actions.setSubmitting(false);
+        const changedValues = getChangedValues(values, initialValues);
+        if (Object.keys(changedValues).length === 0)
+            return actions.setSubmitting(false);
+
+        (async () => dispatch(updateProductCategory(values.id, changedValues)))().then(
+          () => dispatch(getCategories())
+        );
+        actions.setSubmitting(loading);
       }}
       validationSchema={catCreationSchema}
       enableReinitialize={true}
@@ -123,9 +145,9 @@ const Edit = ({ categories = [], currentCatIdSelected, setShowModal, fetchCatego
               color="secondary"
               size="large"
               variant="contained"
-              onClick={() => setShowModal(false)}
+              onClick={toggle}
             >
-              CANCEL
+              Close
             </Button>
             <Button
               color="primary"

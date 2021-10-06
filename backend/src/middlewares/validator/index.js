@@ -170,11 +170,10 @@ export const validate = (method) => {
     case "updateCategory": {
       return [
         body("name")
-          .exists({ checkFalsy: true })
-          .withMessage("Name is required")
-          .bail()
+        .optional()
+        .trim()
           .escape(),
-        body("description").escape(),
+        body("description").optional().trim().escape(),
       ];
     }
     case "deleteProduct": {

@@ -45,7 +45,7 @@ export const registerAdmin = async (req, res) => {
       lastname,
       email,
       password,
-      role: 'Admin'
+      role: "Admin",
     });
     const token = await user.generateAuthToken();
     res.json({
@@ -90,9 +90,27 @@ export const login = async (req, res) => {
 };
 export const logout = async (req, res) => {
   try {
-    req.user.tokens = req.user.tokens.filter((token) => token !== req.token);
-    await req.user.save();
-  } catch (err) {}
+    req.user.tokens = req.user.tokens.filter(
+      (token) => token.token !== req.token
+    );
+    await AuthUser.updateOne(
+      { _id: req.user._id },
+      { $set: { tokens: req.user.tokens } },
+      { new: true, runValidators: true }
+    );
+    res.json({
+      status: {
+        info: {
+          message: "logout success",
+          severity: "success",
+          code: "userlogout",
+        },
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ err: [{ msg: err.message }] });
+  }
 };
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
@@ -112,8 +130,11 @@ export const forgotPassword = async (req, res) => {
 
     const message = `
             <h1>You have requested a new password reset</h1>
-            <p>Please go to this link to reset your password</p>
+            <p>Please go to this link to reset your password.</p>
             <a href=${resetUrl} clicktracking=off>${resetUrl}</a>
+            <p>This password reset link will <strong>expire after ${
+              process.env.RESET_PASSWORD_TOKEN_EXPIRY_MINS || 5
+            } minutes.</strong></p>
         `;
     try {
       await sendEmail({
@@ -127,7 +148,7 @@ export const forgotPassword = async (req, res) => {
             message:
               "An email has been sent to your email address. Check your email, and visit the link to reset your password",
             severity: "success",
-            code: "forgotpassword"
+            code: "forgotpassword",
           },
         },
       });
@@ -159,7 +180,9 @@ export const resetpassword = async (req, res) => {
       resetpasswordtokenexpire: { $gt: Date.now() },
     });
     if (!user)
-      return res.status(400).json({ err: [{ msg: "Invalid reset token" }] });
+      return res
+        .status(400)
+        .json({ err: [{ msg: "The reset link is invalid" }] });
 
     user.password = req.body.password;
     user.resetpasswordtoken = undefined;
@@ -169,7 +192,7 @@ export const resetpassword = async (req, res) => {
     res.status(201).json({
       status: {
         info: {
-          message: "Password reset successful",
+          message: `Password reset successful.`,
           severity: "success",
           code: "passwordreset",
         },

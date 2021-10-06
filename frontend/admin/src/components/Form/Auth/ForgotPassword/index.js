@@ -123,18 +123,27 @@ const ForgotPassword = () => {
                   </Typography>
                 </Box>
 
-                {(Boolean(status?.info?.message) && formAlert) && (
+                {Boolean(status?.info?.message) && formAlert && (
                   <Box sx={{ width: "100%", paddingInline: "10px" }}>
                     <Stack sx={{ width: "100%" }} spacing={2}>
-                      <Alert severity={status.info.severity}>{status.info.message}</Alert>
+                      <Alert
+                        severity={status.info.severity}
+                        onClose={() => setFormAlert(false)}
+                      >
+                        {status.info.message}
+                      </Alert>
                     </Stack>
                   </Box>
                 )}
-                {(err.length > 0 && formAlert) &&
+                {err.length > 0 &&
+                  formAlert &&
                   err.map((error) => (
                     <Box sx={{ width: "100%", paddingInline: "10px" }}>
                       <Stack sx={{ width: "100%" }} spacing={2}>
-                        <Alert severity="error" onClose={() => setFormAlert(false)}>
+                        <Alert
+                          severity="error"
+                          onClose={() => setFormAlert(false)}
+                        >
                           {error.msg}
                         </Alert>
                       </Stack>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useParams, Link as RouterLink } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -11,6 +11,7 @@ import {
   Alert,
   Stack,
   TextField,
+  Link,
   Typography,
   CircularProgress,
 } from "@mui/material";
@@ -21,7 +22,7 @@ import ShowFeedback from "src/utils/ShowFeedback";
 import useShowFeedback from 'src/utils/ShowFeedback/useShowFeedback';
 
 const ResetPassword = () => {
-  const navigate = useNavigate();
+  const { resetToken } = useParams();
   const dispatch = useDispatch();
   const { status, err, loading } = useSelector((state) => state.app);
   const [formAlert, setFormAlert] = useState(false);
@@ -95,7 +96,7 @@ const ResetPassword = () => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values, actions) => {
-              dispatch(ResetPassword(values));
+              dispatch(resetPassword(resetToken, values));
               actions.setSubmitting(loading);
             }}
           >
@@ -125,7 +126,7 @@ const ResetPassword = () => {
                 {(Boolean(status?.info?.message) && formAlert) && (
                   <Box sx={{ width: "100%", paddingInline: "10px" }}>
                     <Stack sx={{ width: "100%" }} spacing={2}>
-                      <Alert severity={status.info.severity}>{status.info.message}</Alert>
+                      <Alert severity={status.info.severity} onClose={() => setFormAlert(false)}>{status.info.message}</Alert>
                     </Stack>
                   </Box>
                 )}
@@ -139,7 +140,14 @@ const ResetPassword = () => {
                       </Stack>
                     </Box>
                   ))}
-                  
+                  {status?.info?.code === "passwordreset" && (<Link
+                    component={RouterLink}
+                    to="/login"
+                    variant="body1"
+                    underline="hover"
+                  >
+                    Sign in
+                  </Link>)}
                 <TextField
                   error={Boolean(touched.password && errors.password)}
                   fullWidth
