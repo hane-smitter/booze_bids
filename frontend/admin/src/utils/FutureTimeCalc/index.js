@@ -17,7 +17,7 @@ function FutureTimeCalc(startTime, endTime) {
     let calcTime = dateFns[`differenceIn${capitalize}s`](endTime, now);
     if (calcTime) {
       res.push(
-        `${calcTime} ${part.abbr}${calcTime === 1 ? "" : "s"}`
+        `${calcTime.toString().padStart(2, '0')} ${part.abbr}${calcTime === 1 ? "" : "s"}`
       );
       if (i < parts.length) endTime = dateFns[`sub${capitalize}s`](endTime, calcTime);
     }

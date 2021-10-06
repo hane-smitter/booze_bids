@@ -1,4 +1,4 @@
-import json from 'body-parser';
+// import json from 'body-parser';
 import User from '../models/User.js';
 
 //get users

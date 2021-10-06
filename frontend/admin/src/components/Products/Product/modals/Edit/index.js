@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { decode } from "html-entities";
 import * as Yup from "yup";
 import { Formik, Field } from "formik";
@@ -15,13 +15,13 @@ import {
 } from "@mui/material";
 import { Image } from "@mui/icons-material";
 import useStyles from "./styles";
-import { updateProduct } from "src/actions/products";
+import { updateProduct, getProducts } from "src/actions/products";
 
 const getChangedValues = (values, initialValues) => {
   return Object
     .entries(values)
     .reduce((acc, [key, value]) => {
-      const hasChanged = initialValues[key] !== value
+      const hasChanged = initialValues[key] !== value;
 
       if (hasChanged) {
         acc[key] = value
@@ -31,9 +31,9 @@ const getChangedValues = (values, initialValues) => {
     }, {})
 }
 
-const Edit = ({ product, setShowModal, imgPrev, setImgPrev, imgObj }) => {
+const Edit = ({ product, toggle, imgPrev, setImgPrev, imgObj, dispatch }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const initialValues = {
     name: product.name,
@@ -225,31 +225,20 @@ const Edit = ({ product, setShowModal, imgPrev, setImgPrev, imgObj }) => {
         onSubmit={(values, actions) => {
           const changedValues = getChangedValues(values, initialValues);
 
-          if(Object.keys(changedValues).length === 0) return;
+          if(Object.keys(changedValues).length === 0) return actions.setSubmitting(false);;
           let formData = new FormData();
           for (let key in changedValues) {
             formData.append(key, changedValues[key]);
           }
           actions.setSubmitting(loading);
-          dispatch(updateProduct(product._id, formData));
+          (async () => dispatch(updateProduct(product._id, formData)))().then(() => dispatch(getProducts()))
+          
 
         }}
         validationSchema={prodUpdateSchema}
       >
         {(props) => (
           <form onSubmit={props.handleSubmit} noValidate autoComplete="off">
-            <Box
-              sx={{
-                my: 3,
-                display: "grid",
-                gridAutoFlow: "column",
-              }}
-            >
-              <Typography color="textPrimary" variant="h3">
-                Edit Product
-              </Typography>
-            </Box>
-
             <Field
               name={"name"}
               formErrorsNames={formErrorsNames}
@@ -283,7 +272,7 @@ const Edit = ({ product, setShowModal, imgPrev, setImgPrev, imgObj }) => {
               name={"productimg"}
               formErrorsNames={formErrorsNames}
               formErrors={formErrors}
-              helperText={"hehe upload a file"}
+              helperText={"upload an image file"}
               component={FileInputField}
             />
 
@@ -298,7 +287,7 @@ const Edit = ({ product, setShowModal, imgPrev, setImgPrev, imgObj }) => {
                 color="secondary"
                 size="large"
                 variant="contained"
-                onClick={() => setShowModal(false)}
+                onClick={toggle}
               >
                 CLOSE
               </Button>
