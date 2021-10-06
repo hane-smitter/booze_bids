@@ -8,6 +8,7 @@ import categoryRoutes from "./routes/categories.js";
 import storeRoutes from "./routes/stores.js";
 import userRoutes from "./routes/users.js";
 import bidRoutes from "./routes/bids.js";
+import mpesaRoutes from "./routes/mpesa.js";
 import authRoutes from "./routes/auth.js";
 import chalk from "chalk";
 import { fileURLToPath } from "url";
@@ -30,6 +31,7 @@ app.use("/categories", categoryRoutes);
 app.use("/stores", storeRoutes);
 app.use("/users", userRoutes);
 app.use("/bids", bidRoutes);
+app.use("/mpesa", mpesaRoutes);
 app.all("*", (req, res) => {
   res.status(404).json({
     err: [

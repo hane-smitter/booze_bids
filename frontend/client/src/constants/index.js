@@ -1,5 +1,6 @@
 export const CREATE = 'CREATE';
 export const READPROD = 'FETCH_PRODUCTS';
+export const READUSER = 'FETCH_USERS';
 export const UPDATE = 'UPDATE';
 export const DELETE = 'DELETE';
 export const ERROR = 'ERROR';
@@ -8,3 +9,4 @@ export const READCAT = 'FETCH_CATEGORIES';
 export const STATUS = 'STATUS';
 export const FETCHTB = 'FETCH_TOP_BIDDER';
 export const FETCHLB = 'FETCH_LAST_BIDDER';
+export const FETCHUSER = 'FETCH_USER';

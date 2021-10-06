@@ -11,7 +11,6 @@ export default makeStyles((theme) => ({
   lightBox: {
     backgroundColor: theme.palette.background.paper,
     color: "#000",
-    padding: "20px",
   },
   white: {
     color:'white'
@@ -23,6 +22,7 @@ export default makeStyles((theme) => ({
   },
   rootTextField: {
     padding:0,
+    margin:0,
     "& .MuiInputBase-root, .MuiFormLabel-root": {
       color: "rgba(245, 245, 245, 1)",
     },
