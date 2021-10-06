@@ -23,7 +23,12 @@ import ImageIcon from "@material-ui/icons/Image";
 import { Formik, Field, getIn } from "formik";
 import * as Yup from "yup";
 
+import { unsetErr, unsetStatus } from "../../actions/errors";
+import ShowFeedback from "../utils/ShowFeedback";
+
 import useStyles from "./styles.js";
+import { createUser } from "../../actions/users.js";
+import { useLocation } from "react-router";
 
 const Form = () => {
   const dispatch = useDispatch();
@@ -33,12 +38,31 @@ const Form = () => {
     loading,
     status,
   } = useSelector((state) => state.app);
-  
+
+  const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
+  const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
+  const locationRouter = useLocation();
+
+  useEffect(() => {
+    return () => {
+      dispatch(unsetErr());
+      dispatch(unsetStatus());
+    };
+  }, []);
+  useEffect(() => {
+    setAlertOpen(Boolean(status?.info));
+  }, [status]);
+  useEffect(() => {
+    setErrAlertOpen(Boolean(err.length > 0));
+  }, [err]);
+
   let formFields = [
     "phone",
     "lastname",
-    "firstname",
+    "othername",
     "location",
+    "password",
+    "passwordConfirmation"
   ];
   let formErrors = [];
   let formErrorsName = [];
@@ -52,14 +76,17 @@ const Form = () => {
       .required("Phone No. is required")
       .positive("Invalid Phone Number")
       .integer(),
-    firstname: Yup.string()
-        .required("Your firstname is required"),
+    othername: Yup.string()
+        .required("Your othername(s) is required"),
     lastname: Yup.string()
       .required("Your surname is required"),
     location: Yup.string()
       .required(
           "Your location(e.g nearest town) is required"
         ),
+    password: Yup.string().required('Password is required'),
+    passwordConfirmation: Yup.string()
+           .oneOf([Yup.ref('password'), null], 'Passwords must match')
   });
 
   const Input = ({
@@ -104,31 +131,32 @@ const Form = () => {
   }, [status, dispatch]);
   return (
     <Box >
+        
       <Card className={classes.lightBox}>
         <Typography
-          style={{ padding:8,margin:5}}
+        align="center"
           variant="h5"
         >Register now
         </Typography>
         <CardActionArea>
-          <CardContent>
-            
-            <Divider color="grey" />
-
+          <CardContent >
             <Formik
               enableReinitialize={true}
               initialValues={{               
                 phone: "",
-                firstname: "",
+                othername: "",
                 lastname: "",
                 location: "",
+                password: "",
+                passwordConfirmation:""
               }}
               onSubmit={function (values, actions) {
                 function shouldClearForm() {
                     actions.resetForm();
                 }
-                
+                dispatch(createUser(values))
                 window.shouldClearForm = shouldClearForm;
+                
                 
               }}
               validationSchema={makeUserSchema}
@@ -143,17 +171,19 @@ const Form = () => {
                     
                     <Field
                     name="lastname"
-                    label="surname name"
+                    label="Surname name"
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     component={Input}
+                    style={{ marginTop:0 }}
                     />
                     <Field
-                    name="firstname"
-                    label="other name"
+                    name="othername"
+                    label="Other name"
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     component={Input}
+                    style={{ marginTop:0 }}
                     />
                     <Field
                     name="location"
@@ -161,6 +191,7 @@ const Form = () => {
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     component={Input}
+                    style={{ marginTop:0 }}
                     />
                 </>
                   
@@ -170,6 +201,25 @@ const Form = () => {
                     name="phone"
                     label="Phone number"
                     component={Input}
+                    style={{ marginTop:0 }}
+                  />
+                  <Field
+                    formErrors={formErrors}
+                    formErrorsName={formErrorsName}
+                    name="password"
+                    label="Password"
+                    component={Input}
+                    type="password"
+                    style={{ marginTop:0 }}
+                  />
+                  <Field
+                    formErrors={formErrors}
+                    formErrorsName={formErrorsName}
+                    name="passwordConfirmation"
+                    label="Confirm Password"
+                    component={Input}
+                    type="password"
+                    style={{ marginTop:0 }}
                   />
 
                   <Button type="submit" variant="contained" color="primary" fullWidth>

@@ -114,9 +114,6 @@ const Detail = () => {
               item
               xs={12}
               sm={4}
-              className={classes.flex}
-              // component={motion.div}
-              variants={darkVariants}
               initial="hidden"
               animate="visible"
               exit="hidden"

@@ -145,12 +145,12 @@ const DarkBox = ({ product, updateProducts }) => {
                     <ImageIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText
+                {/* <ListItemText
                   primary={topBidder.bidder?.bidderuser[0]?.fullname ?? "__"}
                 />
                 <ListItemText
                   primary={`KES ${topBidder?.bidder?.bidAmountTotal ?? 0}`}
-                />
+                /> */}
               </ListItem>
             </List>
             <Divider color="grey" />
