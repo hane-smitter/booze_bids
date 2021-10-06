@@ -9,6 +9,7 @@ import storeRoutes from "./routes/stores.js";
 import userRoutes from "./routes/users.js";
 import bidRoutes from "./routes/bids.js";
 import mpesaRoutes from "./routes/mpesa.js";
+import authRoutes from "./routes/auth.js";
 import chalk from "chalk";
 import { fileURLToPath } from "url";
 
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 const PORT = process.env.PORT || 5000;
 
+app.use("/auth", authRoutes);
 app.use("/products", productRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/stores", storeRoutes);
@@ -43,6 +45,6 @@ app.all("*", (req, res) => {
 DB.on("connected", function () {
   console.log(chalk.rgb(208, 60, 240)("DB is connected"));
   app.listen(PORT, () =>
-    console.log(chalk.rgb(208, 60, 240)(`Server running on port: ${PORT}`))
+    console.log(chalk.rgb(208, 60, 240)(`Server listening on port: ${PORT}`))
   );
 });

@@ -11,8 +11,11 @@ import AllProducts from './AllProducts';
 import BiddableProducts from './BiddableProducts';
 import UnbiddableProducts from './UnbiddableProducts';
 import Modal from "src/utils/modal";
+import EditModal from './Product/modals/Edit';
 import ShowFeedback from "src/utils/ShowFeedback";
 import { unsetErr, unsetStatus } from "src/actions/errors";
+import useShowFeedback from 'src/utils/ShowFeedback/useShowFeedback';
+import useModal from 'src/utils/modal/useModal';
 
 function spreadAttr(index) {
   return {
@@ -23,12 +26,13 @@ function spreadAttr(index) {
 
 const Products = () => {
   const dispatch = useDispatch();
-  const { err, status } = useSelector((state) => state.app);
   const [view, setView] = React.useState(0);
-  const [showModal, setShowModal] = useState(false);
-  const [modalComponent, setModalComponent] = useState(null);
-  const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
-  const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
+  const [imgPrev, setImgPrev] = useState('');
+  const [imgObj, setImgObj] = useState({});
+  const [product, setProduct] = useState({});
+  const { alertOpen, msg, errAlertOpen, errMsg, severity, close } = useShowFeedback();
+  const { showModal, toggle } = useModal();
+  let count = 0;
 
   useEffect(() => {
     return () => {
@@ -36,12 +40,6 @@ const Products = () => {
       dispatch(unsetStatus());
     }
   }, []);
-  useEffect(() => {
-    setAlertOpen(Boolean(status?.info));
-  }, [status]);
-  useEffect(() => {
-    setErrAlertOpen(Boolean(err.length > 0));
-  }, [err]);
 
   const handleChange = (event, newValue) => {
     setView(newValue);
@@ -50,22 +48,24 @@ const Products = () => {
   return (
     <Box sx={{ width: "100%" }}>
     <Modal
+      title="Edit Product"
       isVisible={showModal}
-      toggler={setShowModal}
-      component={modalComponent}
-    />
+      close={toggle}
+    >
+      <EditModal product={product} imgObj={imgObj} imgPrev={imgPrev} setImgPrev= {setImgPrev} toggle={toggle} dispatch={dispatch} />
+    </Modal>
     <ShowFeedback
       alertOpen={alertOpen}
-      setAlertOpen={setAlertOpen}
-      severity={status?.info?.severity}
-      msg={status?.info?.message}
+      close={close}
+      severity={severity}
+      msg={msg}
     />
-    {err.length > 0 &&
-      err.map((error) => (
+    {errMsg.map((error) => (
         <ShowFeedback
+        key={count++}
           alertOpen={errAlertOpen}
-          setAlertOpen={setErrAlertOpen}
-          severity={"error"}
+          close={close}
+          severity={severity}
           msg={error.msg}
           title="Ooops!"
         />
@@ -74,7 +74,7 @@ const Products = () => {
         <Tabs
           value={view}
           onChange={handleChange}
-          aria-label="basic tabs example"
+          aria-label="Product view tabs"
         >
           <Tab label="All Products" {...spreadAttr(0)} />
           <Tab label="Biddable Products" {...spreadAttr(1)} />
@@ -82,13 +82,13 @@ const Products = () => {
         </Tabs>
       </Box>
       <ProductTabs value={view} index={0}>
-        <AllProducts setModalComponent={setModalComponent} setShowModal={setShowModal} />
+        <AllProducts imgObj={imgObj} setImgObj={setImgObj} imgPrev={imgPrev} setImgPrev= {setImgPrev} setProduct={setProduct} toggle={toggle} dispatch={dispatch} />
       </ProductTabs>
       <ProductTabs value={view} index={1}>
-        <BiddableProducts setModalComponent={setModalComponent} />
+        <BiddableProducts /* setModalComponent={setModalComponent} */ />
       </ProductTabs>
       <ProductTabs value={view} index={2}>
-        <UnbiddableProducts setModalComponent={setModalComponent} />
+        <UnbiddableProducts /* setModalComponent={setModalComponent} */ />
       </ProductTabs>
     </Box>
   );

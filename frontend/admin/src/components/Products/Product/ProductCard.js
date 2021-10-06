@@ -25,30 +25,21 @@ const urlToFileObj = (url, name) => {
   return data;
 };
 
-const ProductCard = ({ product, setModalComponent, setShowModal, ...rest }) => {
+const ProductCard = ({ product, setProduct, setImgPrev, setImgObj, toggle, ...rest }) => {
   const classes = useStyles();
   
   const [time, setTime] = useState("00 Days 00 Hours 00 Mins 00 Secs");
-  const [imgPrev, setImgPrev] = useState(null);
-  const [imgObj, setImgObj] = useState("");
+  const [imgPrevLocal, setImgPrevLocal] = useState(null);
+  const [imgObjLocal, setImgObjLocal] = useState({});
 
-  function handleEdit(product) {
-    setShowModal(true);
-    setModalComponent(
-      <EditModal product={product} setShowModal={setShowModal} imgPrev={imgPrev} setImgPrev={setImgPrev} imgObj={imgObj} />
-    );
+  function handleEdit() {
+    setProduct(product);
+    toggle();
+    setImgObj(imgObjLocal);
+    setImgPrev(imgPrevLocal);
   }
 
   useEffect(() => {
-    urlToFileObj(product.image, product.name).then((val) => {
-      setImgObj(val);
-      const reader = new FileReader();
-      reader.readAsDataURL(val);
-
-      reader.onload = () => {
-        setImgPrev(reader.result);
-      };
-    });
     if (product.productbids[0]?.startTime) {
       let interval = setInterval(() => {
         setTime(
@@ -64,6 +55,17 @@ const ProductCard = ({ product, setModalComponent, setShowModal, ...rest }) => {
     }
     
   }, []);
+  useEffect(() => {
+    urlToFileObj(product.image, product.name).then((val) => {
+      setImgObjLocal(val);
+      const reader = new FileReader();
+      reader.readAsDataURL(val);
+
+      reader.onload = () => {
+        setImgPrevLocal(reader.result);
+      };
+    });
+  }, [product]);
   return (
     <Card className={classes.root}>
       {product.productbids[0]?.startTime && (
@@ -93,7 +95,7 @@ const ProductCard = ({ product, setModalComponent, setShowModal, ...rest }) => {
         {product.productbidscount ? null : (
           <Chip label="No bid details created" color="warning" />
         )}
-        <IconButton onClick={() => handleEdit(product)}>
+        <IconButton onClick={handleEdit}>
           <Edit />
         </IconButton>
       </CardActions>
