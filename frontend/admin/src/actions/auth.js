@@ -73,6 +73,15 @@ export const resetPassword = (params, body) => async dispatch => {
     logError(error, dispatch);
   }
 }
+export const logout = () => async dispatch => {
+  try {
+    const { data: status } = await api.logout();
+    
+    dispatch({ type: STATUS, payload: status }); 
+  } catch (error) {
+    logError(error, dispatch);
+  }
+}
 
 function logError(error, dispatch) {
   if (error.response) {

@@ -43,7 +43,7 @@ const Login = () => {
     if (status?.info?.severity) {
       setFormAlert(true);
     }
-    if (status?.info?.severity === "success") {
+    if (status?.info?.code === "userlogin") {
       const token = status.payload.token;
       localStorage.setItem("tokenize", token);
       timeout && clearTimeout();
@@ -111,7 +111,6 @@ const Login = () => {
                 dispatch(unsetStatus());
               });
               dispatch(login(values));
-              console.log(status);
               actions.setSubmitting(loading);
             }}
           >
@@ -230,13 +229,13 @@ const Login = () => {
                 <Typography
                   color="textSecondary"
                   variant="caption"
-                  style={{ marginBottom: -13 }}
                 >
                   <Link
                     component={RouterLink}
                     to="/forgotpassword"
-                    variant="h6"
+                    variant="body1"
                     underline="hover"
+                    style={{ marginBottom: -13 }}
                   >
                     Forgot password?
                   </Link>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStateWithCallbackLazy } from 'use-state-with-callback'
+import { useStateWithCallbackLazy } from "use-state-with-callback";
 import moment from "moment";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +21,7 @@ import {
   CircularProgress,
   IconButton,
   TextField,
-  Button
+  Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -32,6 +32,8 @@ import { unsetErr, unsetStatus } from "src/actions/errors";
 import Modal from "src/utils/modal";
 import EditModal from "./modals/Edit";
 import ShowFeedback from "src/utils/ShowFeedback";
+import useModal from "src/utils/modal/useModal";
+import useShowFeedback from "src/utils/ShowFeedback/useShowFeedback";
 
 const ActionTableToolbar = (props) => {
   const { selectedCategoryIdsLength, handleEditModal } = props;
@@ -70,9 +72,9 @@ const ActionTableToolbar = (props) => {
         </Typography>
       )}
 
-{selectedCategoryIdsLength == 1 ? (
+      {selectedCategoryIdsLength == 1 ? (
         <Tooltip title="Edit">
-          <IconButton onClick={() => handleEditModal()}>
+          <IconButton onClick={handleEditModal}>
             <EditIcon />
           </IconButton>
         </Tooltip>
@@ -84,14 +86,15 @@ const ActionTableToolbar = (props) => {
           </IconButton>
         </Tooltip>
       ) : null}
-      
     </Toolbar>
   );
 };
 
 const CategoriesListResults = ({ ...rest }) => {
   const dispatch = useDispatch();
-  const { categories, loading, err, status } = useSelector((state) => state.app);
+  const { categories, loading, err, status } = useSelector(
+    (state) => state.app
+  );
 
   function fetchCategories() {
     dispatch(getCategories());
@@ -102,23 +105,20 @@ const CategoriesListResults = ({ ...rest }) => {
     return () => {
       dispatch(unsetErr());
       dispatch(unsetStatus());
-    }
+    };
   }, []);
-  useEffect(() => {
-    setAlertOpen(Boolean(status?.info));
-  }, [status]);
-  useEffect(() => {
-    setErrAlertOpen(Boolean(err.length > 0));
-  }, [err]);
 
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
-  const [ alertOpen, setAlertOpen ] = useState(Boolean(status?.info));
-  const [ errAlertOpen, setErrAlertOpen ] = useState(Boolean(err.length > 0));
-  const [ showModal, setShowModal ] = useState(false);
-  const [currentCatIdSelected, setCurrentCatIdSelected] = useStateWithCallbackLazy('');
-  const [ modalComponent, setModalComponent ] = useState(null);
+  const { alertOpen, msg, errAlertOpen, errMsg, severity, close } =
+    useShowFeedback();
+  const { showModal, toggle } = useModal();
+  // const [showModal, setShowModal] = useState(false);
+  const [currentCatIdSelected, setCurrentCatIdSelected] =
+    useStateWithCallbackLazy("");
+  // const [modalComponent, setModalComponent] = useState(null);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  let count = 0;
 
   const handleSelectAll = (event) => {
     let newSelectedCategoryIds;
@@ -146,7 +146,9 @@ const CategoriesListResults = ({ ...rest }) => {
         id
       );
       setCurrentCatIdSelected(id, (current) => {
-        console.log("Current Category index from HANDLE SELECT ONE state callback func");
+        console.log(
+          "Current Category index from HANDLE SELECT ONE state callback func"
+        );
         console.log(current);
       });
     } else if (selectedIndex === 0) {
@@ -183,24 +185,52 @@ const CategoriesListResults = ({ ...rest }) => {
     setPage(newPage);
   };
 
-const handleEditModal = () => {
+  /* const handleEditModal = () => {
   setShowModal(true);
   setModalComponent(<EditModal categories={categories} currentCatIdSelected={currentCatIdSelected} setShowModal={setShowModal} fetchCategories={fetchCategories} />);
-}
+} */
 
   return (
     <Card {...rest}>
       {loading && <CircularProgress />}
-      <Modal isVisible={showModal} toggler={setShowModal} component={modalComponent}/>
+      {/* <Modal isVisible={showModal} toggler={setShowModal} component={modalComponent}/>
       <ShowFeedback alertOpen={alertOpen} setAlertOpen={setAlertOpen} severity={status?.info?.severity} msg={status?.info?.message} />
       {err.length > 0 && (
         err.map((error) => <ShowFeedback alertOpen={errAlertOpen} setAlertOpen={setErrAlertOpen} severity={"error"} msg={error.msg} title="Ooops!" />)
-      )}
+      )} */}
+      <Modal title="Edit Category" isVisible={showModal} close={toggle}>
+        {/* <EditModal  toggle={toggle} dispatch={dispatch} /> */}
+        <EditModal
+          categories={categories}
+          currentCatIdSelected={currentCatIdSelected}
+          toggle={toggle}
+          dispatch={dispatch}
+        />
+      </Modal>
+      <ShowFeedback
+        alertOpen={alertOpen}
+        close={close}
+        severity={severity}
+        msg={msg}
+      />
+      {errMsg.map((error) => (
+        <ShowFeedback
+          key={++count}
+          alertOpen={errAlertOpen}
+          close={close}
+          severity={severity}
+          msg={error.msg}
+          title="Ooops!"
+        />
+      ))}
       {categories.length > 0 && (
         <>
           <PerfectScrollbar>
             <Box sx={{ minWidth: 1050 }}>
-              <ActionTableToolbar selectedCategoryIdsLength={selectedCategoryIds.length} handleEditModal={handleEditModal} />
+              <ActionTableToolbar
+                selectedCategoryIdsLength={selectedCategoryIds.length}
+                handleEditModal={toggle}
+              />
               <Table>
                 <TableHead>
                   <TableRow>
@@ -289,7 +319,7 @@ const handleEditModal = () => {
 };
 
 /* CategoriesListResults.propTypes = {
-  customers: PropTypes.array.isRequired
+  categories: PropTypes.array.isRequired
 }; */
 
 export default CategoriesListResults;

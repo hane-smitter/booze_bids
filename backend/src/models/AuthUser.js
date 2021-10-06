@@ -52,8 +52,8 @@ AuthUserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     let salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+    next();
   }
-  next();
 });
 AuthUserSchema.statics.findByCredentials = async (email, password) => {
   const user = await AuthUser.findOne({ email });
