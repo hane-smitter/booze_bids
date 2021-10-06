@@ -14,3 +14,4 @@ export const fetchTopBidder = () => axios.get(`${url}/bids/amount/high`);
 export const fetchLastBidder = () => axios.get(`${url}/bids/last`);
 
 export const createUser = (body) => axios.post(`${url}/users/create`, body);
+export const signIn = (body) => axios.post(`${url}/users/login`, body);

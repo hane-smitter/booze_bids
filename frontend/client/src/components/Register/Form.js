@@ -29,6 +29,8 @@ import ShowFeedback from "../utils/ShowFeedback";
 import useStyles from "./styles.js";
 import { createUser } from "../../actions/users.js";
 import { useLocation } from "react-router";
+import { array } from "yup/lib/locale";
+import { useHistory } from "react-router-dom";
 
 const Form = () => {
   const dispatch = useDispatch();
@@ -42,7 +44,47 @@ const Form = () => {
   const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
   const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
   const locationRouter = useLocation();
+  const history = useHistory();
+  
+  const useGeoLocation = () => {
+      const [location, setLocation] = useState({
+          loaded: false,
+          coordinates: { lat: "", lng: "" },
+      });
 
+      const onSuccess = (location) => {
+          setLocation({
+              loaded: true,
+              coordinates: {
+                  lat: location.coords.latitude,
+                  lng: location.coords.longitude,
+              },
+          });
+      };
+
+      const onError = (error) => {
+          setLocation({
+              loaded: true,
+              error: {
+                  code: error.code,
+                  message: error.message,
+              },
+          });
+      };
+
+      useEffect(() => {
+          if (!("geolocation" in navigator)) {
+              onError({
+                  code: 0,
+                  message: "Geolocation not supported",
+              });
+          }
+
+          navigator.geolocation.getCurrentPosition(onSuccess, onError);
+      }, []);
+
+      return location;
+  };
   useEffect(() => {
     return () => {
       dispatch(unsetErr());
@@ -58,9 +100,11 @@ const Form = () => {
 
   let formFields = [
     "phone",
-    "lastname",
+    "surname",
     "othername",
     "location",
+    "latitude",
+    "longitude",
     "password",
     "passwordConfirmation"
   ];
@@ -77,13 +121,13 @@ const Form = () => {
       .positive("Invalid Phone Number")
       .integer(),
     othername: Yup.string()
-        .required("Your othername(s) is required"),
-    lastname: Yup.string()
-      .required("Your surname is required"),
-    location: Yup.string()
-      .required(
-          "Your location(e.g nearest town) is required"
-        ),
+        .required("Your Second Name is required"),
+    surname: Yup.string()
+      .required("Your First Name is required"),
+    // location: Yup.string()
+    //   .required(
+    //       "Your location(e.g nearest town) is required"
+    //     ),
     password: Yup.string().required('Password is required'),
     passwordConfirmation: Yup.string()
            .oneOf([Yup.ref('password'), null], 'Passwords must match')
@@ -145,8 +189,10 @@ const Form = () => {
               initialValues={{               
                 phone: "",
                 othername: "",
-                lastname: "",
+                surname: "",
                 location: "",
+                latitude: useGeoLocation().coordinates.lat,
+                longitude: useGeoLocation().coordinates.lng,
                 password: "",
                 passwordConfirmation:""
               }}
@@ -154,7 +200,7 @@ const Form = () => {
                 function shouldClearForm() {
                     actions.resetForm();
                 }
-                dispatch(createUser(values))
+                dispatch(createUser(values, history))
                 window.shouldClearForm = shouldClearForm;
                 
                 
@@ -170,8 +216,8 @@ const Form = () => {
                     <>
                     
                     <Field
-                    name="lastname"
-                    label="Surname name"
+                    name="surname"
+                    label="First Name"
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     component={Input}
@@ -179,21 +225,21 @@ const Form = () => {
                     />
                     <Field
                     name="othername"
-                    label="Other name"
+                    label="Second name"
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     component={Input}
                     style={{ marginTop:0 }}
                     />
-                    <Field
+                    {/* <Field
                     name="location"
                     label="Your location"
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     component={Input}
                     style={{ marginTop:0 }}
-                    />
-                </>
+                    /> */}
+                
                   
                   <Field
                     formErrors={formErrors}
@@ -221,7 +267,7 @@ const Form = () => {
                     type="password"
                     style={{ marginTop:0 }}
                   />
-
+                </>
                   <Button type="submit" variant="contained" color="primary" fullWidth>
                     {loading ? (
                       <CircularProgress style={{ color: "white" }} />

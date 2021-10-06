@@ -1,44 +1,56 @@
 import { batch } from "react-redux";
+import { Router } from "react-router-dom";
 
 import * as api from "../api";
 import {
-  CREATE,
-  READUSER,
-  UPDATE,
-  ERROR,
-  LOADING,
-  STATUS,
-  FETCHTUSER
+  CREATEUSER,
+  ERRORUSER,
+  LOADINGUSER,
+  STATUSUSER,
+  AUTH
 } from "../constants";
 
 //Action creators
-export const createUser = (body) => async (dispatch) => {
+export const createUser = (body, router) => async (dispatch) => {
   try {
-    dispatch({ type: LOADING, payload: { status: 1 } });
+    dispatch({ type: LOADINGUSER, payload: { status: 1 } });
     //create user
     const { data, status } = await api.createUser(body);
     
     batch(() => {
-      dispatch({ type: LOADING, payload: { status: 0 } })
-      dispatch({ type: STATUS, payload: { info: {
+      dispatch({ type: LOADINGUSER, payload: { status: 0 } })
+      dispatch({ type: STATUSUSER, payload: { info: {
         message: "Success! User registered.",
         severity: "success",
         code: "createUser"
       } } });
-      dispatch({ type: CREATE, payload: { user: data } });
+      dispatch({ type: AUTH, payload: { user: data } });
+      router.push('/');
     });
   } catch (error) {
     logError(error, dispatch);
   }
 };
 
+// loginUser
+export const loginUser = (body, router) => async (dispatch) => {
+  try {
+    const { data } = await api.signIn(body);
+
+    dispatch({ type: AUTH, data });
+
+    router.push('/');
+  } catch (error) {
+    logError(error, dispatch);
+  }
+};
 
 function logError(error, dispatch) {
   if (error.response) {
     const { err } = error.response.data;
     batch(() => {
-      dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: ERROR, payload: { err } });
+      dispatch({ type: LOADINGUSER, payload: { status: 0 } });
+      dispatch({ type: ERRORUSER, payload: { err } });
     });
   } else if (error.request) {
     let err = [
@@ -48,8 +60,8 @@ function logError(error, dispatch) {
     ];
 
     batch(() => {
-      dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: ERROR, payload: { err } });
+      dispatch({ type: LOADINGUSER, payload: { status: 0 } });
+      dispatch({ type: ERRORUSER, payload: { err } });
     });
   } else {
     console.error(error);
@@ -61,8 +73,8 @@ function logError(error, dispatch) {
     ];
 
     batch(() => {
-      dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: ERROR, payload: { err } });
+      dispatch({ type: LOADINGUSER, payload: { status: 0 } });
+      dispatch({ type: ERRORUSER, payload: { err } });
     });
   }
 }

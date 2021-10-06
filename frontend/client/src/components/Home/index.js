@@ -6,7 +6,9 @@ import {
     Box,
     Grid,
     Typography,
-    Paper
+    Paper,
+    useTheme,
+    useMediaQuery
 } from '@material-ui/core';
 import ChipInput from 'material-ui-chip-input';
 
@@ -37,30 +39,43 @@ const Home = () => {
     // useEffect(() => {
     //     dispatch(getProducts());
     // }, [dispatch]);
-
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const Cont = () => {
+        return (
+            <span>
+                <Navbar/>
+                <Banner />
+                {/* <Grid container justifyContent="center" className={classes.bg}>
+                    <Banner />
+                </Grid> */}
+                <Products/>
+                <Box style={{ borderLeft:'solid 2px #2b5681',borderRight:'solid 2px #2b5681',marginTop:'-20px'}}>
+                <Grid container justifyContent="center" alignItems="stretch" spacing="3">
+                    <Grid item xs={12} sm={6} md={3}>
+                            <Pagination page={page}/>
+                    </Grid> 
+                </Grid>
+                </Box>
+                {/* pagination */}
+                <Footer/>
+            </span>
+        );
+    };
     return (
         <div>
-            
-                <Grow in>
-                    <Container maxwidth="md">
-                        <Navbar/>
-                        <Banner />
-                        {/* <Grid container justifyContent="center" className={classes.bg}>
-                            <Banner />
-                        </Grid> */}
-                        <Products/>
-                        <Box style={{ borderLeft:'solid 2px #2b5681',borderRight:'solid 2px #2b5681',marginTop:'-20px'}}>
-                        <Grid container justifyContent="center" alignItems="stretch" spacing="3">
-                            <Grid item xs={12} sm={6} md={3}>
-                                    <Pagination page={page}/>
-                            </Grid> 
-                        </Grid>
-                        </Box>
-                        {/* pagination */}
-                        <Footer/>
-                    </Container>
-                </Grow> 
-               
+        {!isMobile ?
+            (<Grow in>
+                <Container maxwidth="md">
+                    {Cont()}
+                </Container>
+            </Grow>)
+                 : 
+            (<Grow in>
+                {Cont()}
+            </Grow>
+            )
+        }
         </div>
     );
 }

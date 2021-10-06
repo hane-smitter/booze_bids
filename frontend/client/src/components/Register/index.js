@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CircularProgress, Container, Grid } from "@material-ui/core";
+import { CircularProgress, Container, Grid, Box, useMediaQuery, useTheme } from "@material-ui/core";
 import { useLocation } from "react-router";
 import { motion } from "framer-motion";
 import { batch, useDispatch, useSelector } from "react-redux";
@@ -15,10 +15,13 @@ const Detail = () => {
   const { products, err, status } = useSelector((state) => state.app);
   const dispatch = useDispatch();
   const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
-  const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
+  const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err));
   const locationRouter = useLocation();
   const classes = useStyles();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  
   useEffect(() => {
     return () => {
       dispatch(unsetErr());
@@ -75,11 +78,10 @@ const Detail = () => {
       opacity: 0,
     },
   };
-
-  return (
-    <>
-      <Container maxwidth="md">
-        <ShowFeedback
+  const Cont = () => {
+    return (
+      <span>
+      <ShowFeedback
           alertOpen={alertOpen}
           setAlertOpen={setAlertOpen}
           severity={status?.info?.severity}
@@ -126,7 +128,21 @@ const Detail = () => {
               </Grid>
           </Grid>
         <Footer />
-      </Container>
+        </span>
+    );
+  };
+  return (
+    <>
+    {!isMobile &&
+    <Container maxwidth="md">
+      {Cont()}
+    </Container>
+    }
+    {isMobile &&
+    <span>
+      {Cont()}
+    </span>
+    }
     </>
   );
 };

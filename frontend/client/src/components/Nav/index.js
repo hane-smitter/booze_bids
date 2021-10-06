@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Typography,
@@ -15,26 +15,64 @@ import {
   TextField,
   InputAdornment,
   styled,
+  CircularProgress,
+  Avatar
 } from "@material-ui/core";
+import decode from 'jwt-decode';
+import * as actionType from '../../constants';
+
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
 
 import useStyles from './styles';
 import Logo from '../../images/smoke.png';
 import Kenya from '../../images/kenya.png';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import SearchBar from "material-ui-search-bar";
 import { alpha, fabClasses } from "@mui/material";
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import { Field } from "formik";
+import { Formik, Field, getIn } from "formik";
+import * as Yup from "yup";
+import { loginUser } from "../../actions/users.js";
+import { AUTH } from '../../constants';
+
+import { useLocation } from "react-router";
+import { unsetErr, unsetStatus } from "../../actions/errors";
+import ShowFeedback from "../utils/ShowFeedback";
+import { batch, useDispatch, useSelector } from "react-redux";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 const Nav = () => {
     const [anchor, setAnchor] = React.useState(null);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
+    alert(localStorage.getItem('profile'))
+    const dispatch = useDispatch();
+    const history = useHistory();
+    const location = useLocation();
     const open = Boolean(anchor);
-
     //import styles
     const classes = useStyles();
+
+    const logout = () => {
+      dispatch({ type: actionType.LOGOUT });
+  
+      history.push('/');
+  
+      setUser(null);
+    };
+  
+    useEffect(() => {
+      const token = user?.token;
+  
+      if (token) {
+        const decodedToken = decode(token);
+  
+        if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+      }
+  
+      setUser(JSON.parse(localStorage.getItem('profile')));
+    }, [location]);
 
     const Search = styled('div')(({ theme }) => ({
       position: 'relative',
@@ -88,7 +126,76 @@ const Nav = () => {
     const handleMenuClose = _ => {
         setAnchor(null);
     }
+  //form
+  const {
+    err,
+    loading,
+    status,
+  } = useSelector((state) => state.app);
 
+  const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
+  const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
+
+  useEffect(() => {
+    return () => {
+      dispatch(unsetErr());
+      dispatch(unsetStatus());
+    };
+  }, []);
+  useEffect(() => {
+    setAlertOpen(Boolean(status?.info));
+  }, [status]);
+  useEffect(() => {
+    setErrAlertOpen(Boolean(err.length > 0));
+  }, [err]);
+
+  let formFields = [
+    "phone",
+    "password",
+  ];
+  let formErrors = [];
+  let formErrorsName = [];
+  formErrors =
+    err.length && err.filter((error) => formFields.includes(error.param));
+  formErrors.length &&
+    formErrors.map((error) => formErrorsName.push(error.param));
+
+  const makeUserSchema = Yup.object().shape({
+    phone: Yup.number()
+      .required("Enter Phone")
+      .positive("Invalid No.")
+      .integer(),
+    password: Yup.string().required('Enter Password'),
+  });
+  const Input = ({
+    form,
+    field: { value, name },
+    formErrors,
+    formErrorsName,
+    ...others
+  }) => {
+    return (
+      <TextField
+        name={name}
+        value={value}
+        error={
+          (getIn(form.touched, name) && !!getIn(form.errors, name)) ||
+          formErrorsName.indexOf(name) !== -1
+        }
+        helperText={
+          (getIn(form.touched, name) && getIn(form.errors, name)) ||
+          (formErrorsName.indexOf(name) !== -1 &&
+            formErrors[formErrorsName.indexOf(name)].msg)
+        }
+        onChange={form.handleChange}
+        onBlur={form.handleBlur}
+        variant="outlined"
+        margin="normal"
+        fullWidth
+        {...others}
+      />
+    );
+  };
   //responsive
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -154,56 +261,101 @@ const Nav = () => {
       <Link to="/register">
         <Typography align="right" className={classes.navLink} style={{ fontSize:'12px',padding:'2px' }} component="body" variant="body1"> Register now!</Typography>
       </Link>
-      <Grid container rowSpacing={2} direction="row"  align="right" className={classes.navContainer}>
+      
         {/* <Grid item xs>
           <Link className={classes.navLink} to="/">Home</Link>
         </Grid>
         <Grid item xs>
           <Link className={classes.navLink} to="/pastbids">Past Bids</Link>
         </Grid> */}
-        
-          <Grid item xs={12} sm={4}>
-          <TextField
-            label="Phone"
-            variant="outlined"
-            margin="3"
-            className={classes.rootTextField}
-            style={{width:"150px"}}
-            size="small"
-          />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-          <TextField
-            label="Password"
-            variant="outlined"
-              margin="3"
-            className={classes.rootTextField}
-            style={{width:"170px", marginLeft:'25px'}}
-            size="small"
-          />
-          </Grid>
-          <Grid item xs={12} sm={4}>
-          <Button className={classes.btn} type="submit" variant="contained" color="primary">
-            Login
-          </Button>
-          </Grid>
-        
+        {user?.result ? 
+          <div className={classes.profile}>
+            <Avatar className={classes.purple} alt={user?.result.surname} src="" >{user?.result.surname.charAt(0)}</Avatar>
+            <Typography className={classes.userName} variant="h6">{user?.result.surname}</Typography>
+            <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Logout</Button>
+          </div>
+        :
+        <Formik
+          enableReinitialize={true}
+          initialValues={{               
+            phone: "",
+            password: "",
+          }}
+          onSubmit={function (values, actions) {
+            function shouldClearForm() {
+                actions.resetForm();
+            }
+            dispatch(loginUser(values, history))
+            window.shouldClearForm = shouldClearForm;
+            
+            
+          }}
+          validationSchema={makeUserSchema}
+        >
+          {(props) => (
+            <form
+              onSubmit={props.handleSubmit}
+              autoComplete="off"
+              noValidate
+            >
+              <Grid container rowSpacing={2} direction="row"  align="right" className={classes.navContainer}>
+                <Grid item xs={12} sm={4}>
+                <Field
+                  label="Phone"
+                  variant="outlined"
+                  margin="3"
+                  className={classes.rootTextField}
+                  style={{width:"150px"}}
+                  size="small"
+                  name="phone"
+                  formErrors={formErrors}
+                  formErrorsName={formErrorsName}
+                  component={Input}
+                />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                <Field
+                  label="Password"
+                  variant="outlined"
+                    margin="3"
+                  className={classes.rootTextField}
+                  style={{width:"170px", marginLeft:'25px'}}
+                  size="small"
+                  name="password"
+                  formErrors={formErrors}
+                  formErrorsName={formErrorsName}
+                  component={Input}
+                />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                <Button className={classes.btn} type="submit" variant="contained" color="primary">
+                  {loading ? (
+                      <CircularProgress style={{ color: "white" }} />
+                    ) : (
+                      "Login"
+                    )}
+                </Button>
+                </Grid>
+                <Grid item xs={12} sm={3}></Grid>
+              <Grid item xs={12} sm={3}></Grid>
+              <Grid item xs={12} sm={6}>
+                <span className={classes.time} style={{ fontFamily:'ticking-time-bomb'}}> 
+                  { new Date().toLocaleString('en-US', {
+                                                      weekday: 'short', // long, short, narrow
+                                                      day: 'numeric', // numeric, 2-digit
+                                                      year: 'numeric', // numeric, 2-digit
+                                                      month: 'short', // numeric, 2-digit, long, short, narrow
+                                                      hour: 'numeric', // numeric, 2-digit
+                                                      minute: 'numeric', // numeric, 2-digit
+                                                  }) } 
+                </span>
+              </Grid>
+            </Grid>
+          </form>
+          )}
+        </Formik>}
 
-        <Grid item xs={12} sm={3}></Grid>
-        <Grid item xs={12} sm={3}></Grid>
-        <Grid item xs={12} sm={6}>
-          <span className={classes.time} style={{ fontFamily:'ticking-time-bomb'}}> 
-            { new Date().toLocaleString('en-US', {
-                                                weekday: 'short', // long, short, narrow
-                                                day: 'numeric', // numeric, 2-digit
-                                                year: 'numeric', // numeric, 2-digit
-                                                month: 'short', // numeric, 2-digit, long, short, narrow
-                                                hour: 'numeric', // numeric, 2-digit
-                                                minute: 'numeric', // numeric, 2-digit
-                                            }) } 
-          </span>
-        </Grid>
-      </Grid>
+        
       </Box>
     </React.Fragment>
   );
