@@ -43,6 +43,14 @@ export default makeStyles(() => ({
             textDecoration:'underline'
           },
     },
+    navLink2: {
+        marginInline: '5px',
+        color: '#f0f0f0',//'#283c9d',
+        fontWeight:'bold',
+        fontFamily: 'Open Sans',
+        fontSize:'18px',
+        textDecoration: 'none',
+    },
     navLinkMobi: {
         marginInline: '5px',
         fontWeight:'bold',
@@ -74,17 +82,12 @@ export default makeStyles(() => ({
     rootTextField: {
         marginLeft: '5px',
     "& .MuiInputBase-root, .MuiFormLabel-root": {
-      color: "#555",
+    //   color: "#555",
       borderRadius:'0px',
-      margin:'auto'
+      margin:'auto',
+      backgroundColor:'#f0f0f0'
     },
-    "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-      borderColor: "#ccc",
-      backgroundColor:'#f0f0f0',
-    },
-    '& .MuiInputBase-root, .Mui-focused': {
-        color: 'transparent',
-      },
+    
       centar: {
         margin:'auto'
       }
@@ -93,5 +96,25 @@ export default makeStyles(() => ({
       borderRadius:'0px',
       padding: '8px',
       marginLeft:'5px',
+  },
+  userName: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  logout:{
+    borderRadius:'0px',
+    padding: '2px',
+    marginLeft:'5px',
+  },
+  purple: {
+
+  },
+  sb: {
+    maxWidth:200,
+    margin: 10,
+    maxHeight:30,
+    backgroundColor:'#4472c4',
+    color:'#ffffff',
+    marginRight:0,
   }
 }));
