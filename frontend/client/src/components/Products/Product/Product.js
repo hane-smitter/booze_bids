@@ -29,7 +29,7 @@ import ProductDetail from "./ProductDetail";
 
 const Product = ({ product }) => {
   const classes = useStyles();
-
+  
   const location = {
     pathname: "/detail",
     state: { product },

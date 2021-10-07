@@ -25,11 +25,13 @@ import { unsetErr } from "../../../actions/errors";
 const BidForm = ({product}) => {
     const dispatch = useDispatch();
     const classes = useStyles();
-        
+    
+    const user = JSON.parse(localStorage.getItem('profile'));
+    const userPhone = user ? user.result?.phone : '';
     const { err, loading, status } = useSelector((state) => state.app);
     const [nowLoading, setNowLoading] = useState(Boolean(false));
 
-    let formFields = ["bidAmount", "phone"];
+    let formFields = ["bidAmount", "bidder.phone"];
     let formErrors = [];
     let formErrorsName = [];
     formErrors =
@@ -47,21 +49,6 @@ const BidForm = ({product}) => {
         phone: Yup.number("You phone number should be numerical")
             .required("Phone number is required")
             .integer(),
-        acknowledgeNew: Yup.boolean(),
-        firstname: Yup.string().when("acknowledgeNew", {
-            is: true,
-            then: Yup.string().required("Your other name(firstname) is required"),
-        }),
-        lastname: Yup.string().when("acknowledgeNew", {
-            is: true,
-            then: Yup.string().required("Your surname is required"),
-        }),
-        location: Yup.string().when("acknowledgeNew", {
-            is: true,
-            then: Yup.string().required(
-            "Your location(e.g nearest town) is required"
-            ),
-        }),
         }),
     });
     const Input = ({
@@ -103,7 +90,9 @@ const BidForm = ({product}) => {
         <Formik
         initialValues={{
         bidAmount: product.bidPrice,
-        phone: "",
+        bidder:{
+            phone: userPhone,
+        },
         bidPrice: product.bidPrice,
         productId: product.product._id,
         }}
@@ -135,13 +124,15 @@ const BidForm = ({product}) => {
             inputProps={{ min: product.bidPrice }}
             type="number"
             />
+            
             <Field
                 formErrors={formErrors}
                 formErrorsName={formErrorsName}
-                name="phone"
+                name="bidder.phone"
                 placeholder="Phone Number"
                 component={Input}
                 size="small"
+                type="number"
             />
                 
             <Button

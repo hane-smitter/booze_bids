@@ -43,6 +43,14 @@ export default makeStyles(() => ({
             textDecoration:'underline'
           },
     },
+    navLink2: {
+        marginInline: '5px',
+        color: '#f0f0f0',//'#283c9d',
+        fontWeight:'bold',
+        fontFamily: 'Open Sans',
+        fontSize:'18px',
+        textDecoration: 'none',
+    },
     navLinkMobi: {
         marginInline: '5px',
         fontWeight:'bold',
@@ -94,9 +102,19 @@ export default makeStyles(() => ({
     alignItems: 'center',
   },
   logout:{
-
+    borderRadius:'0px',
+    padding: '2px',
+    marginLeft:'5px',
   },
   purple: {
-      
+
+  },
+  sb: {
+    maxWidth:200,
+    margin: 10,
+    maxHeight:30,
+    backgroundColor:'#4472c4',
+    color:'#ffffff',
+    marginRight:0,
   }
 }));

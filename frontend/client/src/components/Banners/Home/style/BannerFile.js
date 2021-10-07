@@ -24,20 +24,17 @@ export default makeStyles(() => ({
     MediaCaption: {
         textOverflow: 'ellipsis',
         position: 'absolute',
-        bottom: '0',
+        top: '50%',
         padding: '10px',
         backgroundColor: 'black',
         color: 'white',
         opacity: '06',
-        width: '100%',
+        width: '70%',
         height: '7%',
         fontSize: '18px',
         fontWeight: '200',
         transition: '300ms',
         cursor: 'pointer',
-        "&:hover": {
-            opacity: '0.8',
-          },
    },
 
     BannerGrid: {

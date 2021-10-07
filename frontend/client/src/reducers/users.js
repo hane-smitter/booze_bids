@@ -2,8 +2,7 @@ import {
   CREATEUSER,
   ERRORUSER,
   LOADINGUSER,
-  STATUSUSER,
-  AUTH
+  STATUSUSER
 } from "../constants";
 
 export default (

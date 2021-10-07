@@ -45,7 +45,7 @@ const Form = () => {
   const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
   const locationRouter = useLocation();
   const history = useHistory();
-  
+
   const useGeoLocation = () => {
       const [location, setLocation] = useState({
           loaded: false,
@@ -248,6 +248,7 @@ const Form = () => {
                     label="Phone number"
                     component={Input}
                     style={{ marginTop:0 }}
+                    type="number"
                   />
                   <Field
                     formErrors={formErrors}

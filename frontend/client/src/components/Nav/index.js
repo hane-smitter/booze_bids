@@ -46,7 +46,6 @@ import { Alert, AlertTitle } from "@material-ui/lab";
 const Nav = () => {
     const [anchor, setAnchor] = React.useState(null);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
-    alert(localStorage.getItem('profile'))
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
@@ -228,6 +227,11 @@ const Nav = () => {
         open={open}
         onClose={handleMenuClose}
       >
+        {user?.result &&
+        <MenuItem onClick={handleMenuClose}>
+          <Typography>Hi, <span style={{ fontStyle: 'italic'}}>{user?.result?.surname}</span></Typography>
+        </MenuItem>
+        }
         <MenuItem onClick={handleMenuClose}>
           <Link className={classes.navLinkMobi} to="/">Home</Link>
         </MenuItem>
@@ -237,15 +241,11 @@ const Nav = () => {
       </Menu>
 
       <Link to="/"><img alignItems="center" src={Logo} sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }} className={classes.image,classes.position} /></Link>
-      <Search>
-        <SearchIconWrapper>
-          <SearchIcon />
-        </SearchIconWrapper>
-        <StyledInputBase
-          placeholder="Search…"
-          inputProps={{ 'aria-label': 'search' }}
+      <SearchBar
+      className={classes.sb}
+          value={searchItem}
+          onRequestSearch={() => console.log("onRequestSearch")}
         />
-      </Search>
 
     </React.Fragment>
   );
@@ -258,23 +258,18 @@ const Nav = () => {
         </Link>
       </div>
       <Box>
+      {!user &&
       <Link to="/register">
         <Typography align="right" className={classes.navLink} style={{ fontSize:'12px',padding:'2px' }} component="body" variant="body1"> Register now!</Typography>
       </Link>
-      
+      }
         {/* <Grid item xs>
           <Link className={classes.navLink} to="/">Home</Link>
         </Grid>
         <Grid item xs>
           <Link className={classes.navLink} to="/pastbids">Past Bids</Link>
         </Grid> */}
-        {user?.result ? 
-          <div className={classes.profile}>
-            <Avatar className={classes.purple} alt={user?.result.surname} src="" >{user?.result.surname.charAt(0)}</Avatar>
-            <Typography className={classes.userName} variant="h6">{user?.result.surname}</Typography>
-            <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Logout</Button>
-          </div>
-        :
+        
         <Formik
           enableReinitialize={true}
           initialValues={{               
@@ -300,6 +295,9 @@ const Nav = () => {
             >
               <Grid container rowSpacing={2} direction="row"  align="right" className={classes.navContainer}>
                 <Grid item xs={12} sm={4}>
+                {user?.result ? 
+                <Link className={classes.navLink} to="/pastbids">Past Bids</Link>
+                :
                 <Field
                   label="Phone"
                   variant="outlined"
@@ -308,26 +306,36 @@ const Nav = () => {
                   style={{width:"150px"}}
                   size="small"
                   name="phone"
+                  type="number"
                   formErrors={formErrors}
                   formErrorsName={formErrorsName}
                   component={Input}
                 />
+                }
                 </Grid>
                 <Grid item xs={12} sm={4}>
+                {user?.result ? 
+                <Link to='#' className={classes.navLink2}> Hi, <span style={{fontStyle:'italic'}}>{user?.result.surname}</span></Link>
+                :
                 <Field
                   label="Password"
                   variant="outlined"
-                    margin="3"
+                  margin="3"
                   className={classes.rootTextField}
                   style={{width:"170px", marginLeft:'25px'}}
                   size="small"
                   name="password"
+                  type="password"
                   formErrors={formErrors}
                   formErrorsName={formErrorsName}
                   component={Input}
                 />
+                }
                 </Grid>
                 <Grid item xs={12} sm={4}>
+                {user?.result ? 
+                <Button variant="contained" className={classes.logout} color="secondary" onClick={logout}>Logout</Button>
+                :
                 <Button className={classes.btn} type="submit" variant="contained" color="primary">
                   {loading ? (
                       <CircularProgress style={{ color: "white" }} />
@@ -335,6 +343,7 @@ const Nav = () => {
                       "Login"
                     )}
                 </Button>
+                }
                 </Grid>
                 <Grid item xs={12} sm={3}></Grid>
               <Grid item xs={12} sm={3}></Grid>
@@ -353,7 +362,7 @@ const Nav = () => {
             </Grid>
           </form>
           )}
-        </Formik>}
+        </Formik>
 
         
       </Box>

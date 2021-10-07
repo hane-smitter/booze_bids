@@ -35,6 +35,8 @@ const DarkBox = ({ product, updateProducts }) => {
     status,
     bidder: { topBidder },
   } = useSelector((state) => state.app);
+  const user = JSON.parse(localStorage.getItem('profile'));
+  const userPhone = user ? user.result?.phone : '';
   let newBidder = Boolean(status?.info?.code === "newbiddinguser");
 
   if (newBidder) window.scroll({ top: 2, left: 0, behavior: "smooth" });
@@ -164,7 +166,7 @@ const DarkBox = ({ product, updateProducts }) => {
               initialValues={{
                 bidAmount: product.bidPrice,
                 bidder: {
-                  phone: "",
+                  phone: userPhone,
                   acknowledgeNew: newBidder,
                   firstname: "",
                   lastname: "",
@@ -255,6 +257,7 @@ const DarkBox = ({ product, updateProducts }) => {
                     formErrorsName={formErrorsName}
                     name="bidder.phone"
                     label="Phone number"
+                    type="number"
                     component={Input}
                   />
 

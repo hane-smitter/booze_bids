@@ -31,7 +31,7 @@ export const createBid = async (req, res) => {
   }
 
   try {
-    let { bidder, productId, bidPrice, bidAmount } = req.body;
+    let { phone, bidder, productId, bidPrice, bidAmount } = req.body;
     let user = await User.findOrCreate(bidder);
     if(user === "NEW") {
       return res.status(202).json({ info: { message: "Welcome, get registered with us", severity: "info", code: "newbiddinguser"} });

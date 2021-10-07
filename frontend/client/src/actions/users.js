@@ -36,7 +36,6 @@ export const createUser = (body, router) => async (dispatch) => {
 export const loginUser = (body, router) => async (dispatch) => {
   try {
     const { data } = await api.signIn(body);
-
     dispatch({ type: AUTH, data });
 
     router.push('/');
