@@ -2,6 +2,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import ErrorResponse from '../_helpers/error/ErrorResponse.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,7 +25,7 @@ const upload = multer({
     },
     fileFilter(req, file, cb) {
         if(!file.originalname.toLowerCase().match(/(.*?)\.(jpe?g|png)$/)){
-            return cb(new Error('File extension is disallowed!'));
+            return cb(new ErrorResponse('File extension is disallowed!', 400));
         }
         cb(undefined, true);
     }

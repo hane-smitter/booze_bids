@@ -1,28 +1,27 @@
 import { validationResult } from "express-validator";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
+import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
 
-import Category from "../models/Category.js";
-import Product from "../models/Product.js";
-import makeId from "./utils/makeid/makeid.js";
+import Category from "../../models/Category.js";
+import Product from "../../models/Product.js";
+import makeId from "../utils/makeid/makeid.js";
 
-export const getCategories = async (req, res) => {
+export const getCategories = async (req, res, next) => {
   try {
     const categories = await Category.find({});
     res.json(categories);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+    next(error);
   }
 };
 
 //create category
-export const createCategory = async (req, res) => {
+export const createCategory = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(422).json({ err: [...errors.array()] });
-    return;
-  }
   try {
+    if (!errors.isEmpty()) {
+      throw new ErrorResponse(undefined, 422, errors.array());
+    }
     const newCategory = new Category(req.body);
     let category_slug = `${makeId(4)}T${
       new Date().valueOf() + Math.floor(Math.random() * 1000)
@@ -34,23 +33,22 @@ export const createCategory = async (req, res) => {
         message: "New category added!",
         severity: "success",
         code: "createproductcategory",
-      }
+      },
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+    next(error);
   }
 };
 
 //update category
-export const updateCategory = async (req, res) => {
+export const updateCategory = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(422).json({ err: [...errors.array()] });
-    return;
-  }
-  if (!req.params.id) throw new Error("Must provide id of the category");
   try {
+    if (!errors.isEmpty()) {
+      throw new ErrorResponse(undefined, 422, errors.array());
+    }
+    if (!req.params.id)
+      throw new ErrorResponse("Must provide id of the category", 422);
     const allowedUpdates = ["name", "description"];
     const body = req.body;
 
@@ -60,7 +58,7 @@ export const updateCategory = async (req, res) => {
     );
 
     const isValidId = mongoose.isValidObjectId(req.params.id);
-    if(!isValidId) throw new Error("Invalid ID is provided!");
+    if (!isValidId) throw new ErrorResponse("Invalid ID is provided", 422);
 
     const category = await Category.findById(req.params.id);
     for (let i = 0; i < validFields.length; i++) {
@@ -76,28 +74,29 @@ export const updateCategory = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ err: [{
-      msg: "Could not complete requested operation"
-    }] });
+    next(err);
   }
 };
 
 //delete category
-export const deleteCategory = async (req, res) => {
+export const deleteCategory = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(422).json({ err: [...errors.array()] });
-    return;
-  }
-  
+
   try {
-    if (!req.body.catId) throw new Error("Must provide id of the category");
+    if (!errors.isEmpty()) {
+      throw new ErrorResponse(undefined, 422, errors.array());
+    }
+    if (!req.body.catId)
+      throw new ErrorResponse("Must provide id of the category", 422);
     const categoryId = req.body.catId;
     const category = await Category.findById(categoryId);
-    if (!category) throw new Error("category not found");
+    if (!category) throw new ErrorResponse("category not found", 404);
     const catInUse = await Product.findOne({ category: category._id });
-    if (catInUse) return res.status(422).json({ err: [{msg: "Consider deleting the items registered under this category first!"}] });
+    if (catInUse)
+      throw new ErrorResponse(
+        "Consider deleting the items registered under this category first",
+        400
+      );
 
     await Category.findByIdAndDelete(categoryId);
     res.json({
@@ -107,9 +106,6 @@ export const deleteCategory = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ err: [{
-      msg: "Could not complete requested operation"
-    }] });
+    next(err);
   }
 };

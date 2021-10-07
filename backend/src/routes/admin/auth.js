@@ -1,14 +1,14 @@
 import express from "express";
 
 import {
-  register,
-  login,
   logout,
-  forgotPassword,
+  registerAdmin,
   resetpassword,
-} from "../controllers/user/auth.js";
-import { authCheck } from "../middlewares/auth.js";
-import adminRoutes from './admin/auth.js';
+  forgotPassword,
+  login,
+  register,
+} from "../../controllers/admin/auth.js";
+import { adminCheck } from "../../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.post("/signup", register);
 router.post("/signin", login);
 router.post("/forgotpassword", forgotPassword);
 router.patch("/resetpassword/:resetToken", resetpassword);
-router.post("/logout", authCheck, logout);
-router.use('/admin', adminRoutes);
+router.post("/create", adminCheck, registerAdmin);
+router.post("/logout", adminCheck, logout);
 
 export default router;

@@ -1,26 +1,26 @@
-// import json from 'body-parser';
-import User from '../models/User.js';
+import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
+import User from "../../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 const secret = 'test';
 //get users
-export const getUsers = async (req, res) => {
+export const getUsers = async (req, res, next) => {
     try {
         const users = await User.find();
         console.log(users);
         res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({message: error.message});
+      next(error);
     }
 }
 //create user
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
     const { phone, password, latitude, longitude, surname, othername, location } = req.body;
     
     try {
         const oldUser = await User.findOne({ phone });
-        if (oldUser) return res.status(400).json({ message: "User already exists" });
+        if (oldUser) throw new ErrorResponse('User already exists', 400);
 
         const hashedPassword = await bcrypt.hash(password, 12);
         const result = await User.create({ phone, password: hashedPassword, latitude, longitude, surname, othername, location });
@@ -29,25 +29,25 @@ export const createUser = async (req, res) => {
 
         res.status(201).json({ result, token });
     } catch (error) {
-        res.status(500).json({message: error.message});
+      next(error);
     }
 }
 // loginUser
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res, next) => {
     const { phone, password } = req.body;
     try {
         const oldUser = await User.findOne({ phone });
 
-        if (!oldUser) return res.status(404).json({ message: "User doesn't exist" });
+        if (!oldUser) throw new ErrorResponse('User doesn-t exist', 404);
 
         const isPasswordCorrect = await bcrypt.compare(password, oldUser.password);
 
-        if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
+        if (!isPasswordCorrect) throw new ErrorResponse('Invalid credentials', 400);
 
         const token = jwt.sign({ phone: oldUser.phone, id: oldUser._id }, secret, { expiresIn: "1h" });
 
         res.status(200).json({ result: oldUser, token });
     } catch (error) {
-        res.status(500).json({ message: "Something went wrong" });
+        next(error);
     }
 }

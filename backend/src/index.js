@@ -10,6 +10,8 @@ import userRoutes from "./routes/users.js";
 import bidRoutes from "./routes/bids.js";
 import mpesaRoutes from "./routes/mpesa.js";
 import authRoutes from "./routes/auth.js";
+import {errorHandler} from "./_helpers/error/error-handler.js";
+import ErrorRes from "./_helpers/error/ErrorResponse.js";
 import chalk from "chalk";
 import { fileURLToPath } from "url";
 import fs from "fs";
@@ -44,14 +46,8 @@ app.use("/stores", storeRoutes);
 app.use("/users", userRoutes);
 app.use("/bids", bidRoutes);
 app.use("/mpesa", mpesaRoutes);
-app.all("*", (req, res) => {
-  res.status(404).json({
-    err: [
-      {
-        msg: "Requested resource not found",
-      },
-    ],
-  });
+app.all("*", (req, res, next) => {
+  next(new ErrorRes('Requested resource not found', 404));
 });
 //cron
 // Schedule tasks to be run on the server.
@@ -61,6 +57,8 @@ cron.schedule('* * * * *', function() {
 //.cron
 var httpServer = http.createServer(app);
 var httpsServer = https.createServer(options, app);
+
+app.use(errorHandler);
 
 DB.on("connected", function () {
   console.log(chalk.rgb(208, 60, 240)("DB is connected"));
