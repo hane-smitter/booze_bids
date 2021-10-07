@@ -31,7 +31,7 @@ export const getBiddableProducts = async (req, res) => {
     const LIMIT = 40;
     const startIndex = (Number(page) - 1) * LIMIT;//get starting index of every page
     const total =  await ProductBidDetail.countDocuments({
-      endTime: { $gt: new Date().toISOString() },
+      // endTime: { $gt: new Date().toISOString() },
       status: "Active",
     }
     );
@@ -45,7 +45,7 @@ export const getBiddableProducts = async (req, res) => {
       const search = new RegExp(req.query.search, "i");
 
       const biddableProducts = await ProductBidDetail.find({
-        endTime: { $gt: new Date().toISOString() },
+        // endTime: { $gt: new Date().toISOString() },
         status: "Active",
       })
         .populate({
@@ -57,7 +57,7 @@ export const getBiddableProducts = async (req, res) => {
     else
     {
       const biddableProducts = await ProductBidDetail.find({
-        endTime: { $gt: new Date().toISOString() },
+        // endTime: { $gt: new Date().toISOString() },
         status: "Active",
       })
       .populate({

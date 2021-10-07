@@ -12,9 +12,21 @@ import mpesaRoutes from "./routes/mpesa.js";
 import authRoutes from "./routes/auth.js";
 import chalk from "chalk";
 import { fileURLToPath } from "url";
+import fs from "fs";
+import http from "http";
+import https from "https";
+import cron from "node-cron";
+import { updateBidabbles } from "./controllers/bids.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+
+var options = {
+  key: fs.readFileSync('certificates/private.key'),
+  cert: fs.readFileSync('certificates/certificate.crt'),
+  ca: fs.readFileSync('certificates/ca_bundle.crt')
+};
 
 const app = express();
 
@@ -41,10 +53,19 @@ app.all("*", (req, res) => {
     ],
   });
 });
+//cron
+// Schedule tasks to be run on the server.
+cron.schedule('* * * * *', function() {
+  const ups = updateBidabbles();
+});
+//.cron
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(options, app);
 
 DB.on("connected", function () {
   console.log(chalk.rgb(208, 60, 240)("DB is connected"));
-  app.listen(PORT, () =>
+  httpsServer.listen(PORT, () =>
     console.log(chalk.rgb(208, 60, 240)(`Server listening on port: ${PORT}`))
   );
 });
+

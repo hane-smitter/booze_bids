@@ -52,7 +52,7 @@ const Products = () => {
         
         <Grid container rowSpacing={0} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           
-          <Grid style={{ height:40 }} item xs={12} sm={4}>
+          <Grid style={{ height:50 }} item xs={12} sm={4}>
             <Box component="span">
               <List style={{ height:25,padding:0 }} 
                 component="nav"

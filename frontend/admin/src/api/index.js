@@ -1,7 +1,7 @@
 import axios from 'axios';
 import elevateAxios from './axiosConfig';
 
-const url = 'http://127.0.0.1:5000';
+const url = 'https://api.bidspesa.com:5000';
 axios.defaults.baseURL = url;
 
 export const fetchBidProducts = () => axios.get(`/products`);
