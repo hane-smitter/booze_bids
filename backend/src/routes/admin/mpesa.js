@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { callback } from '../controllers/admin/mpesa.js';
+import { callback } from '../controllers/mpesa.js';
 
 const router = express.Router();
 

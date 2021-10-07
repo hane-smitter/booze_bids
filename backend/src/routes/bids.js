@@ -1,18 +1,19 @@
 import express from "express";
 
 import {
-  getBids,
   createBid,
   getHighestAmountBidder,
   getLastBidder,
-} from "../controllers/bids.js";
+} from "../controllers/user/bids.js";
 import { validate } from "../middlewares/validator/index.js";
+import adminRoutes from './admin/bids.js';
 
 const router = express.Router();
 
-router.route("/").get(getBids).post(validate("createBid"), createBid);
+router.route("/").post(validate("createBid"), createBid);
 
 router.get("/amount/high", getHighestAmountBidder);
 router.get("/last", getLastBidder);
+router.use('/admin', adminRoutes);
 
 export default router;

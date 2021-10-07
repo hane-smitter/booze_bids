@@ -1,12 +1,12 @@
 import { validationResult } from "express-validator";
 import mongoose from "mongoose";
+import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
 
-import Bid from "../models/Bid.js";
-import Product from "../models/Product.js";
-import ProductBidDetail from "../models/ProductBidDetail.js";
-import User from "../models/User.js";
+import Bid from "../../models/Bid.js";
+import ProductBidDetail from "../../models/ProductBidDetail.js";
+import User from "../../models/User.js";
 
-export const getBids = async (req, res) => {
+export const getBids = async (req, res, next) => {
   try {
     /* const bids = await Bid.find({}).populate({
       path: 'prodbiddetails',
@@ -18,19 +18,18 @@ export const getBids = async (req, res) => {
 
     res.json(bids);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+    next(err);
   }
 };
 //customer bidding for a product
-export const createBid = async (req, res) => {
+export const createBid = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(422).json({ err: [...errors.array()] });
-    return;
-  }
-
+  
   try {
+    if (!errors.isEmpty()) {
+      throw new ErrorResponse(undefined, 422, errors.array());
+    }
+
     let { bidder, productId, bidPrice, bidAmount } = req.body;
     let user = await User.findOrCreate(bidder);
     if(user === "NEW") {
@@ -39,14 +38,13 @@ export const createBid = async (req, res) => {
 
     let productBidInfo = await ProductBidDetail.findOne({product: mongoose.Types.ObjectId(productId)}).lean();
     if(!productBidInfo) {
-      return res.status(404).json({ err: [{ msg: "Sorry this product is not found" }] });
+      throw new ErrorResponse("Sorry this product is not found", 404);
     }
     bidPrice = productBidInfo.bidPrice;
 
     //generate slot figure
     if(bidAmount < bidPrice) {
-      res.status(422).json({ err: [{ msg: "Amount bidding is way Low!" }] });
-      return;
+      throw new ErrorResponse("Amount bidding is way low", 422)
     }
     // let dbSlot;
     let slotField = 'slots';
@@ -61,7 +59,7 @@ export const createBid = async (req, res) => {
       if(slot > productBidInfo.extraSlots) {
         await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $set: {extraSlots: 0, slots: 0, status: 'Inactive'} }, { new: true, runValidators: true });
         let exSlot = slot - productBidInfo.extraSlots;
-        return res.status(403).json({ err: [{ msg: "Sorry! Item not available for bidding" }] });
+        throw new ErrorResponse("Sorry! Item not available for bidding", 403);
       } else {
         updateSlot[slotField] = -slot;
         await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $inc: updateSlot, $set: {slots: 0} }, { new: true, runValidators: true });
@@ -97,28 +95,25 @@ export const createBid = async (req, res) => {
 
     res.json(successMsg);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+    next(err);
   }
 };
 
-export const getHighestAmountBidder = async (req, res) => {
+export const getHighestAmountBidder = async (req, res, next) => {
   try {
     const bidder = await Bid.findOne({}).populate('user').sort('-bidAmountTotal');
 
     res.json({ bidder });
   } catch{
-    console.log(err);
-    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+    next(err);
   }
 }
-export const getLastBidder = async (req, res) => {
+export const getLastBidder = async (req, res, next) => {
   try {
     const bidder = await Bid.findOne({}).populate('user').sort('-bidsCount');
 
     res.json({ bidder });
   } catch{
-    console.log(err);
-    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+    next(err);
   }
 }

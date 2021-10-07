@@ -1,15 +1,17 @@
 import crypto from "crypto";
+import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
 
-import AuthUser from "../models/AuthUser.js";
-import { sendEmail } from "./utils/sendMail/sendMail.js";
+import AuthUser from "../../models/AuthUser.js";
+import { sendEmail } from "../utils/sendMail/sendMail.js";
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
   try {
     const { firstname, lastname, email, password } = req.body;
     if (!firstname || !lastname || !email || !password)
-      return res.status(400).json({
-        err: [{ msg: "firsname, lastname, email password are required" }],
-      });
+      throw new ErrorResponse(
+        "firsname, lastname, email password are required",
+        400
+      );
     const user = await AuthUser.create({
       firstname,
       lastname,
@@ -28,18 +30,17 @@ export const register = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ err: [{ msg: err.message }] });
+    next(err);
   }
 };
-export const registerAdmin = async (req, res) => {
+export const registerAdmin = async (req, res, next) => {
   try {
     const { firstname, lastname, email, password } = req.body;
-    console.log(req.body);
     if (!firstname || !lastname || !email || !password)
-      return res.status(400).json({
-        err: [{ msg: "firsname, lastname, email password are required" }],
-      });
+      throw new ErrorResponse(
+        "firsname, lastname, email password are required",
+        400
+      );
     const user = await AuthUser.create({
       firstname,
       lastname,
@@ -59,17 +60,14 @@ export const registerAdmin = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ err: [{ msg: err.message }] });
+    next(err);
   }
 };
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password)
-      return res
-        .status(400)
-        .json({ err: [{ msg: "Email and password are required" }] });
+      throw new ErrorResponse("email and password are required", 400);
     const user = await AuthUser.findByCredentials(email, password);
     const token = await user.generateAuthToken();
 
@@ -84,20 +82,25 @@ export const login = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ err: [{ msg: err.message }] });
+    next(err);
   }
 };
-export const logout = async (req, res) => {
+export const logout = async (req, res, next) => {
   try {
+    if (!req.token) throw new ErrorResponse("Unautorized", 401);
+    console.log(req.user.tokens.length);
     req.user.tokens = req.user.tokens.filter(
       (token) => token.token !== req.token
     );
-    await AuthUser.updateOne(
+    console.log(req.user.tokens.length);
+    /* await AuthUser.updateOne(
       { _id: req.user._id },
       { $set: { tokens: req.user.tokens } },
       { new: true, runValidators: true }
-    );
+    ); */
+    const modifiedUser = await req.user.save();
+    console.log("Token length of finally saved user");
+    console.log(modifiedUser.tokens.length);
     res.json({
       status: {
         info: {
@@ -108,19 +111,16 @@ export const logout = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ err: [{ msg: err.message }] });
+    next(err);
   }
 };
-export const forgotPassword = async (req, res) => {
+export const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
 
   try {
+    if (!email) throw new ErrorResponse("Email is required", 422);
     const user = await AuthUser.findOne({ email });
-    if (!user)
-      return res
-        .status(404)
-        .json({ err: [{ msg: "Email could not be sent" }] });
+    if (!user) throw new ErrorResponse("Email not sent", 404);
 
     const resetToken = await user.getResetPasswordToken();
 
@@ -156,21 +156,17 @@ export const forgotPassword = async (req, res) => {
       user.resetpasswordtoken = undefined;
       user.resetpasswordtokenexpire = undefined;
       await user.save();
-      console.log(err);
-      return res
-        .status(500)
-        .json({ err: [{ msg: "Email could not be sent" }] });
+      throw new ErrorResponse("Email not sent", 500);
     }
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err: [{ msg: err.message }] });
+    next(err);
   }
 };
 
-export const resetpassword = async (req, res) => {
+export const resetpassword = async (req, res, next) => {
   try {
     if (!req.params.resetToken || !req.body.password)
-      throw new Error("Could not reset password");
+      throw new ErrorResponse("Could not reset password", 422);
     const resetpasswordtoken = crypto
       .createHash("sha256")
       .update(req.params.resetToken)
@@ -179,10 +175,7 @@ export const resetpassword = async (req, res) => {
       resetpasswordtoken,
       resetpasswordtokenexpire: { $gt: Date.now() },
     });
-    if (!user)
-      return res
-        .status(400)
-        .json({ err: [{ msg: "The reset link is invalid" }] });
+    if (!user) throw new ErrorResponse("The reset link is invalid", 400);
 
     user.password = req.body.password;
     user.resetpasswordtoken = undefined;
@@ -199,7 +192,6 @@ export const resetpassword = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ err: [{ msg: err.message }] });
+    next(err);
   }
 };

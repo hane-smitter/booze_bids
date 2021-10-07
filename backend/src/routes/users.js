@@ -1,11 +1,11 @@
 import express from 'express';
 
-import { getUsers } from '../controllers/users.js';
-import { createUser } from '../controllers/users.js';
+import { getUsers } from '../controllers/user/users.js';
+import adminRoutes from './admin/users.js';
 
 const router = express.Router();
 
 router.get('/', getUsers);
-router.post('/create', createUser);
+router.use('/admin', adminRoutes);
 
 export default router;

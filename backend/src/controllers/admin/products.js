@@ -1,12 +1,13 @@
 import fs from "fs";
 import { validationResult } from "express-validator";
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-import Product from "../models/Product.js";
-import ProductBidDetail from "../models/ProductBidDetail.js";
-import Category from "../models/Category.js";
+import Product from "../../models/Product.js";
+import ProductBidDetail from "../../models/ProductBidDetail.js";
+import Category from "../../models/Category.js";
+import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
 
-export const getProducts = async (req, res) => {
+export const getProducts = async (req, res, next) => {
   try {
     const products = await Product.find({})
       .sort([["createdAt", -1]])
@@ -19,22 +20,20 @@ export const getProducts = async (req, res) => {
     res.json(products);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+    next(new ErrorResponse(err.message, 500));
   }
 };
 
-export const getBiddableProducts = async (req, res) => {
-  
+export const getBiddableProducts = async (req, res, next) => {
   try {
-    const {page} = req.query;
-    
+    const { page } = req.query;
+
     const LIMIT = 40;
-    const startIndex = (Number(page) - 1) * LIMIT;//get starting index of every page
-    const total =  await ProductBidDetail.countDocuments({
+    const startIndex = (Number(page) - 1) * LIMIT; //get starting index of every page
+    const total = await ProductBidDetail.countDocuments({
       endTime: { $gt: new Date().toISOString() },
       status: "Active",
-    }
-    );
+    });
 
     const match = new Object();
     if (req.query.category) {
@@ -53,19 +52,23 @@ export const getBiddableProducts = async (req, res) => {
           match,
         })
         .sort([["endTime", 1]]);
-    }
-    else
-    {
+    } else {
       const biddableProducts = await ProductBidDetail.find({
         endTime: { $gt: new Date().toISOString() },
         status: "Active",
       })
-      .populate({
-        path: "product",
-        match,
-      })
-      .sort([["endTime", 1]]).limit(LIMIT).skip(startIndex);
-      res.json({ data: biddableProducts, currentPage: Number(page), numberOfPages: Math.ceil(total / LIMIT)});
+        .populate({
+          path: "product",
+          match,
+        })
+        .sort([["endTime", 1]])
+        .limit(LIMIT)
+        .skip(startIndex);
+      res.json({
+        data: biddableProducts,
+        currentPage: Number(page),
+        numberOfPages: Math.ceil(total / LIMIT),
+      });
       // const biddableProducts = await ProductBidDetail.find({
       //   endTime: { $gt: new Date().toISOString() },
       //   status: "Active",
@@ -80,11 +83,11 @@ export const getBiddableProducts = async (req, res) => {
     // res.json(biddableProducts);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+    next(new ErrorResponse(err.message, 500));
   }
 };
 
-export const createProduct = async (req, res) => {
+export const createProduct = async (req, res, next) => {
   const errors = validationResult(req);
   let fileErr = [];
   if (!req.file) {
@@ -96,18 +99,16 @@ export const createProduct = async (req, res) => {
     });
   }
 
-  if (!errors.isEmpty() || !req.file) {
-    res
-      .status(422)
-      .json({ err: [...(errors.array() || []), ...(fileErr || [])] });
-    return;
-  }
-
-  const URL = process.env.APP_URL ?? "http://localhost:5000";
-  const filePath = `${URL}/imgs/products/${req.file.filename}`;
   try {
+    if (!errors.isEmpty() || !req.file) {
+      let errorsBag = [...errors.array(), ...(fileErr || [])];
+      throw new ErrorResponse(undefined, 422, errorsBag);
+    }
+
+    const URL = process.env.APP_URL ?? "http://localhost:5000";
+    const filePath = `${URL}/imgs/products/${req.file.filename}`;
     const category = await Category.findById(req.body.category);
-    if (!category) throw new Error("This Category does not exist");
+    if (!category) throw new ErrorResponse("This Category does not exist", 404);
 
     let product = new Product({
       ...req.body,
@@ -129,28 +130,27 @@ export const createProduct = async (req, res) => {
         if (error) throw error;
         console.log("Uploaded file deleted successfully!");
       });
-    console.log(err);
-    res.status(400).json({ err: [{ msg: err.message }] });
+    next(err);
   }
 };
 
-export const getBidProducts = async (req, res) => {
+export const getBidProducts = async (req, res, next) => {
   try {
     const productBids = await ProductBidDetail.find().populate("product");
     res.json(productBids);
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ err: [{ error: "Server is temporarily down!" }] });
+    next(err);
   }
 };
 
-export const createProductBidDetails = async (req, res) => {
+export const createProductBidDetails = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(422).json({ err: errors.array() });
-    return;
-  }
   try {
+    if (!errors.isEmpty()) {
+      let errorsBag = errors.array();
+      throw new ErrorResponse(undefined, 422, errorsBag);
+    }
+
     const bidDetails = new ProductBidDetail(req.body);
     /* console.log('bid product');
         console.log(bidDetails); */
@@ -161,37 +161,39 @@ export const createProductBidDetails = async (req, res) => {
         severity: "success",
         code: "createproductbiddetails",
       },
-    }); 
+    });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ err: [{ msg: err.message }] });
+    next(err);
   }
 };
 
 //delete product
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(422).json({ err: errors.array() });
-    return;
-  }
   try {
+    if (!errors.isEmpty()) {
+      let errorsBag = errors.array();
+      throw new ErrorResponse(undefined, 422, errorsBag);
+    }
+
     const productId = req.body.productId;
-    if(!productId) throw new Error("Provide the product ID");
-    const product = await Product.findOneAndDelete({_id: mongoose.Types.ObjectId(productId)});
-    if(!product) throw new Error("Product not found");
+    if (!productId) throw new ErrorResponse("Provide the product ID", 400);
+    const product = await Product.findOneAndDelete({
+      _id: mongoose.Types.ObjectId(productId),
+    });
+    if (!product) throw new ErrorResponse("Product not found", 404);
     const imageUrl = product.image;
     let capturingRegex = /\/(?<img>[a-zA-Z0-9]+[_]\d+\.(jpe?g|png))$/;
     const { groups } = imageUrl.match(capturingRegex);
     const imageName = groups.img;
-    if(imageName) {
+    if (imageName) {
       fs.unlink(`public/imgs/products/${imageName}`, (error) => {
-          if (error) {
-            console.log(error);
-          } else {
-            console.log('file deleted successfully');
-          };
-        });
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("file deleted successfully");
+        }
+      });
     }
     res.json({
       info: {
@@ -200,23 +202,21 @@ export const deleteProduct = async (req, res) => {
         code: "deleteproduct",
       },
     });
-  }catch(err) {
-    console.log(err);
-    res.status(400).json({ err: [ {
-      msg: "Could not complete operation!"
-     } ] })
+  } catch (err) {
+    next(err);
   }
-}
+};
 
 //update product
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res, next) => {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(422).json({ err: [...errors.array()] });
-    return;
-  }
-  if (!req.params.id) throw new Error("Must provide id of the category");
   try {
+    if (!errors.isEmpty()) {
+      let errorsBag = errors.array();
+      throw new ErrorResponse(undefined, 422, errorsBag);
+    }
+    if (!req.params.id)
+      throw new ErrorResponse("Must provide id of the category", 400);
     const allowedUpdates = ["name", "brand", "image", "cost", "category"];
     const body = req.body;
 
@@ -226,27 +226,27 @@ export const updateProduct = async (req, res) => {
     );
 
     const isValidId = mongoose.isValidObjectId(req.params.id);
-    if(!isValidId) throw new Error("Invalid ID is provided!");
+    if (!isValidId) throw new ErrorResponse("Invalid ID is provided", 400);
 
     const product = await Product.findById(req.params.id);
     for (let i = 0; i < validFields.length; i++) {
       product[validFields[i]] = req.body[validFields[i]];
     }
 
-    if(req.file) {
+    if (req.file) {
       const URL = process.env.APP_URL ?? "http://localhost:5000";
       const filePath = `${URL}/imgs/products/${req.file.filename}`;
       const imageUrl = product.image;
       let capturingRegex = /\/(?<img>[a-zA-Z0-9]+[_]\d+\.(jpe?g|png))$/;
       const { groups } = imageUrl.match(capturingRegex);
       const imageName = groups.img;
-      if(imageName) {
+      if (imageName) {
         fs.unlink(`public/imgs/products/${imageName}`, (error) => {
           if (error) {
             console.log(error);
           } else {
-            console.log('file deleted successfully');
-          };
+            console.log("file deleted successfully");
+          }
         });
       }
       product.image = filePath;
@@ -262,9 +262,6 @@ export const updateProduct = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ err: [{
-      msg: err.message
-    }] });
+    next(err);
   }
-}
+};

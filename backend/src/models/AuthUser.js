@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import crypto from 'crypto';
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import ErrorResponse from "../_helpers/error/ErrorResponse.js";
 
 const AuthUserSchema = mongoose.Schema({
   firstname: {
@@ -24,7 +25,7 @@ const AuthUserSchema = mongoose.Schema({
     lowercase: true,
     unique: true,
     validate(value) {
-      if (!validator.isEmail(value)) throw new Error("Invalid Email");
+      if (!validator.isEmail(value)) throw new ErrorResponse("Invalid Email", 422);
     },
   },
   role: {
@@ -57,10 +58,10 @@ AuthUserSchema.pre("save", async function (next) {
 });
 AuthUserSchema.statics.findByCredentials = async (email, password) => {
   const user = await AuthUser.findOne({ email });
-  if (!user) throw new Error("Unable to login");
+  if (!user) throw new ErrorResponse("Wrong credentials", 400);
   const passwdMatch = await bcrypt.compare(password, user.password);
-  console.log(passwdMatch);
-  if (!passwdMatch) throw new Error("Unable to login");
+  // console.log(passwdMatch);
+  if (!passwdMatch) throw new ErrorResponse("Wrong credentials", 400);
   return user;
 };
 AuthUserSchema.methods.generateAuthToken = async function () {
@@ -73,7 +74,7 @@ AuthUserSchema.methods.generateAuthToken = async function () {
   return token;
 };
 AuthUserSchema.methods.getResetPasswordToken = async function () {
-    const resetToken = await crypto.randomBytes(20).toString("hex");
+    const resetToken = crypto.randomBytes(20).toString("hex");
 
     //hash the reset token
     this.resetpasswordtoken = crypto.createHash("sha256").update(resetToken).digest("hex");

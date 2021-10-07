@@ -1,4 +1,4 @@
-import Mpesa from '../models/Mpesa.js';
+import Mpesa from '../../models/Mpesa.js';
 
 export const callback = (req, res) => {
     try {

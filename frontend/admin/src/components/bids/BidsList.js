@@ -30,12 +30,9 @@ import ActionsToolBar from './ActionsToolBar';
     const dispatch = useDispatch();
     const { bids: { allbids:bids }, loading, err, status } = useSelector((state) => state.app);
   
-    function fetchBids() {
-      dispatch(getBids());
-    }
   
     useEffect(() => {
-        fetchBids();
+      dispatch(getBids());
       return () => {
           batch(() => {
             dispatch(unsetErr());
