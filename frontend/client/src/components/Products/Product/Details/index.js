@@ -22,7 +22,6 @@ const Detail = () => {
   let initialProduct = locationRouter.state.product;
   const [product, setProduct] = useState(initialProduct);
   const classes = useStyles();
-
   function rehydrateProducts() {
     dispatch(getProducts(undefined, updateProduct));
     // updateProduct();
@@ -58,65 +57,6 @@ const Detail = () => {
   //   updateProduct();
   // }, [products]);
 
-  const nav = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10,
-  };
-  const navVariants = {
-    hidden: {
-      opacity: 0,
-      x: "100vw",
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: "spring",
-        delay: 0.5,
-      },
-    },
-    leave: {
-      opacity: 0,
-    },
-  };
-
-  const lightVariants = {
-    hidden: {
-      opacity: 0,
-      x: "-100vw",
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: "spring",
-        delay: 1.5,
-      },
-    },
-    leave: {
-      opacity: 0,
-    },
-  };
-  const darkVariants = {
-    hidden: {
-      opacity: 0,
-      x: "100vw",
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        type: "spring",
-        delay: 1,
-      },
-    },
-    leave: {
-      opacity: 0,
-    },
-  };
 
   return (
     <>
@@ -155,11 +95,6 @@ const Detail = () => {
               xs={12}
               md={6}
               className={classes.flex}
-              // component={motion.div}
-              variants={lightVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
             >
               <LightBox product={product} />
             </Grid>
@@ -168,11 +103,6 @@ const Detail = () => {
               xs={12}
               md={6}
               className={classes.flex}
-              // component={motion.div}
-              variants={darkVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
             >
               <DarkBox updateProducts={rehydrateProducts} product={product} />
             </Grid>

@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Typography,
   TextField,
-  List,
-  ListItem,
-  ListItemText,
   CircularProgress
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion"
+import { useHistory } from 'react-router-dom';
 import { Formik, Field } from "formik";
 import * as Yup from "yup";
 import useStyles from "./styles";
 import { useDispatch, useSelector } from "react-redux";
-import { makeBid, fetchTopBidder } from "../../../actions/products";
+import { makeBid } from "../../../actions/products";
 import { unsetErr } from "../../../actions/errors";
+/* 
+<Link to={location}>
+        <CardMedia
+          className={classes.media}
+          image={product.product.image || defaultImg}
+          title={product.product.name}
+        />
+      </Link>
+
+*/
+
+/* 
+const location = {
+    pathname: "/detail",
+    state: { product },
+  };
+*/
 
 const BidForm = ({product}) => {
+    const history = useHistory();
     const dispatch = useDispatch();
     const classes = useStyles();
     
@@ -38,6 +46,7 @@ const BidForm = ({product}) => {
         err.length && err.filter((error) => formFields.includes(error.param));
     formErrors.length &&
         formErrors.map((error) => formErrorsName.push(error.param));
+
 
     const makeBidSchema = Yup.object().shape({
         bidAmount: Yup.number()

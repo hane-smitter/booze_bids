@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'https://api.bidspesa.com:5000';
+const url = 'http://127.0.0.1:5000';
 const API = axios.create({ baseURL: url });
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('profile')) {

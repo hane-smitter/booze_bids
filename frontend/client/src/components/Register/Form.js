@@ -65,6 +65,10 @@ const Form = () => {
       const onError = (error) => {
           setLocation({
               loaded: true,
+              coordinates: {
+                  lat: "",
+                  lng: "",
+              },
               error: {
                   code: error.code,
                   message: error.message,

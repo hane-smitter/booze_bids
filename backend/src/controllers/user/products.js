@@ -20,16 +20,16 @@ export const getProducts = async (req, res, next) => {
     res.json(products);
   } catch (err) {
     console.log(err);
-    next(new ErrorResponse(err.message, 500));
+    next(err);
   }
 };
 
 export const getBiddableProducts = async (req, res, next) => {
   try {
-    const { page } = req.query;
+    const page = req.query.page || 1;
 
     const LIMIT = 40;
-    const startIndex = (Number(page) - 1) * LIMIT; //get starting index of every page
+    const startIndex = (parseInt(page) - 1) * LIMIT; //get starting index of every page
     const total = await ProductBidDetail.countDocuments({
       endTime: { $gt: new Date().toISOString() },
       status: "Active",
@@ -82,8 +82,7 @@ export const getBiddableProducts = async (req, res, next) => {
 
     // res.json(biddableProducts);
   } catch (err) {
-    console.log(err);
-    next(new ErrorResponse(err.message, 500));
+    next(err);
   }
 };
 

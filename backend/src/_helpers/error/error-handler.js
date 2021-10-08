@@ -27,6 +27,11 @@ function errorHandler(err, req, res, next) {
     error = new ErrorResponse(message, 401);
   }
 
+  if(err.name === "MongoServerError") {
+    const message = "Internal Error occured";
+    error = new ErrorResponse(message);
+  }
+
   if (error.errArray && error.errArray.length > 0) {
     return res.status(error.statusCode || 500).json({
       err: error.errArray,

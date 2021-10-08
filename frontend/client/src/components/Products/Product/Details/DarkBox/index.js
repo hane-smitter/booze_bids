@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Typography,
   Box,
@@ -9,12 +9,8 @@ import {
   ListItem,
   Avatar,
   List,
-  ListItemText,
   ListItemAvatar,
-  Snackbar,
   CardContent,
-  CardActionArea,
-  CardHeader,
   Card,
 } from "@material-ui/core";
 import { batch, useDispatch, useSelector } from "react-redux";
@@ -35,11 +31,30 @@ const DarkBox = ({ product, updateProducts }) => {
     status,
     bidder: { topBidder },
   } = useSelector((state) => state.app);
-  const user = JSON.parse(localStorage.getItem('profile'));
-  const userPhone = user ? user.result?.phone : '';
   let newBidder = Boolean(status?.info?.code === "newbiddinguser");
 
-  if (newBidder) window.scroll({ top: 2, left: 0, behavior: "smooth" });
+  //form initial values
+  let initialValues = {
+    bidAmount: product.bidPrice,
+    bidder: {
+      phone: "",
+      acknowledgeNew: newBidder,
+      firstname: "",
+      lastname: "",
+      location: "",
+    },
+    bidPrice: product.bidPrice,
+    productId: product.product._id,
+  }
+  if (newBidder) {
+    window.scroll({ top: 2, left: 0, behavior: "smooth" });
+    if(window.sessionStorage && sessionStorage.getItem('bidderFormData')) {
+      const previousBidderFormData = JSON.parse(sessionStorage.getItem('bidderFormData'));
+      previousBidderFormData.bidder.acknowledgeNew = newBidder;
+      Object.assign(initialValues, previousBidderFormData);
+    }
+  };
+
 
   let formFields = [
     "bidAmount",
@@ -116,15 +131,7 @@ const DarkBox = ({ product, updateProducts }) => {
 
   useEffect(() => {
     dispatch(fetchTopBidder());
-    window.shouldClearForm && delete window.shouldClearForm;
   }, []);
-
-  useEffect(() => {
-    if (window.shouldClearForm) {
-      window.shouldClearForm(newBidder);
-      delete window.shouldClearForm;
-    }
-  }, [status, dispatch]);
   return (
     <Box className={classes.darkBox}>
       <Card className={classes.cardRoot}>
@@ -134,7 +141,6 @@ const DarkBox = ({ product, updateProducts }) => {
           variant="h5"
         >Place your bid now
         </Typography>
-        <CardActionArea>
           <CardContent>
             <Typography gutterBottom variant="body1">
               Highest Bidder
@@ -163,26 +169,12 @@ const DarkBox = ({ product, updateProducts }) => {
 
             <Formik
               enableReinitialize={true}
-              initialValues={{
-                bidAmount: product.bidPrice,
-                bidder: {
-                  phone: userPhone,
-                  acknowledgeNew: newBidder,
-                  firstname: "",
-                  lastname: "",
-                  location: "",
-                },
-                bidPrice: product.bidPrice,
-                productId: product.product._id,
-              }}
+              initialValues={initialValues}
               onSubmit={function (values, actions) {
-                function shouldClearForm(newBidder = false) {
-                  if (newBidder) {
-                    actions.resetForm({ values: values });
-                  } else {
-                    actions.resetForm();
-                  }
+                if (window.sessionStorage) {
+                  sessionStorage.setItem('bidderFormData', JSON.stringify(values));
                 }
+
                 let currentCard = document.querySelector(`#bid4m-${product._id}`);
                 currentCard.dataset.id === product._id &&
                   batch(() => {
@@ -190,17 +182,6 @@ const DarkBox = ({ product, updateProducts }) => {
                     updateProducts();
                     dispatch(fetchTopBidder());
                   });
-                window.shouldClearForm = shouldClearForm;
-                if (newBidder) {
-                  actions.resetForm();
-                }
-                // actions.resetForm();
-
-                // newBidder && actions.resetForm({ values });
-                /* setTimeout(() => {
-                          alert(JSON.stringify(values, null, 2));
-                          actions.setSubmitting(false);
-                        }, 1000); */
               }}
               validationSchema={makeBidSchema}
             >
@@ -272,7 +253,6 @@ const DarkBox = ({ product, updateProducts }) => {
               )}
             </Formik>
           </CardContent>
-        </CardActionArea>
       </Card>
     </Box>
   );
