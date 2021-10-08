@@ -44,7 +44,7 @@ export const getBiddableProducts = async (req, res, next) => {
       const search = new RegExp(req.query.search, "i");
 
       const biddableProducts = await ProductBidDetail.find({
-        endTime: { $gt: new Date().toISOString() },
+        // endTime: { $gt: new Date().toISOString() },
         status: "Active",
       })
         .populate({
@@ -54,7 +54,7 @@ export const getBiddableProducts = async (req, res, next) => {
         .sort([["endTime", 1]]);
     } else {
       const biddableProducts = await ProductBidDetail.find({
-        endTime: { $gt: new Date().toISOString() },
+        // endTime: { $gt: new Date().toISOString() },
         status: "Active",
       })
         .populate({

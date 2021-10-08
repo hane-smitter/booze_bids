@@ -1,9 +1,12 @@
 import express from 'express';
 
-import { callback } from '../controllers/admin/mpesa.js';
+import { callback, stkPush, validation, confirmation } from '../controllers/mpesa.js';
 
 const router = express.Router();
 
 router.get('/callback', callback);
+router.get('/stk-push', stkPush);
+router.get('/validation', validation);
+router.get('/confirmation', confirmation);
 
 export default router;

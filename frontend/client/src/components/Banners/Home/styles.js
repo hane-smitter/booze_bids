@@ -19,6 +19,18 @@ export default makeStyles(() => ({
         backgroundColor:'#2b5681',
         width:'100%'
     },
+    imgContainerMobi: {
+        backgroundPosition: 'center',
+        backgroundSize: 'contain',
+        backgroundRepeat: 'yes',
+        height: 'auto',
+        // marginBlockEnd: '20px',
+        // borderBottomLeftRadius: '50%',
+        // borderBottomRightRadius: '60%',
+        marginBlockStart:'-60px',
+        backgroundColor:'#2b5681',
+        width:'100%'
+    },
     image: {
         width: '100%',
         height: '100%',

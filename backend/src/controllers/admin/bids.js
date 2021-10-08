@@ -2,9 +2,12 @@ import { validationResult } from "express-validator";
 import mongoose from "mongoose";
 import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
 
-import Bid from "../../models/Bid.js";
-import ProductBidDetail from "../../models/ProductBidDetail.js";
-import User from "../../models/User.js";
+import Bid from "../models/Bid.js";
+import Mpesa from "../models/Mpesa.js";
+import Product from "../models/Product.js";
+import ProductBidDetail from "../models/ProductBidDetail.js";
+import User from "../models/User.js";
+import { stkPush } from "./mpesa.js";
 
 export const getBids = async (req, res, next) => {
   try {
@@ -92,7 +95,20 @@ export const createBid = async (req, res, next) => {
     });
 
     await bid.save();
-
+    //trigger mpesa
+    let mpesa = stkPush(bidAmount, phone ? phone : bidder.phone)
+    //store mpesa
+    let mpesaResponse = new Mpesa({
+      mechant: mpesa.JSON.stringify(),
+      phone: phone ? phone : bidder.phone,
+      amount: bidAmount,
+      bid: bid._id,
+      mpesaRef: "",
+      name: "", 
+      status: "", 
+      description: ""
+    })
+    await mpesaResponse.save();
     res.json(successMsg);
   } catch (err) {
     next(err);
@@ -101,7 +117,7 @@ export const createBid = async (req, res, next) => {
 
 export const getHighestAmountBidder = async (req, res, next) => {
   try {
-    const bidder = await Bid.findOne({}).populate('user').sort('-bidAmountTotal');
+    const undoneBid = await ProductBidDetail.find({"extraslots":0}).populate('user').sort('-bidAmountTotal');
 
     res.json({ bidder });
   } catch{
@@ -116,4 +132,21 @@ export const getLastBidder = async (req, res, next) => {
   } catch{
     next(err);
   }
+}
+//auto update +24hrs if slots still there
+export const updateBidabbles = async (req, res) => {
+  try {
+    // const biddableProducts = await ProductBidDetail.find({
+    //   endTime: { $lt: new Date().toISOString() },
+    //   status: "Active",
+    // });
+    const biddableProducts = ProductBidDetail.updateMany({"endTime": { $lt: new Date().toISOString() }, "status": "Active"},
+    {$set:{"endTime": new Date(new Date().getTime() + 60 * 60 * 24 * 1000)}})
+    // biddableProducts['endTime'] = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
+    // await biddableProducts.save();
+
+    return 'success';
+} catch (error) {
+    return error.message;//"Something went wrong";
+}
 }
