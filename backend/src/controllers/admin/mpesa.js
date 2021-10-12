@@ -1,4 +1,4 @@
-import Mpesa from '../models/Mpesa.js';
+import Mpesa from '../../models/Mpesa.js';
 import unirest from "unirest";
 import request from "request";
 import https from "https";

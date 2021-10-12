@@ -69,7 +69,7 @@ const ProductCategoryCreate = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>Create Product Category | Booze Bids</title>
+        <title>Create Product Category | Bidspesa</title>
       </Helmet>
       <Container maxWidth="sm">
         <Formik

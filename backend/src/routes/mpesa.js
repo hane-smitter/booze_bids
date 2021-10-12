@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { callback, stkPush, validation, confirmation } from '../controllers/mpesa.js';
+import { callback, stkPush, validation, confirmation } from '../controllers/user/mpesa.js';
 
 const router = express.Router();
 

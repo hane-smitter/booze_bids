@@ -269,7 +269,7 @@ const Login = () => {
                     )}
                   </Button>
                 </Box>
-                <Typography color="textSecondary" variant="body1">
+                {/* <Typography color="textSecondary" variant="body1">
                   Don&apos;t have an account?{" "}
                   <Link
                     component={RouterLink}
@@ -279,7 +279,7 @@ const Login = () => {
                   >
                     Sign up
                   </Link>
-                </Typography>
+                </Typography> */}
               </form>
             )}
           </Formik>

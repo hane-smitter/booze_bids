@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "https://api.bidspesa.com:5000",
+  baseURL: "http://localhost:5000",
 });
 
 instance.defaults.headers.common[

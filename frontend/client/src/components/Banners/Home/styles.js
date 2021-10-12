@@ -16,7 +16,7 @@ export default makeStyles(() => ({
         // borderBottomLeftRadius: '50%',
         // borderBottomRightRadius: '60%',
         marginBlockStart:'-100px',
-        backgroundColor:'#2b5681',
+        backgroundColor:'#fff',
         width:'100%'
     },
     imgContainerMobi: {

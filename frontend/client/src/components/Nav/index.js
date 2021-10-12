@@ -16,7 +16,9 @@ import {
   InputAdornment,
   styled,
   CircularProgress,
-  Avatar
+  Avatar,
+  Divider,
+  SwipeableDrawer
 } from "@material-ui/core";
 import decode from 'jwt-decode';
 import * as actionType from '../../constants';
@@ -43,12 +45,37 @@ import ShowFeedback from "../utils/ShowFeedback";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
+import EditIcon from '@mui/icons-material/Edit';
+import LoginIcon from '@mui/icons-material/Login';
+import HistoryIcon from '@mui/icons-material/History';
+
 const Nav = () => {
     const [anchor, setAnchor] = React.useState(null);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
+
+    const [state, setState] = React.useState({
+      left: false,
+    });
+  
+    const toggleDrawer = (anchor, open) => (event) => {
+      if (
+        event &&
+        event.type === 'keydown' &&
+        (event.key === 'Tab' || event.key === 'Shift')
+      ) {
+        return;
+      }
+  
+      setState({ ...state, [anchor]: open });
+    };
     const open = Boolean(anchor);
     //import styles
     const classes = useStyles();
@@ -198,23 +225,73 @@ const Nav = () => {
   //responsive
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  //drawer
+  const list = (anchor) => (
+    <Box
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <List>
+          {user &&
+            <ListItem button>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary={user?.result?.surname} />
+            </ListItem>
+          }
+          <Divider />
+          {!user &&
+            <ListItem button component={Link} to="/login">
+              <ListItemIcon>
+                <LoginIcon />
+              </ListItemIcon>
+              <ListItemText primary='Login' />
+            </ListItem>
+          }
+          {!user &&
+            <ListItem button component={Link} to="/register">
+              <ListItemIcon>
+                <EditIcon />
+              </ListItemIcon>
+              <ListItemText primary='Register' />
+            </ListItem>
+          }
+          <ListItem button>
+            <ListItemIcon>
+              <HistoryIcon />
+            </ListItemIcon>
+            <ListItemText primary='Past Bids' />
+          </ListItem>
+      </List>
+      <Divider />
+      {user?.result &&
+      <List>
+          <ListItem button  onClick={logout}>
+            <ListItemIcon>
+              <LogoutIcon/>
+            </ListItemIcon>
+            <ListItemText primary='Logout' />
+          </ListItem>
+      </List>
+      }
+      
+    </Box>
+  );
+  //drawer
   const displayMobile = () => (
+    
     <React.Fragment>  
-      <IconButton
-        edge="start"
-        color="inherit"
-        aria-controls="toggle-mobile-menu"
-        aria-haspopup="true"
-        onClick={handleMenu}
-      >
-        <MenuIcon />
-      </IconButton>
 
+        
+        <Button onClick={toggleDrawer('left', true)} style={{color:"white"}}><MenuIcon/></Button>      
+
+    {/*
       <Menu
         id="toggle-mobile-menu"
-        /* to open the anchor at the top below the cursor */
         anchorEl={anchor}
-        /* anchor origin so that it open it that location */
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "right",
@@ -245,7 +322,15 @@ const Nav = () => {
       className={classes.sb}
           value={searchItem}
           onRequestSearch={() => console.log("onRequestSearch")}
-        />
+        /> */}
+        <SwipeableDrawer
+            anchor={'left'}
+            open={state['left']}
+            onClose={toggleDrawer('left', false)}
+            onOpen={toggleDrawer('left', true)}
+          >
+            {list('left')}
+        </SwipeableDrawer>
 
     </React.Fragment>
   );

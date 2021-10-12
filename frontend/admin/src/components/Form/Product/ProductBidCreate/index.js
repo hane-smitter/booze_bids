@@ -67,7 +67,7 @@ const ProductBidCreate = (props) => {
   return (
     <>
       <Helmet>
-        <title>Create Product Bid | Booze Bids</title>
+        <title>Create Product Bid | Bidspesa</title>
       </Helmet>
       <Container maxWidth="sm">
         <ShowFeedback

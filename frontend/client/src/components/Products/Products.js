@@ -63,7 +63,11 @@ const Products = () => {
                   {/* <ListItemIcon>
                     <CategoryIcon />
                   </ListItemIcon> */}
-                  <ListItemText primary="Browse Categories" />
+                  {isMobile ?  
+                    <ListItemText primary="Filter" />
+                    :
+                    <ListItemText primary="Browse Categories" />
+                  }
                   {categoryOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                 </ListItem>
                 <Collapse

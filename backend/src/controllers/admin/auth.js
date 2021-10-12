@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
-
+import jwt from "jsonwebtoken";
 import AuthUser from "../../models/AuthUser.js";
 import { sendEmail } from "../utils/sendMail/sendMail.js";
 
@@ -69,12 +69,13 @@ export const login = async (req, res, next) => {
     if (!email || !password)
       throw new ErrorResponse("email and password are required", 400);
     const user = await AuthUser.findByCredentials(email, password);
-    const token = await user.generateAuthToken();
+    // const token = await user.generateAuthToken();
+    const token = jwt.sign({ firstname: user.firstname, lastname: user.lastname, email: user.email, id: user._id }, 'test', { expiresIn: "1h" });
 
     res.json({
       status: {
         info: {
-          message: "login success",
+          message: "Login success! Redirecting...",
           severity: "success",
           code: "userlogin",
         },
