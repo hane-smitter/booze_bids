@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const url = 'http://127.0.0.1:5000';
+
 const API = axios.create({ baseURL: url });
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('profile')) {
@@ -23,3 +24,4 @@ export const fetchLastBidder = () => API.get(`${url}/bids/last`);
 
 export const createUser = (body) => API.post(`${url}/users/create`, body);
 export const signIn = (body) => API.post(`${url}/users/login`, body);
+export const sendOtp = (body) => API.post(`${url}/users/generate-otp`, body);

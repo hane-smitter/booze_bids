@@ -27,7 +27,7 @@ import { unsetErr, unsetStatus } from "../../actions/errors";
 import ShowFeedback from "../utils/ShowFeedback";
 
 import useStyles from "./styles.js";
-import { createUser } from "../../actions/users.js";
+import { createUser, sendOtp } from "../../actions/users.js";
 import { useLocation } from "react-router";
 import { array } from "yup/lib/locale";
 import { useHistory } from "react-router-dom";
@@ -42,9 +42,36 @@ const Form = () => {
   } = useSelector((state) => state.app);
 
   const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
+  const [showBtn, setVerify] = useState(false);
+  const [idCode, setCode] = useState('3902');
   const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
   const locationRouter = useLocation();
   const history = useHistory();
+
+  //show rest of form for otp ver
+  const handleSetVerify = () => {
+    // dispatch(sendOtp(formFields, history));
+      setVerify(true);
+  };
+  //submit
+  const submitForm = (values,history) => {
+    if(showBtn){
+      handleSetVerify()
+      dispatch(createUser(values, history)) 
+    }
+    else {
+      handleSetVerify()
+      dispatch(sendOtp(values, history)) 
+    }
+  }
+  const genId = () => {
+    setCode(Math.floor(
+      Math.random() * (9999 - 1111) + 1111
+    ))
+  }
+  const handleUnSetVerify = () => {
+    setVerify(false);
+  };
 
   const useGeoLocation = () => {
       const [location, setLocation] = useState({
@@ -101,7 +128,7 @@ const Form = () => {
   useEffect(() => {
     setErrAlertOpen(Boolean(err.length > 0));
   }, [err]);
-
+  console.log(showBtn)
   let formFields = [
     "phone",
     "surname",
@@ -110,7 +137,9 @@ const Form = () => {
     "latitude",
     "longitude",
     "password",
-    "passwordConfirmation"
+    "passwordConfirmation",
+    "otp",
+    "id"
   ];
   let formErrors = [];
   let formErrorsName = [];
@@ -128,6 +157,8 @@ const Form = () => {
         .required("Your Second Name is required"),
     surname: Yup.string()
       .required("Your First Name is required"),
+    otp: Yup.string()
+      .oneOf([idCode, null], 'Incorrect validation code'),
     // location: Yup.string()
     //   .required(
     //       "Your location(e.g nearest town) is required"
@@ -179,13 +210,53 @@ const Form = () => {
   }, [status, dispatch]);
   return (
     <Box >
-        
+        <Typography 
+        className={classes.title}
+          align="center"
+          variant="h5">
+            Welcome to Bidspesa
+          </Typography>
+          <Typography 
+          style={{ textTransform:'uppercase',textAlign:'center',fontSize:'14px' }}
+          variant="h6">
+            {showBtn ?
+              <span>
+                <span style={{ color:'#666' }}>Step 1</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;
+                &nbsp;&nbsp;
+                <span>&nbsp;|&nbsp;</span>
+                &nbsp;&nbsp;
+                &nbsp;&nbsp;
+                <span className={classes.step}>Step 2</span>
+              </span>
+              :
+              <span>
+                <span className={classes.step}>Step 1</span>&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span>&nbsp;</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style={{ color:'#666' }}>Step 2</span>
+              </span>
+            }
+          </Typography>
+          <Typography 
+          style={{ textTransform:'uppercase', textAlign:'center',fontSize:'12px' }}
+          variant="h6">
+              <span>
+                Register Account
+              &nbsp;&nbsp;
+              &nbsp;&nbsp;
+              &nbsp;&nbsp;
+              &nbsp;&nbsp;
+                Verify Account
+              </span>
+          </Typography>
       <Card className={classes.lightBox}>
         <Typography
         align="center"
-          variant="h5"
+          variant="h6"
         >Register now
         </Typography>
+        
         <CardActionArea>
           <CardContent >
             <Formik
@@ -198,18 +269,21 @@ const Form = () => {
                 latitude: useGeoLocation().coordinates.lat,
                 longitude: useGeoLocation().coordinates.lng,
                 password: "",
-                passwordConfirmation:""
+                passwordConfirmation:"",
+                id:idCode,
+                otp:""
               }}
               onSubmit={function (values, actions) {
                 function shouldClearForm() {
                     actions.resetForm();
                 }
-                dispatch(createUser(values, history))
+                submitForm(values, history)
                 window.shouldClearForm = shouldClearForm;
                 
                 
               }}
-              validationSchema={makeUserSchema}
+              validationSchema={showBtn ? makeUserSchema : ''}
+              
             >
               {(props) => (
                 <form
@@ -218,7 +292,7 @@ const Form = () => {
                   noValidate
                 >
                     <>
-                    
+                    <span hidden={showBtn}>
                     <Field
                     name="surname"
                     label="First Name"
@@ -226,6 +300,7 @@ const Form = () => {
                     formErrorsName={formErrorsName}
                     component={Input}
                     style={{ marginTop:0 }}
+                    size="small"
                     />
                     <Field
                     name="othername"
@@ -234,6 +309,7 @@ const Form = () => {
                     formErrorsName={formErrorsName}
                     component={Input}
                     style={{ marginTop:0 }}
+                    size="small"
                     />
                     {/* <Field
                     name="location"
@@ -253,6 +329,19 @@ const Form = () => {
                     component={Input}
                     style={{ marginTop:0 }}
                     type="number"
+                    size="small"
+                  />
+                  </span>
+                  <span hidden={!showBtn}>
+                  <Field
+                    formErrors={formErrors}
+                    formErrorsName={formErrorsName}
+                    name="otp"
+                    label="Verification Code"
+                    component={Input}
+                    type="number"
+                    style={{ marginTop:0 }}
+                    size="small"
                   />
                   <Field
                     formErrors={formErrors}
@@ -262,6 +351,7 @@ const Form = () => {
                     component={Input}
                     type="password"
                     style={{ marginTop:0 }}
+                    size="small"
                   />
                   <Field
                     formErrors={formErrors}
@@ -271,15 +361,34 @@ const Form = () => {
                     component={Input}
                     type="password"
                     style={{ marginTop:0 }}
+                    size="small"
                   />
-                </>
-                  <Button type="submit" variant="contained" color="primary" fullWidth>
+                
+                  <Button  onClick={handleUnSetVerify} type="button" variant="contained" color="secondary">
+                    {loading ? (
+                      <CircularProgress style={{ color: "white" }} />
+                    ) : (
+                      "< Back"
+                    )}
+                  </Button>
+                  <Button style={{ float:'right' }} type="submit" variant="contained" color="primary">
                     {loading ? (
                       <CircularProgress style={{ color: "white" }} />
                     ) : (
                       "Register"
                     )}
                   </Button>
+                  </span>
+                  <span hidden={showBtn}>
+                  <Button  type="submit" variant="contained" color="primary" fullWidth>
+                    {loading ? (
+                      <CircularProgress style={{ color: "white" }} />
+                    ) : (
+                      "Verify Phone"
+                    )}
+                  </Button>
+                  </span>
+                  </>
                     <Alert severity={"info"} sx={{ width: "100%" }}>
                     <AlertTitle>Note</AlertTitle>
                     By clicking register, you consent to provide your information to us.

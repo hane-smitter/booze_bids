@@ -239,7 +239,7 @@ const Nav = () => {
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
-              <ListItemText primary={user?.result?.surname} />
+              <ListItemText primary={'Welcome, '+user?.result?.surname} />
             </ListItem>
           }
           <Divider />
@@ -315,14 +315,14 @@ const Nav = () => {
         <MenuItem onClick={handleMenuClose}>
           <Link className={classes.navLinkMobi} to="/pastbids">Past Bids</Link>
         </MenuItem>
-      </Menu>
+      </Menu>*/}
 
       <Link to="/"><img alignItems="center" src={Logo} sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }} className={classes.image,classes.position} /></Link>
       <SearchBar
       className={classes.sb}
           value={searchItem}
           onRequestSearch={() => console.log("onRequestSearch")}
-        /> */}
+        /> 
         <SwipeableDrawer
             anchor={'left'}
             open={state['left']}

@@ -29,7 +29,7 @@ export const getBiddableProducts = async (req, res, next) => {
     const { page } = req.query;
 
     const LIMIT = 40;
-    const startIndex = (Number(page) - 1) * LIMIT; //get starting index of every page
+    const startIndex = (Number(page || 1) - 1) * LIMIT; //get starting index of every page
     const total = await ProductBidDetail.countDocuments({
       endTime: { $gt: new Date().toISOString() },
       status: "Active",
@@ -44,7 +44,7 @@ export const getBiddableProducts = async (req, res, next) => {
       const search = new RegExp(req.query.search, "i");
 
       const biddableProducts = await ProductBidDetail.find({
-        // endTime: { $gt: new Date().toISOString() },
+        endTime: { $gt: new Date().toISOString() },
         status: "Active",
       })
         .populate({
@@ -52,6 +52,7 @@ export const getBiddableProducts = async (req, res, next) => {
           match,
         })
         .sort([["endTime", 1]]);
+        res.json(biddableProducts);
     } else {
       const biddableProducts = await ProductBidDetail.find({
         // endTime: { $gt: new Date().toISOString() },
@@ -64,11 +65,11 @@ export const getBiddableProducts = async (req, res, next) => {
         .sort([["endTime", 1]])
         .limit(LIMIT)
         .skip(startIndex);
-      res.json({
-        data: biddableProducts,
-        currentPage: Number(page),
-        numberOfPages: Math.ceil(total / LIMIT),
-      });
+      // res.json({
+      //   data: biddableProducts,
+      //   currentPage: Number(page),
+      //   numberOfPages: Math.ceil(total / LIMIT),
+      // });
       // const biddableProducts = await ProductBidDetail.find({
       //   endTime: { $gt: new Date().toISOString() },
       //   status: "Active",
@@ -78,9 +79,10 @@ export const getBiddableProducts = async (req, res, next) => {
       //     match,
       //   })
       //   .sort([["endTime", 1]]);
+      res.json(biddableProducts);
     }
 
-    // res.json(biddableProducts);
+    
   } catch (err) {
     console.log(err);
     next(new ErrorResponse(err.message, 500));
@@ -105,7 +107,7 @@ export const createProduct = async (req, res, next) => {
       throw new ErrorResponse(undefined, 422, errorsBag);
     }
 
-    const URL = process.env.APP_URL ?? "http://localhost:5000";
+    const URL = process.env.APP_URL ?? "https://api.bidspesa.com:5000";
     const filePath = `${URL}/imgs/products/${req.file.filename}`;
     const category = await Category.findById(req.body.category);
     if (!category) throw new ErrorResponse("This Category does not exist", 404);
@@ -234,7 +236,7 @@ export const updateProduct = async (req, res, next) => {
     }
 
     if (req.file) {
-      const URL = process.env.APP_URL ?? "http://localhost:5000";
+      const URL = process.env.APP_URL ?? "https://api.bidspesa.com:5000";
       const filePath = `${URL}/imgs/products/${req.file.filename}`;
       const imageUrl = product.image;
       let capturingRegex = /\/(?<img>[a-zA-Z0-9]+[_]\d+\.(jpe?g|png))$/;

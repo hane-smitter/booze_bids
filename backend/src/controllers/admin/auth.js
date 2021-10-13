@@ -70,7 +70,7 @@ export const login = async (req, res, next) => {
       throw new ErrorResponse("email and password are required", 400);
     const user = await AuthUser.findByCredentials(email, password);
     // const token = await user.generateAuthToken();
-    const token = jwt.sign({ firstname: user.firstname, lastname: user.lastname, email: user.email, id: user._id }, 'test', { expiresIn: "1h" });
+    const token = jwt.sign({ firstname: user.firstname, lastname: user.lastname, role: user.role, email: user.email, id: user._id }, 'test', { expiresIn: "1h" });
 
     res.json({
       status: {
@@ -79,7 +79,7 @@ export const login = async (req, res, next) => {
           severity: "success",
           code: "userlogin",
         },
-        payload: { token },
+        payload: { result: user, token },
       },
     });
   } catch (err) {
@@ -122,7 +122,7 @@ export const forgotPassword = async (req, res, next) => {
     const resetToken = await user.getResetPasswordToken();
 
     const resetUrl = `${
-      process.env.FRONTEND_APP_URL || "http://localhost:3000"
+      process.env.FRONTEND_APP_URL || "https://api.bidspesa.com:3000"
     }/passwordreset/${resetToken}`;
 
     const message = `

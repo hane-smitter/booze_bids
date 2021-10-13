@@ -26,7 +26,7 @@ export const adminCheck = async (req, res, next) => {
     let token = auth.replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const adminUser = await AuthUser.findById(decoded._id);
-    if (adminUser.role !== "Admin") throw new ErrorResponse("Admin resource. Access denied.", 401);
+    // if (adminUser.role !== "Admin") throw new ErrorResponse("Admin resource. Access denied.", 401);
     req.admin = adminUser;
     req.token = token;
     console.log('adminUser');

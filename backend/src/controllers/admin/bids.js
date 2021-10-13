@@ -140,8 +140,8 @@ export const updateBidabbles = async (req, res) => {
     //   endTime: { $lt: new Date().toISOString() },
     //   status: "Active",
     // });
-    const biddableProducts = ProductBidDetail.updateMany({"endTime": { $lt: new Date().toISOString() }, "status": "Active"},
-    {$set:{"endTime": new Date(new Date().getTime() + 60 * 60 * 24 * 1000)}})
+    const biddableProducts = await ProductBidDetail.updateMany({"endTime": { '$lt': new Date().toISOString() }, "status": "Active"},
+    {'$set':{"endTime": new Date(new Date().getTime() + 60 * 60 * 24 * 1000)}}, {'multi':true})
     // biddableProducts['endTime'] = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
     // await biddableProducts.save();
     console.log(biddableProducts)

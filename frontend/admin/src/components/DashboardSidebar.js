@@ -21,11 +21,11 @@ import {
   Settings as SettingsIcon, */
 } from 'react-feather';
 import NavItem from './NavItem';
-
+const loggedIn = localStorage.getItem("tokenize");
 const user = {
-  avatar: '/static/images/avatars/avatar_1.png',
+  avatar: '/static/images/avatars/avatar.png',
   jobTitle: 'Admin',
-  name: 'Mr John Doe'
+  name: loggedIn
 };
 
 const items = [

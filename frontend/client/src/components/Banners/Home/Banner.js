@@ -8,6 +8,7 @@ import p2 from '../../../images/products/Chardonnay.jpeg';
 import p3 from '../../../images/products/chivas1ltr.jpeg';
 import p4 from '../../../images/products/jb1liter.jpeg';
 import { Card, CardMedia, Typography } from "@material-ui/core";
+import useStyles from "./styles.js";
 
 const breakPoints = [
   { width: 1, itemsToShow: 1 },
@@ -17,30 +18,27 @@ const breakPoints = [
 ];
 
 const BannerFile = () => {
+  const classes = useStyles();
     const items = [
                 {
+                    i:50,
                     Name: "A Passion",
                     Image: p1// "https://source.unsplash.com/featured/?macbook"
                 },
                 {
+                    i:100,
                     Name: "Chardonnay",
                     Image: p2//"https://source.unsplash.com/featured/?iphone"
                 },
                 {
+                    i:50,
                     Name: "Chivas",
                     Image: p3//"https://source.unsplash.com/featured/?washingmachine"
                 },
                 {
+                    i:20,
                     Name: "JB 1000ML",
                     Image: p4//"https://source.unsplash.com/featured/?vacuum,cleaner"
-                },
-                {
-                    Name: "A Passion",
-                    Image: p1//"https://source.unsplash.com/featured/?lamp"
-                },
-                {
-                    Name: "Chardonnay",
-                    Image: p2//"https://source.unsplash.com/featured/?vase"
                 }
         ]
 
@@ -50,35 +48,38 @@ const BannerFile = () => {
         <Carousel breakPoints={breakPoints} pagination={false} enableAutoPlay={true} showArrows={false}>
           {items.map((item) => (
             <Item >
+                
                 <CardMedia
                     style={{backgroundSize: 'contain',
                     width:'200px',
                     height: '190px',
-                    overflow: 'hidden'}}
+                    overflow: 'hidden',
+                    border:'2px solid #2b5681',
+                    padding:'3px'
+                   }}
                     image={item.Image}
                     title={item.Name}
                 >
-                <Typography 
-                    style={{
-                        textOverflow: 'ellipsis',
-                        position: 'relative',
-                        top: '50%',
-                        alignItems:'right',
-                        padding: '10px',
-                        backgroundColor: 'black',
-                        color: 'white',
-                        opacity: '0.6',
-                        maxWidth: '50%',
-                        height: '7%',
-                        fontSize: '18px',
-                        fontWeight: '200',
-                        transition: '300ms',
-                        cursor: 'pointer'
-                    }}
-                >
-                    {item.Name}
-                </Typography>
+                  <Typography 
+                  variant="h6"
+                  className={classes.ribbon}
+                  >BID NOW!!
+                  </Typography><br/>
+
+                  <Typography 
+                  variant="p"
+                  className={classes.ribbon3}
+                  ><span style={{alignItems:'right'}}>Ends in 9h {item.i}m<br/>
+                  Slots: {(item.i)*10}</span>
+                  </Typography><br/>
+
+                  <Typography 
+                    className={classes.ribbon2}
+                  >KES. {item.i}
+                  </Typography>
                 </CardMedia>
+                
+                
             </Item>
           ))}
         </Carousel>

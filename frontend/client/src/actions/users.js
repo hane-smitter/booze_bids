@@ -44,6 +44,25 @@ export const loginUser = (body, router) => async (dispatch) => {
   }
 };
 
+//send otp
+export const sendOtp = (body) => async(dispatch) => {
+  try {
+    const { data, status } = await api.sendOtp(body);
+    batch(() => {
+      dispatch({ type: LOADINGUSER, payload: { status: 0 } })
+      dispatch({ type: STATUSUSER, payload: { info: {
+        message: "Success! Otp sent.",
+        severity: "success",
+        code: "sendOtp"
+      } } });
+    });
+    dispatch({ type: AUTH, data });
+  }
+  catch (error) {
+    logError(error, dispatch)
+  }
+}
+
 function logError(error, dispatch) {
   if (error.response) {
     const { err } = error.response.data;

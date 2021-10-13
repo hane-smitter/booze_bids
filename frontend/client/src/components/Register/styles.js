@@ -34,4 +34,12 @@ export default makeStyles((theme) => ({
     color: "#ff9800",
     fontWeight: "bold",
   },
+  title: {
+    textShadow: '0 0 24px #00a8fa',
+    fontWeight:900,
+    textTransform: 'uppercase',
+  },
+  step: {
+    textShadow: '0 0 24px #00a8fa',
+  }
 }));
