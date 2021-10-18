@@ -21,8 +21,10 @@ export const fetchProductCategories = () => axios.get(`/categories`);
 export const createProductCategory = body => elevateAxios.post(`/categories/admin`, body);
 export const updateProductCategory = (param, body) => elevateAxios.patch(`/categories/admin/mod/update/${param}`, body);
 export const fetchBids = () => elevateAxios.get(`/bids/admin`);
+export const fetchExpiredBids = () => elevateAxios.get(`/bids/admin/expired`);
 
 export const register = body => axios.post(`/auth/admin/signup`, body);
+export const fetchAdmins = () => elevateAxios.get(`/auth/admin/`);
 export const registerAdmin = body => elevateAxios.post(`/auth/admin/create`, body);
 export const login = body => axios.post(`/auth/admin/signin`, body);
 export const logout = body => elevateAxios.post(`/auth/admin/logout`, body);

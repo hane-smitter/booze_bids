@@ -101,7 +101,7 @@ const Login = () => {
           justifyContent: "center",
         }}
       >
-        <Container maxWidth="sm">
+        <Container maxWidth="sm"  style={{ marginTop:'50px', borderRadius:'1%', border:'1px solid grey' }}>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}

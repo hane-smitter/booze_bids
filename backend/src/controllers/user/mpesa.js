@@ -14,7 +14,7 @@ export const callback = (req, res) => {
 export const stkPush = (amount,mssisdn) => {
     try {
         let amount = '1';
-        let mssidn = '254708058225'
+        let mssidn = '254708927971'
         var postBody = JSON.stringify({
         "BusinessShortCode": '174379',
         "Password": Buffer.from(
@@ -27,7 +27,7 @@ export const stkPush = (amount,mssisdn) => {
         "PartyA": mssidn,
         "PartyB": "174379",
         "PhoneNumber": mssidn,
-        "CallBackURL": "https://api.bidspesa.com/mpesa/callback",
+        "CallBackURL": "https://bidspesa.com/text.txt",
         "AccountReference": "LNMOnGlitch",
         "TransactionDesc": "@SandboxTests",
         });
@@ -97,7 +97,7 @@ function getAccessToken() {
             path: "/oauth/v1/generate?grant_type=client_credentials",
             method: "GET",
             headers: {
-              "Authorization": "Basic " + Buffer.from(consumerKey
+              "Authorization": "Bearer " + Buffer.from(consumerKey
                 + ":" + consumerSecret).toString("base64"),
                 "Accept":"application/json"
             }
@@ -124,8 +124,8 @@ function getAT(){
       path: "/oauth/v1/generate?grant_type=client_credentials",
       method: "GET",
       headers: {
-        "Authorization": "Basic " + Buffer.from("nG5XTbbAgpnREsv2ihHPeXzXCJKH7jPx"
-          + ":" + "ihbsgAtffLsAPJ7C").toString("base64"),
+        "Authorization": "Bearer " + Buffer.from("OYVtkaCW2lRJl4ysFGcmU2UrffGPMgJ8"
+          + ":" + "eoCzeBSPDIwRqxma").toString("base64"),
           "Accept":"application/json"
       }
     }

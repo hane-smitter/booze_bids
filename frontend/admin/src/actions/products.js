@@ -7,6 +7,7 @@ import {
   READBIDDABLEPROD,
   READUNBIDDABLEPROD,
   READCAT,
+  READADMIN,
   CREATECAT,
   ERROR,
   LOADING,
@@ -64,6 +65,22 @@ export const getCategories = () => async (dispatch) => {
     logError(err, dispatch);
   }
 };
+//admins
+export const getAdmins = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //fetch admins
+    const { data: admins } = await api.fetchAdmins();
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: READADMIN, payload: { admins } });
+    });
+  } catch (err) {
+    logError(err, dispatch);
+  }
+};
+
 export const createProduct = (body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
@@ -157,6 +174,21 @@ export const getBids = () => async (dispatch) => {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch bids made by customers
     const { data:bids } = await api.fetchBids();
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: READBIDS, payload: { bids } });
+    });
+  } catch (error) {
+    logError(error, dispatch);
+  }
+}
+//expired bids
+export const getExpiredBids = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //fetch bids made by customers
+    const { data:bids } = await api.fetchExpiredBids();
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });

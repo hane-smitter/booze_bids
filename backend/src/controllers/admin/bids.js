@@ -17,7 +17,23 @@ export const getBids = async (req, res, next) => {
         path: 'product'
       }
     }).populate('user').sort([["createdAt", -1]]); */
-    const bids = await ProductBidDetail.find({}).populate('product').populate('prodbids');
+    const bids = await ProductBidDetail.find({"status":"Active"}).populate('product').populate('prodbids');
+
+    res.json(bids);
+  } catch (err) {
+    next(err);
+  }
+};
+//getExpiredBids
+export const getExpiredBids = async (req, res, next) => {
+  try {
+    /* const bids = await Bid.find({}).populate({
+      path: 'prodbiddetails',
+      populate: {
+        path: 'product'
+      }
+    }).populate('user').sort([["createdAt", -1]]); */
+    const bids = await ProductBidDetail.find({"status":"Not Active"}).populate('product').populate('prodbids');
 
     res.json(bids);
   } catch (err) {

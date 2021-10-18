@@ -22,11 +22,12 @@ export const authCheck = async (req, res, next) => {
 export const adminCheck = async (req, res, next) => {
   let auth = req.header("Authorization");
   try {
+    console.log(';hi')
     if(!auth || !auth.startsWith('Bearer')) throw new ErrorResponse('Unauthorized', 401);
     let token = auth.replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const adminUser = await AuthUser.findById(decoded._id);
-    // if (adminUser.role !== "Admin") throw new ErrorResponse("Admin resource. Access denied.", 401);
+    if (adminUser.role !== "Admin") throw new ErrorResponse("Admin resource. Access denied.", 401);
     req.admin = adminUser;
     req.token = token;
     console.log('adminUser');

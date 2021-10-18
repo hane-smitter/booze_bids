@@ -83,7 +83,7 @@ const orders = [
 
 const LatestOrders = (props) => (
   <Card {...props}>
-    <CardHeader title="Latest Orders" />
+    <CardHeader title="Latest Bids" />
     <Divider />
     <PerfectScrollbar>
       <Box sx={{ minWidth: 800 }}>
@@ -91,7 +91,7 @@ const LatestOrders = (props) => (
           <TableHead>
             <TableRow>
               <TableCell>
-                Order Ref
+                Bid Ref
               </TableCell>
               <TableCell>
                 Customer
@@ -109,9 +109,6 @@ const LatestOrders = (props) => (
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
-              <TableCell>
-                Status
-              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -128,13 +125,6 @@ const LatestOrders = (props) => (
                 </TableCell>
                 <TableCell>
                   {moment(order.createdAt).format('DD/MM/YYYY')}
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    color="primary"
-                    label={order.status}
-                    size="small"
-                  />
                 </TableCell>
               </TableRow>
             ))}

@@ -31,7 +31,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
     });
   }
   return (
-    <AppBar elevation={0} {...rest}>
+    <AppBar elevation={0} {...rest}  style={{ backgroundColor:'#222222' }}>
       <Toolbar>
         <RouterLink to="/">
           <Logo />

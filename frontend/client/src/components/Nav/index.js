@@ -53,6 +53,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import EditIcon from '@mui/icons-material/Edit';
 import LoginIcon from '@mui/icons-material/Login';
 import HistoryIcon from '@mui/icons-material/History';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import LockIcon from '@mui/icons-material/Lock';
 
 const Nav = () => {
     const [anchor, setAnchor] = React.useState(null);
@@ -60,7 +62,7 @@ const Nav = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
-
+    
     const [state, setState] = React.useState({
       left: false,
     });
@@ -234,7 +236,7 @@ const Nav = () => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-          {user &&
+          {user?.result &&
             <ListItem button>
               <ListItemIcon>
                 <AccountCircleIcon />
@@ -321,6 +323,8 @@ const Nav = () => {
       <SearchBar
       className={classes.sb}
           value={searchItem}
+          style={{backgroundColor:'#fff',
+          color:'#222'}}
           onRequestSearch={() => console.log("onRequestSearch")}
         /> 
         <SwipeableDrawer
@@ -343,9 +347,9 @@ const Nav = () => {
         </Link>
       </div>
       <Box>
-      {!user &&
+      {!user?.result &&
       <Link to="/register">
-        <Typography align="right" className={classes.navLink} style={{ fontSize:'12px',padding:'2px' }} component="body" variant="body1"> Register now!</Typography>
+        <Typography align="right" className={classes.navLink} style={{ fontSize:'14px',padding:'2px',paddingBottom: '5px'}} component="body" variant="body1"> Register Now!</Typography>
       </Link>
       }
         {/* <Grid item xs>
@@ -384,26 +388,34 @@ const Nav = () => {
                 <Link className={classes.navLink} to="/pastbids">Past Bids</Link>
                 :
                 <Field
-                  label="Phone"
+                  placeholder="Phone"
                   variant="outlined"
                   margin="3"
                   className={classes.rootTextField}
                   style={{width:"150px"}}
                   size="small"
                   name="phone"
-                  type="number"
+                  type="text"
                   formErrors={formErrors}
                   formErrorsName={formErrorsName}
                   component={Input}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start" placeholder="Phone">
+                        <LocalPhoneIcon fontSize="small" color="primary">
+                        </LocalPhoneIcon>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 }
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                {user?.result ? 
+                {user?.result?.surname ? 
                 <Link to='#' className={classes.navLink2}> Hi, <span style={{fontStyle:'italic'}}>{user?.result.surname}</span></Link>
                 :
                 <Field
-                  label="Password"
+                  placeholder="Password"
                   variant="outlined"
                   margin="3"
                   className={classes.rootTextField}
@@ -414,6 +426,14 @@ const Nav = () => {
                   formErrors={formErrors}
                   formErrorsName={formErrorsName}
                   component={Input}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockIcon fontSize="small" color="primary">
+                        </LockIcon>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 }
                 </Grid>
@@ -432,7 +452,7 @@ const Nav = () => {
                 </Grid>
                 <Grid item xs={12} sm={3}></Grid>
               <Grid item xs={12} sm={3}></Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={6} style={{paddingTop:'4px'}}>
                 <span className={classes.time} style={{ fontFamily:'ticking-time-bomb'}}> 
                   { new Date().toLocaleString('en-US', {
                                                       weekday: 'short', // long, short, narrow
@@ -441,6 +461,7 @@ const Nav = () => {
                                                       month: 'short', // numeric, 2-digit, long, short, narrow
                                                       hour: 'numeric', // numeric, 2-digit
                                                       minute: 'numeric', // numeric, 2-digit
+                                                      second: 'numeric', // numeric, 2-digit
                                                   }) } 
                 </span>
               </Grid>

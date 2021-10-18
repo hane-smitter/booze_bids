@@ -16,7 +16,7 @@ export default makeStyles(() => ({
         // borderBottomLeftRadius: '50%',
         // borderBottomRightRadius: '60%',
         marginBlockStart:'-100px',
-        backgroundColor:'#fff',
+        backgroundColor:'transparent',
         width:'100%'
     },
     imgContainerMobi: {
@@ -33,10 +33,10 @@ export default makeStyles(() => ({
     },
     image: {
         width: '100%',
-        height: '100%',
+        height: '200px',
         display: 'block',
-        borderRadius: '10px',
-        objectFit: 'contain'
+        // // borderRadius: '10px',
+        backgroundSize:'contain'
     },
     ribbon: {
         textOverflow: 'ellipsis',

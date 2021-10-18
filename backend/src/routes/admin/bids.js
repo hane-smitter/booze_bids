@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   getBids,
+  getExpiredBids,
   createBid,
   getHighestAmountBidder,
   getLastBidder,
@@ -14,6 +15,7 @@ const router = express.Router();
 router.use(adminCheck);
 
 router.route("/").get(getBids).post(validate("createBid"), createBid);
+router.route("/").get(getExpiredBids).post(validate("createBid"), createBid);
 
 router.get("/amount/high", getHighestAmountBidder);
 router.get("/last", getLastBidder);

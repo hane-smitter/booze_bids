@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   logout,
+  getAdmins,
   registerAdmin,
   resetpassword,
   forgotPassword,
@@ -18,5 +19,6 @@ router.post("/forgotpassword", forgotPassword);
 router.patch("/resetpassword/:resetToken", resetpassword);
 router.post("/create", adminCheck, registerAdmin);
 router.post("/logout", adminCheck, logout);
+router.get("/", getAdmins);
 
 export default router;

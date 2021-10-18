@@ -28,7 +28,7 @@ const TotalProfit = (props) => (
             color="textPrimary"
             variant="h3"
           >
-            $23,200
+            KES23,200
           </Typography>
         </Grid>
         <Grid item>

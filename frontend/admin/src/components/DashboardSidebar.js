@@ -50,9 +50,19 @@ const items = [
     title: 'Bids'
   },
   {
+    href: '/app/expired-bids',
+    icon: ShoppingBagIcon,
+    title: 'Expired Bids'
+  },
+  {
     href: '/app/settings',
     icon: ShoppingBagIcon,
     title: 'Winnings'
+  },
+  {
+    href: '/app/admins',
+    icon: UsersIcon,
+    title: 'Admins'
   },
 ];
 

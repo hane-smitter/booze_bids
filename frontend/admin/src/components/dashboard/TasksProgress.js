@@ -27,13 +27,13 @@ const TasksProgress = (props) => (
             gutterBottom
             variant="h6"
           >
-            TASKS PROGRESS
+            Ongoing Bids
           </Typography>
           <Typography
             color="textPrimary"
             variant="h3"
           >
-            75.5%
+            7
           </Typography>
         </Grid>
         <Grid item>

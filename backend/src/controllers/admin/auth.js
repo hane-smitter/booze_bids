@@ -4,6 +4,17 @@ import jwt from "jsonwebtoken";
 import AuthUser from "../../models/AuthUser.js";
 import { sendEmail } from "../utils/sendMail/sendMail.js";
 
+//getAdmins
+export const getAdmins = async (req, res, next) => {
+  try {
+    const users = await AuthUser.find();
+    console.log(users);
+    res.status(200).json(users);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const register = async (req, res, next) => {
   try {
     const { firstname, lastname, email, password } = req.body;

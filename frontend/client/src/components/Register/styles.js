@@ -11,6 +11,8 @@ export default makeStyles((theme) => ({
   lightBox: {
     backgroundColor: theme.palette.background.paper,
     color: "#000",
+    marginBlockEnd:'50px',
+    padding:'15px'
   },
   white: {
     color:'white'
@@ -34,10 +36,16 @@ export default makeStyles((theme) => ({
     color: "#ff9800",
     fontWeight: "bold",
   },
+  label: {
+    color: "#181D32",
+    fontWeight: "bold",
+    paddingBottom:'1px',
+  },
   title: {
     textShadow: '0 0 24px #00a8fa',
     fontWeight:900,
     textTransform: 'uppercase',
+    fontSize:'28px'
   },
   step: {
     textShadow: '0 0 24px #00a8fa',

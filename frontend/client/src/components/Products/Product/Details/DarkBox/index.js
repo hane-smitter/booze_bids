@@ -12,6 +12,7 @@ import {
   ListItemAvatar,
   CardContent,
   Card,
+  ListItemText,
 } from "@material-ui/core";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { Alert, AlertTitle } from "@material-ui/lab";
@@ -29,7 +30,7 @@ const DarkBox = ({ product, updateProducts }) => {
     err,
     loading,
     status,
-    bidder: { topBidder },
+    bidder: { topBidder, },
   } = useSelector((state) => state.app);
   let newBidder = Boolean(status?.info?.code === "newbiddinguser");
 
@@ -130,20 +131,20 @@ const DarkBox = ({ product, updateProducts }) => {
   };
 
   useEffect(() => {
-    dispatch(fetchTopBidder());
+    dispatch(fetchTopBidder({"productId": product.product._id}));
   }, []);
   return (
     <Box className={classes.darkBox}>
       <Card className={classes.cardRoot}>
-        <Typography
+        {/* <Typography
           className={classes.white}
           style={{ padding:8,margin:5}}
           variant="h5"
         >Place your bid now
-        </Typography>
+        </Typography> */}
           <CardContent>
             <Typography gutterBottom variant="body1">
-              Highest Bidder
+              CURRENT HIGHEST BIDDER
             </Typography>
             {/*highest bidder  details*/}
             <List>
@@ -153,12 +154,12 @@ const DarkBox = ({ product, updateProducts }) => {
                     <ImageIcon />
                   </Avatar>
                 </ListItemAvatar>
-                {/* <ListItemText
-                  primary={topBidder.bidder?.bidderuser[0]?.fullname ?? "__"}
+                <ListItemText
+                  primary={topBidder?.bidder?.user?.fullname ?? "___"}
                 />
                 <ListItemText
                   primary={`KES ${topBidder?.bidder?.bidAmountTotal ?? 0}`}
-                /> */}
+                />
               </ListItem>
             </List>
             <Divider color="grey" />

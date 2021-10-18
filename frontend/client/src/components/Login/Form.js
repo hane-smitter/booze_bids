@@ -16,6 +16,7 @@ import {
   CardActionArea,
   CardHeader,
   Card,
+  InputAdornment,
 } from "@material-ui/core";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { Alert, AlertTitle } from "@material-ui/lab";
@@ -34,6 +35,8 @@ import { array } from "yup/lib/locale";
 import { useHistory } from "react-router-dom";
 import decode from 'jwt-decode';
 import * as actionType from '../../constants';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import LockIcon from '@mui/icons-material/Lock';
 
 const Form = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
@@ -144,7 +147,12 @@ const Form = () => {
   }, [status, dispatch]);
   return (
     <Box >
-        
+        <Typography 
+          className={classes.title}
+          align="center"
+          variant="h5">
+          Welcome to Bidspesa
+        </Typography>
       <Card className={classes.lightBox}>
         <Typography
         align="center"
@@ -183,19 +191,35 @@ const Form = () => {
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     name="phone"
-                    label="Phone number"
+                    placeholder="Phone number"
                     component={Input}
                     style={{ marginTop:0 }}
-                    type="number"
+                    type="text"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LocalPhoneIcon fontSize="small" color="primary">
+                          </LocalPhoneIcon>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                   <Field
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     name="password"
-                    label="Password"
+                    placeholder="Password"
                     component={Input}
                     type="password"
                     style={{ marginTop:0 }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockIcon fontSize="small" color="primary">
+                          </LockIcon>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                  
                 </>

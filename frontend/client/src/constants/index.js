@@ -12,6 +12,7 @@ export const STATUS = 'STATUS';
 export const STATUSUSER = 'STATUSUSER';
 export const FETCHTB = 'FETCH_TOP_BIDDER';
 export const FETCHLB = 'FETCH_LAST_BIDDER';
+export const FETCHCB = 'FETCH_CURRENT_BIDDER';
 export const FETCHUSER = 'FETCH_USER';
 
 export const CREATEUSER = 'CREATEUSER';

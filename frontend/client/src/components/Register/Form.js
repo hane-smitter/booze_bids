@@ -16,6 +16,7 @@ import {
   CardActionArea,
   CardHeader,
   Card,
+  Link,
 } from "@material-ui/core";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { Alert, AlertTitle } from "@material-ui/lab";
@@ -139,7 +140,8 @@ const Form = () => {
     "password",
     "passwordConfirmation",
     "otp",
-    "id"
+    "id",
+    "consent"
   ];
   let formErrors = [];
   let formErrorsName = [];
@@ -163,6 +165,7 @@ const Form = () => {
     //   .required(
     //       "Your location(e.g nearest town) is required"
     //     ),
+    consent: Yup.bool().oneOf([true], 'Accept Terms & Conditions is required'),
     password: Yup.string().required('Password is required'),
     passwordConfirmation: Yup.string()
            .oneOf([Yup.ref('password'), null], 'Passwords must match')
@@ -239,7 +242,7 @@ const Form = () => {
             }
           </Typography>
           <Typography 
-          style={{ textTransform:'uppercase', textAlign:'center',fontSize:'12px' }}
+          style={{ textTransform:'uppercase', textAlign:'center',fontSize:'12px',marginBottom:10 }}
           variant="h6">
               <span>
                 Register Account
@@ -251,12 +254,24 @@ const Form = () => {
               </span>
           </Typography>
       <Card className={classes.lightBox}>
-        <Typography
+        {/* <Typography
         align="center"
           variant="h6"
         >Register now
+        </Typography> */}
+        <Typography
+        align="center"
+        variant="h6"
+        style={{ fontWeight: 300,fontSize: '14px',padding:'30px'}}>
+          Thanks for your interest in BidsPesa! Once you fill in the registration form below, you will receive the registration code via SMS. To complete the registration process, please submit the registration code.
         </Typography>
-        
+        <Typography
+        align="center"
+        variant="h6"
+        style={{ fontWeight: 300,fontSize: '14px',padding:'30px'}}>
+          Already got a<b> Registration code?</b> <Link onClick={handleSetVerify}>Skip this step ›</Link>
+        </Typography>
+
         <CardActionArea>
           <CardContent >
             <Formik
@@ -271,7 +286,8 @@ const Form = () => {
                 password: "",
                 passwordConfirmation:"",
                 id:idCode,
-                otp:""
+                otp:"",
+                consent:false
               }}
               onSubmit={function (values, actions) {
                 function shouldClearForm() {
@@ -293,22 +309,24 @@ const Form = () => {
                 >
                     <>
                     <span hidden={showBtn}>
+                    <label className={classes.label}>Firstname*</label>
                     <Field
                     name="surname"
-                    label="First Name"
+                    placeholder="First Name"
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     component={Input}
-                    style={{ marginTop:0 }}
+                    style={{ marginTop:2,marginBottom:15 }}
                     size="small"
                     />
+                    <label className={classes.label}>Second Name*</label>
                     <Field
                     name="othername"
-                    label="Second name"
+                    placeholder="Second name"
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     component={Input}
-                    style={{ marginTop:0 }}
+                    style={{ marginTop:2,marginBottom:15 }}
                     size="small"
                     />
                     {/* <Field
@@ -320,47 +338,50 @@ const Form = () => {
                     style={{ marginTop:0 }}
                     /> */}
                 
-                  
+                  <label className={classes.label}>Mobile Phone Number*</label>
                   <Field
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     name="phone"
-                    label="Phone number"
+                    placeholder="Phone 254XXXXXXXXX"
                     component={Input}
-                    style={{ marginTop:0 }}
-                    type="number"
+                    style={{ marginTop:2,marginBottom:15 }}
+                    type="text"
                     size="small"
                   />
                   </span>
                   <span hidden={!showBtn}>
+                  <label className={classes.label}>Registration Code*</label>
                   <Field
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     name="otp"
-                    label="Verification Code"
+                    placeholder="Verification Code"
                     component={Input}
                     type="number"
-                    style={{ marginTop:0 }}
+                    style={{ marginTop:2,marginBottom:15 }}
                     size="small"
                   />
+                  <label className={classes.label}>Password*</label>
                   <Field
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     name="password"
-                    label="Password"
+                    placeholder="Password"
                     component={Input}
                     type="password"
-                    style={{ marginTop:0 }}
+                    style={{ marginTop:2,marginBottom:15 }}
                     size="small"
                   />
+                  <label className={classes.label}>Confirm Password*</label>
                   <Field
                     formErrors={formErrors}
                     formErrorsName={formErrorsName}
                     name="passwordConfirmation"
-                    label="Confirm Password"
+                    placeholder="Confirm Password"
                     component={Input}
                     type="password"
-                    style={{ marginTop:0 }}
+                    style={{ marginTop:2,marginBottom:15 }}
                     size="small"
                   />
                 
@@ -375,24 +396,27 @@ const Form = () => {
                     {loading ? (
                       <CircularProgress style={{ color: "white" }} />
                     ) : (
-                      "Register"
+                      "COMPLETE >"
                     )}
                   </Button>
                   </span>
                   <span hidden={showBtn}>
-                  <Button  type="submit" variant="contained" color="primary" fullWidth>
+                  <Button onClick={genId} type="submit" variant="contained" color="primary" fullWidth>
                     {loading ? (
                       <CircularProgress style={{ color: "white" }} />
                     ) : (
-                      "Verify Phone"
+                      "GET VERIFICATION CODE >"
                     )}
                   </Button>
                   </span>
                   </>
-                    <Alert severity={"info"} sx={{ width: "100%" }}>
-                    <AlertTitle>Note</AlertTitle>
-                    By clicking register, you consent to provide your information to us.
-                    </Alert>
+                    <Typography
+                    variant="h6"
+                    style={{ fontWeight: 450,fontSize: '14px', paddingTop:'5px'}}>
+                    <Field formErrors={formErrors}
+                    formErrorsName={formErrorsName} type="checkbox" name="consent"/>
+                    By checking this message, I hereby confirm that I agree with the <Link>Terms and Conditions</Link>, the <Link>Privacy Policy</Link>, that I am 18 years old or over and that all information given is true.
+                    </Typography>
                 </form>
               )}
             </Formik>

@@ -101,7 +101,8 @@ export const createBid = async (req, res, next) => {
 
 export const getHighestAmountBidder = async (req, res, next) => {
   try {
-    const bidder = await Bid.findOne({}).populate('user').sort('-bidAmountTotal');
+    let { productId } = req.query;
+    const bidder = await Bid.findOne({product: mongoose.Types.ObjectId(productId)}).populate('user').sort('-bidAmountTotal');
 
     res.json({ bidder });
   } catch{
@@ -110,9 +111,21 @@ export const getHighestAmountBidder = async (req, res, next) => {
 }
 export const getLastBidder = async (req, res, next) => {
   try {
-    const bidder = await Bid.findOne({}).populate('user').sort('-bidsCount');
+    let { productId } = req.query;
+    const bidder = await Bid.findOne({product: mongoose.Types.ObjectId(productId)}).populate('user').sort('-bidsCount');
 
     res.json({ bidder });
+  } catch{
+    next(err);
+  }
+}
+//latest bidders
+export const getCurrentBidders = async (req, res, next) => {
+  try {
+    let { productId } = req.query;
+    const bidder = await Bid.find({product: mongoose.Types.ObjectId(productId)}).populate('user').limit(10).sort('-bidsCount');
+
+    res.json( { bidder } );
   } catch{
     next(err);
   }
