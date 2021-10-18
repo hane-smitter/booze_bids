@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'https:/api.bidspesa.com:5000';
+const url = 'https://api.bidspesa.com:5000';
 
 const API = axios.create({ baseURL: url });
 API.interceptors.request.use((req) => {
