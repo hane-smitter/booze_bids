@@ -77,7 +77,7 @@ const Products = () => {
           aria-label="Product view tabs"
         >
           <Tab label="All Products" {...spreadAttr(0)} />
-          <Tab label="Biddable Products" {...spreadAttr(1)} />
+          <Tab label="Active Bids" {...spreadAttr(1)} />
           <Tab label="UnBiddable Products" {...spreadAttr(2)} />
         </Tabs>
       </Box>

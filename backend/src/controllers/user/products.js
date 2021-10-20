@@ -11,7 +11,7 @@ export const getProducts = async (req, res, next) => {
   try {
     const products = await Product.find({})
       .sort([["createdAt", -1]])
-      .populate(["productbids", "productbidscount"]);
+      .populate(["productbids", "productbidscount","category"]);
     /* .exec(function(error, bids) {
             if(error) throw error;
             console.log('here is the bids meen!!');
@@ -42,16 +42,24 @@ export const getBiddableProducts = async (req, res, next) => {
     }
     if (req.query.search) {
       const search = new RegExp(req.query.search, "i");
-
+      match.name = req.query.search;
       const biddableProducts = await ProductBidDetail.find({
         endTime: { $gt: new Date().toISOString() },
         status: "Active",
+        product: { name: search}
       })
         .populate({
           path: "product",
           match,
         })
-        .sort([["endTime", 1]]);
+        .sort([["endTime", 1]])
+        .limit(LIMIT)
+        .skip(startIndex);
+        res.json({
+          data: biddableProducts,
+          currentPage: Number(page),
+          numberOfPages: Math.ceil(total / LIMIT),
+        });
     } else {
       const biddableProducts = await ProductBidDetail.find({
         endTime: { $gt: new Date().toISOString() },

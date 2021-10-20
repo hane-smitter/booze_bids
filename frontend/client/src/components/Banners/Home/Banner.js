@@ -4,7 +4,7 @@ import Carousel from "react-elastic-carousel";
 import Item from "./Item";
 import "./styles.css";
 import s1 from '../../../images/slider1.png';
-import s2 from '../../../images/slider2.png';
+import s2 from '../../../images/HEAD MAST HOLIDAY FINAL.png';
 import ms1 from '../../../images/mslider1.png';
 import ms2 from '../../../images/mslider2.png';
 import p1 from '../../../images/products/AustralianPassion.jpeg';
@@ -71,16 +71,11 @@ const BannerFile = () => {
           }}>
           {items.map((item) => (
            
-                <CardMedia
-                    style={{
-                      backgroundSize: isMobile ? '' : 'contain',
-                      width:'100%',
-                      height: '200px'
-                   }}
-                    image={item.Image}
-                    title={item.Name}
-                >
-                </CardMedia>
+           <img src={item.Image} style={{
+            objectFit: isMobile ? 'cover' : 'fill',
+            width:'100%',
+            height: '200px'
+           }}/>
           ))}
         </Carousel>
       {/* </div> */}

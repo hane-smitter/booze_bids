@@ -11,4 +11,5 @@ export const CREATECAT = 'CREATE_CATEGORY';
 export const READCAT = 'FETCH_CATEGORIES';
 export const STATUS = 'STATUS';
 export const READBIDS = 'FETCH_BIDS';
+export const READEXBIDS = 'FETCH_EXPIRED_BIDS';
 export const READADMIN = 'FETCH_ADMINS';
