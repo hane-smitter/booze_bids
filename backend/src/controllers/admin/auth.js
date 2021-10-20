@@ -1,8 +1,19 @@
 import crypto from "crypto";
 import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
-
+import jwt from "jsonwebtoken";
 import AuthUser from "../../models/AuthUser.js";
 import { sendEmail } from "../utils/sendMail/sendMail.js";
+
+//getAdmins
+export const getAdmins = async (req, res, next) => {
+  try {
+    const users = await AuthUser.find();
+    console.log(users);
+    res.status(200).json(users);
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const register = async (req, res, next) => {
   try {
@@ -69,12 +80,13 @@ export const login = async (req, res, next) => {
     if (!email || !password)
       throw new ErrorResponse("email and password are required", 400);
     const user = await AuthUser.findByCredentials(email, password);
-    const token = await user.generateAuthToken();
+    // const token = await user.generateAuthToken();
+    const token = jwt.sign({ firstname: user.firstname, lastname: user.lastname, role: user.role, email: user.email, id: user._id }, 'test', { expiresIn: "1h" });
 
     res.json({
       status: {
         info: {
-          message: "login success",
+          message: "Login success! Redirecting...",
           severity: "success",
           code: "userlogin",
         },
@@ -121,7 +133,7 @@ export const forgotPassword = async (req, res, next) => {
     const resetToken = await user.getResetPasswordToken();
     const origin = req.get('origin');
     const resetUrl = `${
-      process.env.FRONTEND_APP_URL || origin || "http://localhost:3000"
+      process.env.FRONTEND_APP_URL || origin || "https://api.bidspesa.com:3000"
     }/passwordreset/${resetToken}`;
 
     const message = `

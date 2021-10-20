@@ -30,7 +30,7 @@ const TotalCustomers = (props) => (
             color="textPrimary"
             variant="h3"
           >
-            1,600
+            16
           </Typography>
         </Grid>
         <Grid item>

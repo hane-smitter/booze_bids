@@ -95,7 +95,6 @@ export const validation = (req, res) => {
 };
 
 function getAccessToken() {
-  try {
     const consumerKey = "nG5XTbbAgpnREsv2ihHPeXzXCJKH7jPx";
     const consumerSecret = "ihbsgAtffLsAPJ7C";
     var getOptions = {
@@ -103,83 +102,34 @@ function getAccessToken() {
       path: "/oauth/v1/generate?grant_type=client_credentials",
       method: "GET",
       headers: {
-        Authorization:
-          "Basic " +
-          Buffer.from(consumerKey + ":" + consumerSecret).toString("base64"),
-        Accept: "application/json",
-      },
-    };
-    return new Promise(function (resolve, reject) {
-      https
-        .request(getOptions, function (res) {
-          res.setEncoding("utf-8");
-          res.on("data", function (d) {
-            resolve(JSON.parse(d));
-          });
-          res.on("error", function (e) {
-            reject(e);
-          });
-        })
-        .end();
-    });
-  } catch (error) {
-    return (token = null);
-  }
-}
-
-function getAT() {
-  var getOptions = {
-    host: "sandbox.safaricom.co.ke",
-    path: "/oauth/v1/generate?grant_type=client_credentials",
-    method: "GET",
-    headers: {
-      Authorization:
-        "Basic " +
-        Buffer.from(
-          "nG5XTbbAgpnREsv2ihHPeXzXCJKH7jPx" + ":" + "ihbsgAtffLsAPJ7C"
-        ).toString("base64"),
-      Accept: "application/json",
-    },
-  };
-  return new Promise(function (resolve, reject) {
-    https
-      .request(getOptions, function (res) {
+        "Authorization": "Bearer " + Buffer.from("OYVtkaCW2lRJl4ysFGcmU2UrffGPMgJ8"
+          + ":" + "eoCzeBSPDIwRqxma").toString("base64"),
+          "Accept":"application/json"
+      }
+    }
+    return new Promise(function(resolve, reject) {
+      https.request(getOptions, function(res) {
         res.setEncoding("utf-8");
-        res.on("data", function (d) {
+        res.on("data", function(d) {
           resolve(JSON.parse(d));
         });
-        res.on("error", function (e) {
+        res.on("error", function(e) {
           reject(e);
         });
-      })
-      .end();
-  });
-}
-
-function getTimeStamp() {
-  function parseDate(e) {
-    return e < 10 ? "0" + e : e;
+      }).end();
+    });
   }
-  var _date = new Date();
-  var currentTime = new Date(
-    _date.toLocaleString("en-us", { timeZone: "Africa/Nairobi" })
-  );
-  var month = parseDate(currentTime.getMonth() + 1);
-  var date = parseDate(currentTime.getDate());
-  var hour = parseDate(currentTime.getHours());
-  var minutes = parseDate(currentTime.getMinutes());
-  var seconds = parseDate(currentTime.getSeconds());
-  return (
-    currentTime.getFullYear() +
-    "" +
-    month +
-    "" +
-    date +
-    "" +
-    hour +
-    "" +
-    minutes +
-    "" +
-    seconds
-  );
-}
+  
+  function getTimeStamp() {
+    function parseDate(e) { return (e < 10) ? "0" + e : e; }
+    var _date = new Date();
+    var currentTime = 
+        new Date(_date.toLocaleString("en-us", {timeZone: "Africa/Nairobi"}));
+    var month = parseDate(currentTime.getMonth() + 1);
+    var date = parseDate(currentTime.getDate());
+    var hour = parseDate(currentTime.getHours());
+    var minutes = parseDate(currentTime.getMinutes());
+    var seconds = parseDate(currentTime.getSeconds());
+    return currentTime.getFullYear() + "" + month + "" + date + "" + 
+        hour + "" + minutes + "" + seconds;
+  }

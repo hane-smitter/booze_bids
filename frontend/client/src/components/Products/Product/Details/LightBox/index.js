@@ -9,11 +9,14 @@ import {
     Grid,
     Box,
     Divider,
+    Button,
   } from "@material-ui/core";
 
 import FutureTimeCalc from "../../../../utils/FutureTimeCalc";
 import useStyles from './style';
 import defaultImg from "../../../../../images/products/defaultImg.jpeg";
+import actionImg from "../../../../../images/auction.jpg";
+import bidImg from "../../../../../images/bid.jpeg";
 import MoneyFormat from "../../../../utils/MoneyFormat";
 
 
@@ -41,24 +44,24 @@ const LightBox = ({ product }) => {
   return (
     <Box className={classes.lightBox}>
       <Card className={classes.cardRoot}>
-        <CardHeader
-          className={classes.capitalize}
-          color="primary"
-          subheader={product.product.name}
-        />
         <CardActionArea>
+          <CardMedia component={"img"} image={bidImg} className={classes.ribbon2}/>
+          <CardMedia component={"img"} image={actionImg} className={classes.ribbon}/>
           <CardMedia
-            className={classes.media}
+            align="center"
             component={"img"}
+            className={classes.media}
             image={product.product.image ? product.product.image : defaultImg}
             title={product.product.name}
-          />
+          >
+          </CardMedia>
+            
           <CardContent>
-            <Divider color="grey" />
             <Typography
               gutterBottom
               variant="body2"
               component="p"
+              align="center"
               className={cardBlinking ? classes.danger: ''}
               style={{fontWeight:'bold'}} 
             >
@@ -86,18 +89,16 @@ const LightBox = ({ product }) => {
                 <span>Secs</span>
               </span>
             </Typography>
-
-            <Grid container alignItems="center"  >
-              <Grid item xs>
-                <Typography variant="body2" component="p" style={{fontWeight:'bold'}}>
+              <Typography variant="body2" align="center" component="p" style={{fontWeight:'bold'}}>
                   RRP @ {MoneyFormat(product.product.cost)}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Typography variant="body2" component="p" style={{fontWeight:'bold'}}>
-                  Slots Remaining: {product.totalslots ?? 0}
-                </Typography>
-              </Grid>
+              </Typography>
+              <Typography variant="body2" align="center" component="p" style={{fontWeight:'bold'}}>
+                Slots Remaining: {product.totalslots ?? 0}
+              </Typography>
+            <Grid container>
+              <Button type="submit" variant="contained" color="primary" fullWidth>
+                Purchase @ RRP
+              </Button>
             </Grid>
           </CardContent>
         </CardActionArea>

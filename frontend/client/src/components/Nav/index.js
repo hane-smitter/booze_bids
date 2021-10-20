@@ -16,7 +16,9 @@ import {
   InputAdornment,
   styled,
   CircularProgress,
-  Avatar
+  Avatar,
+  Divider,
+  SwipeableDrawer
 } from "@material-ui/core";
 import decode from 'jwt-decode';
 import * as actionType from '../../constants';
@@ -43,12 +45,40 @@ import ShowFeedback from "../utils/ShowFeedback";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { Alert, AlertTitle } from "@material-ui/lab";
 
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
+import EditIcon from '@mui/icons-material/Edit';
+import LoginIcon from '@mui/icons-material/Login';
+import HistoryIcon from '@mui/icons-material/History';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import LockIcon from '@mui/icons-material/Lock';
+import { Timer } from "./Timer";
+
 const Nav = () => {
     const [anchor, setAnchor] = React.useState(null);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
     const dispatch = useDispatch();
     const history = useHistory();
     const location = useLocation();
+    
+    const [state, setState] = React.useState({
+      left: false,
+    });
+  
+    const toggleDrawer = (anchor, open) => (event) => {
+      if (
+        event &&
+        event.type === 'keydown' &&
+        (event.key === 'Tab' || event.key === 'Shift')
+      ) {
+        return;
+      }
+  
+      setState({ ...state, [anchor]: open });
+    };
     const open = Boolean(anchor);
     //import styles
     const classes = useStyles();
@@ -198,23 +228,73 @@ const Nav = () => {
   //responsive
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  //drawer
+  const list = (anchor) => (
+    <Box
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <List>
+          {user?.result &&
+            <ListItem button>
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Welcome, '+user?.result?.surname} />
+            </ListItem>
+          }
+          <Divider />
+          {!user &&
+            <ListItem button component={Link} to="/login">
+              <ListItemIcon>
+                <LoginIcon />
+              </ListItemIcon>
+              <ListItemText primary='Login' />
+            </ListItem>
+          }
+          {!user &&
+            <ListItem button component={Link} to="/register">
+              <ListItemIcon>
+                <EditIcon />
+              </ListItemIcon>
+              <ListItemText primary='Register' />
+            </ListItem>
+          }
+          <ListItem button>
+            <ListItemIcon>
+              <HistoryIcon />
+            </ListItemIcon>
+            <ListItemText primary='Past Bids' />
+          </ListItem>
+      </List>
+      <Divider />
+      {user?.result &&
+      <List>
+          <ListItem button  onClick={logout}>
+            <ListItemIcon>
+              <LogoutIcon/>
+            </ListItemIcon>
+            <ListItemText primary='Logout' />
+          </ListItem>
+      </List>
+      }
+      
+    </Box>
+  );
+  //drawer
   const displayMobile = () => (
+    
     <React.Fragment>  
-      <IconButton
-        edge="start"
-        color="inherit"
-        aria-controls="toggle-mobile-menu"
-        aria-haspopup="true"
-        onClick={handleMenu}
-      >
-        <MenuIcon />
-      </IconButton>
 
+        
+        <Button onClick={toggleDrawer('left', true)} style={{color:"white"}}><MenuIcon/></Button>      
+
+    {/*
       <Menu
         id="toggle-mobile-menu"
-        /* to open the anchor at the top below the cursor */
         anchorEl={anchor}
-        /* anchor origin so that it open it that location */
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "right",
@@ -238,14 +318,24 @@ const Nav = () => {
         <MenuItem onClick={handleMenuClose}>
           <Link className={classes.navLinkMobi} to="/pastbids">Past Bids</Link>
         </MenuItem>
-      </Menu>
+      </Menu>*/}
 
       <Link to="/"><img alignItems="center" src={Logo} sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }} className={classes.image,classes.position} /></Link>
       <SearchBar
       className={classes.sb}
           value={searchItem}
+          style={{backgroundColor:'#fff',
+          color:'#222'}}
           onRequestSearch={() => console.log("onRequestSearch")}
-        />
+        /> 
+        <SwipeableDrawer
+            anchor={'left'}
+            open={state['left']}
+            onClose={toggleDrawer('left', false)}
+            onOpen={toggleDrawer('left', true)}
+          >
+            {list('left')}
+        </SwipeableDrawer>
 
     </React.Fragment>
   );
@@ -258,9 +348,9 @@ const Nav = () => {
         </Link>
       </div>
       <Box>
-      {!user &&
+      {!user?.result &&
       <Link to="/register">
-        <Typography align="right" className={classes.navLink} style={{ fontSize:'12px',padding:'2px' }} component="body" variant="body1"> Register now!</Typography>
+        <Typography align="right" className={classes.navLink} style={{ fontSize:'14px',padding:'2px',paddingBottom: '5px'}} component="body" variant="body1"> Register Now!</Typography>
       </Link>
       }
         {/* <Grid item xs>
@@ -299,26 +389,34 @@ const Nav = () => {
                 <Link className={classes.navLink} to="/pastbids">Past Bids</Link>
                 :
                 <Field
-                  label="Phone"
+                  placeholder="Phone"
                   variant="outlined"
                   margin="3"
                   className={classes.rootTextField}
                   style={{width:"150px"}}
                   size="small"
                   name="phone"
-                  type="number"
+                  type="text"
                   formErrors={formErrors}
                   formErrorsName={formErrorsName}
                   component={Input}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start" placeholder="Phone">
+                        <LocalPhoneIcon fontSize="small" color="primary">
+                        </LocalPhoneIcon>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 }
                 </Grid>
                 <Grid item xs={12} sm={4}>
-                {user?.result ? 
+                {user?.result?.surname ? 
                 <Link to='#' className={classes.navLink2}> Hi, <span style={{fontStyle:'italic'}}>{user?.result.surname}</span></Link>
                 :
                 <Field
-                  label="Password"
+                  placeholder="Password"
                   variant="outlined"
                   margin="3"
                   className={classes.rootTextField}
@@ -329,6 +427,14 @@ const Nav = () => {
                   formErrors={formErrors}
                   formErrorsName={formErrorsName}
                   component={Input}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockIcon fontSize="small" color="primary">
+                        </LockIcon>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 }
                 </Grid>
@@ -347,17 +453,8 @@ const Nav = () => {
                 </Grid>
                 <Grid item xs={12} sm={3}></Grid>
               <Grid item xs={12} sm={3}></Grid>
-              <Grid item xs={12} sm={6}>
-                <span className={classes.time} style={{ fontFamily:'ticking-time-bomb'}}> 
-                  { new Date().toLocaleString('en-US', {
-                                                      weekday: 'short', // long, short, narrow
-                                                      day: 'numeric', // numeric, 2-digit
-                                                      year: 'numeric', // numeric, 2-digit
-                                                      month: 'short', // numeric, 2-digit, long, short, narrow
-                                                      hour: 'numeric', // numeric, 2-digit
-                                                      minute: 'numeric', // numeric, 2-digit
-                                                  }) } 
-                </span>
+              <Grid item xs={12} sm={6} style={{paddingTop:'4px'}}>
+                <Timer/>
               </Grid>
             </Grid>
           </form>

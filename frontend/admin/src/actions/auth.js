@@ -35,7 +35,7 @@ export const login = body => async dispatch => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
 
-    const { data: status } = await api.login(body);
+    const { data, data: status } = await api.login(body);
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });

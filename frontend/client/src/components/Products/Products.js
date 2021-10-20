@@ -52,7 +52,7 @@ const Products = () => {
         
         <Grid container rowSpacing={0} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           
-          <Grid style={{ height:50 }} item xs={12} sm={4}>
+          <Grid style={{ height:50,padding:'0px' }} item xs={12} sm={4}>
             <Box component="span">
               <List style={{ height:25,padding:0 }} 
                 component="nav"
@@ -63,7 +63,11 @@ const Products = () => {
                   {/* <ListItemIcon>
                     <CategoryIcon />
                   </ListItemIcon> */}
-                  <ListItemText primary="Browse Categories" />
+                  {isMobile ?  
+                    <ListItemText primary="Filter" />
+                    :
+                    <ListItemText primary="Browse Categories" />
+                  }
                   {categoryOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                 </ListItem>
                 <Collapse
@@ -118,10 +122,10 @@ const Products = () => {
                 onRequestSearch={() => console.log("onRequestSearch")}
                 style={{
                   maxWidth: 400,
-                  margin: 5,
+                  margin: 9,
                   height:30,
-                  backgroundColor:'#4472c4',
-                  color:'#ffffff',
+                  backgroundColor:'#fff',
+                  color:'#222',
                 }}
               />
             </Typography>
@@ -148,7 +152,7 @@ const Products = () => {
           justifyContent={isMobile ? "space-around" : "left"}
           alignItems="stretch"
           spacing={3}
-          style={{marginBlock:20}}
+          style={{marginBlock:20,marginBlockEnd:40}}
         >
           {products.map((product) => {
             let content = null;

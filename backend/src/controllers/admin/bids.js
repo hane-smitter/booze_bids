@@ -17,7 +17,23 @@ export const getBids = async (req, res, next) => {
         path: 'product'
       }
     }).populate('user').sort([["createdAt", -1]]); */
-    const bids = await ProductBidDetail.find({}).populate('product').populate('prodbids');
+    const bids = await ProductBidDetail.find({"status":"Active"}).populate('product').populate('prodbids');
+
+    res.json(bids);
+  } catch (err) {
+    next(err);
+  }
+};
+//getExpiredBids
+export const getExpiredBids = async (req, res, next) => {
+  try {
+    /* const bids = await Bid.find({}).populate({
+      path: 'prodbiddetails',
+      populate: {
+        path: 'product'
+      }
+    }).populate('user').sort([["createdAt", -1]]); */
+    const bids = await ProductBidDetail.find({"status":"Not Active"}).populate('product').populate('prodbids');
 
     res.json(bids);
   } catch (err) {
@@ -140,11 +156,11 @@ export const updateBidabbles = async (req, res) => {
     //   endTime: { $lt: new Date().toISOString() },
     //   status: "Active",
     // });
-    const biddableProducts = ProductBidDetail.updateMany({"endTime": { $lt: new Date().toISOString() }, "status": "Active"},
-    {$set:{"endTime": new Date(new Date().getTime() + 60 * 60 * 24 * 1000)}})
+    const biddableProducts = await ProductBidDetail.updateMany({"endTime": { '$lt': new Date().toISOString() }, "status": "Active"},
+    {'$set':{"endTime": new Date(new Date().getTime() + 60 * 60 * 24 * 1000)}}, {'multi':true})
     // biddableProducts['endTime'] = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
     // await biddableProducts.save();
-
+    console.log(biddableProducts)
     return 'success';
 } catch (error) {
     return error.message;//"Something went wrong";

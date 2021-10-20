@@ -9,6 +9,7 @@ import {
   STATUS,
   FETCHTB,
   FETCHLB,
+  FETCHCB
 } from "../constants";
 
 export default (
@@ -17,8 +18,10 @@ export default (
     status: {},
     categories: [],
     bidder: {
-      topBidder: {}
+      topBidder: {},
     },
+    lastBidder:{},
+    currentBidders:[],
     loading: false,
     err: [],
   },
@@ -51,7 +54,12 @@ export default (
     case FETCHLB:
       return {
         ...app,
-        bidder: { ...app.bidder, lastBidder: action.payload.bidder },
+        lastBidder: action.payload.bidder,
+      };
+      case FETCHCB:
+      return {
+        ...app,
+        currentBidders: action.payload.bidder ,
       };
     case STATUS:
       return {

@@ -34,9 +34,11 @@ import EditModal from "./modals/Edit";
 import ShowFeedback from "src/utils/ShowFeedback";
 import useModal from "src/utils/modal/useModal";
 import useShowFeedback from "src/utils/ShowFeedback/useShowFeedback";
+import { deleteProductCategory } from "src/actions/products";
 
 const ActionTableToolbar = (props) => {
-  const { selectedCategoryIdsLength, handleEditModal } = props;
+  const { selectedCategoryIdsLength, handleEditModal, handleDelete } = props;
+  const dispatch = useDispatch();
 
   return (
     <Toolbar
@@ -81,7 +83,7 @@ const ActionTableToolbar = (props) => {
       ) : null}
       {selectedCategoryIdsLength > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={handleDelete}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -185,6 +187,9 @@ const CategoriesListResults = ({ ...rest }) => {
     setPage(newPage);
   };
 
+  const handleDelete = () => {
+    dispatch(deleteProductCategory({"catIds": selectedCategoryIds}))
+  }
   /* const handleEditModal = () => {
   setShowModal(true);
   setModalComponent(<EditModal categories={categories} currentCatIdSelected={currentCatIdSelected} setShowModal={setShowModal} fetchCategories={fetchCategories} />);
@@ -230,6 +235,7 @@ const CategoriesListResults = ({ ...rest }) => {
               <ActionTableToolbar
                 selectedCategoryIdsLength={selectedCategoryIds.length}
                 handleEditModal={toggle}
+                handleDelete={handleDelete}
               />
               <Table>
                 <TableHead>
@@ -293,8 +299,15 @@ const CategoriesListResults = ({ ...rest }) => {
                             </Box>
                           </TableCell>
                           <TableCell>{decode(category.description)}</TableCell>
-                          <TableCell align="center">
+                          <TableCell>
+                          <Box
+                              sx={{
+                                alignItems: "center",
+                                display: "flex",
+                              }}
+                            > 
                             {moment(category.createdAt).format("DD/MM/YYYY")}
+                            </Box>
                           </TableCell>
                         </TableRow>
                       );

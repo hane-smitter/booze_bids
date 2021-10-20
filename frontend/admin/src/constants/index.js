@@ -13,3 +13,4 @@ export const STATUS = 'STATUS';
 export const READBIDS = 'FETCH_BIDS';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const READADMIN = 'FETCH_ADMINS';

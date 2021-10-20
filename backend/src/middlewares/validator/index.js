@@ -143,7 +143,7 @@ export const validate = (method) => {
           .escape()
           .custom(async (name) => {
             try {
-              name = name && name.trim().toLowerCase();
+              name = name && name.trim();
               const exists = await Category.findOne({ name });
               return exists && Promise.reject();
             } catch (err) {
@@ -157,14 +157,14 @@ export const validate = (method) => {
     }
     case "deleteCategory": {
       return [
-        check("catId")
-          .exists({ checkFalsy: true })
-          .withMessage("category Id is required")
-          .bail()
-          .custom((value) => {
-            return mongoose.isValidObjectId(value);
-          })
-          .withMessage("Invalid id"),
+        check("catIds")
+          // .exists({ checkFalsy: true })
+          // .withMessage("category Id is required")
+          // .bail()
+          // .custom((value) => {
+          //   return Array.isArray(value);
+          // })
+          // .withMessage("Invalid id"),
       ];
     }
     case "updateCategory": {

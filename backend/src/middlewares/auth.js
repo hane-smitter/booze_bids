@@ -22,6 +22,7 @@ export const authCheck = async (req, res, next) => {
 export const adminCheck = async (req, res, next) => {
   let auth = req.header("Authorization");
   try {
+    console.log(';hi')
     if(!auth || !auth.startsWith('Bearer')) throw new ErrorResponse('Unauthorized', 401);
     let token = auth.replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

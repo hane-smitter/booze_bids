@@ -97,6 +97,7 @@ const BidForm = ({product}) => {
       }, [status, dispatch]);
     return (
         <Formik
+        id={"bid4m-" + product._id}
         initialValues={{
         bidAmount: product.bidPrice,
         bidder:{
@@ -117,7 +118,7 @@ const BidForm = ({product}) => {
         actions.setSubmitting(false);
     }, 1000); */
         }}
-        validationSchema={makeBidSchema}
+        // validationSchema={makeBidSchema}
         >
         {(props) => (
         <form onSubmit={props.handleSubmit} id={"bid4m-" + product._id} autoComplete="off" noValidate data-id={product._id}>
@@ -147,7 +148,7 @@ const BidForm = ({product}) => {
             <Button
             type="submit"
             variant="contained"
-            style = {{ backgroundColor:'#f79224',color:'#fff' }}
+            color="primary"
             >
             {nowLoading ? (
                 <CircularProgress style={{ color: "white" }} />

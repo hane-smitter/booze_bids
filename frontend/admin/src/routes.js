@@ -3,6 +3,9 @@ import DashboardLayout from "./components/DashboardLayout";
 import MainLayout from "./components/MainLayout";
 import Account from "./pages/Account";
 import CategoriesList from "./pages/CategoriesList";
+import AdminsList from "./pages/AdminsList";
+import AdminsListResults from "./components/admins/AdminsListResults";
+import AdminCreate from "./components/admins/modals/Edit/index";
 import Dashboard from "./pages/Dashboard";
 import Login from "./components/Form/Auth/Login";
 import ForgotPassword from "./components/Form/Auth/ForgotPassword";
@@ -19,6 +22,7 @@ import CategoriesListResults from "./components/categories/CategoriesListResults
 import BidsList from "./components/bids/BidsList";
 import RouteProtect from "./components/Routing/RouteProtect";
 import RoutePublic from "./components/Routing/RoutePublic";
+import ExpiredBidsList from "./components/bids/ExpiredBidsList";
 
 const routes = [
   {
@@ -42,6 +46,14 @@ const routes = [
           { path: "createcat", element: <ProductCategoryCreate /> },
         ],
       },
+      {
+        path: "admins",
+        element: <AdminsList />,
+        children: [
+          { path: "", element: <AdminsListResults /> },
+          { path: "create-admin", element: <AdminCreate /> },
+        ],
+      },
       { path: "dashboard", element: <Dashboard /> },
       {
         path: "products",
@@ -55,6 +67,10 @@ const routes = [
       {
         path: "bids",
         element: <BidsList />,
+      },
+      {
+        path: "expired-bids",
+        element: <ExpiredBidsList />,
       },
       { path: "settings", element: <Settings /> },
       { path: "", element: <Navigate to="/app/dashboard" /> },

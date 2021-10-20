@@ -2,6 +2,9 @@ import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
 import User from "../../models/User.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import unirest from "unirest";
+import request from "request";
+import https from "https";
 
 const secret = 'test';
 //get users
@@ -47,6 +50,62 @@ export const loginUser = async (req, res, next) => {
         const token = jwt.sign({ phone: oldUser.phone, id: oldUser._id }, secret, { expiresIn: "1h" });
 
         res.status(200).json({ result: oldUser, token });
+    } catch (error) {
+        next(error);
+    }
+}
+//generate and send otp
+export const generateOtp = async (req, res, next) => {
+    const { id, phone } = req.body;
+    try {
+        // let param = {
+        //     'username':'test',
+        //     'api':'9HkbTre7xDoF6JjS',
+        //     'phone':phone,
+        //     'from':'TELESKY',
+        //     'message':'Test message'
+        // }
+        // var postOptions = {
+        //     host: "https://vas.teleskytech.com",
+        //     path: '/api/sendsms',
+        //     method: "POST",
+        //     headers: {
+        //     'Content-Type' : 'application/json',
+        //     }        
+        // }
+        getToken(phone,id).then((body) => res.status(201).json( body )).catch((error) => 
+        res.status(500).json( 'Error occured.' ))
+        // res.status(201).json({ ca });
+    } catch (error) {
+        next(error);
+    }
+}
+function getToken(phone,otp) {
+    return new Promise((resolve, reject) => {
+      unirest.post('https://vas.teleskytech.com/api/sendsms?from=Telesky&apiKey=9HkbTre7xDoF6JjS&username=test&message=Your verification code is: '+otp+'&phone='+phone)
+        .headers({
+          'Content-Type': 'application/json'
+        })
+        // .send('apiKey=9HkbTre7xDoF6JjS')
+        // .send('username=test')
+        // .send('phone='+phone)
+        // .send('from=Telesky')
+        // .send('message=test')
+        .end(function (response) {
+          if (response.error) {
+            return reject(response.error)
+          }
+          return resolve(response.body);
+        });
+    })
+  }
+  
+//verify and send otp
+export const verifyOtp = async (req, res, next) => {
+    const { phone } = req.body;
+    try {
+        
+        res.status(200).json('success');
     } catch (error) {
         next(error);
     }

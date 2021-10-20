@@ -9,7 +9,7 @@ import {AuthService} from 'src/api/AuthService';
 
 
 const DashboardLayoutRoot = styled("div")(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,
+  backgroundColor:'#222222',
   display: "flex",
   height: "100%",
   overflow: "hidden",

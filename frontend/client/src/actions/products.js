@@ -1,3 +1,4 @@
+import { buttonUnstyledClasses } from "@mui/material";
 import { batch } from "react-redux";
 
 import * as api from "../api";
@@ -9,7 +10,9 @@ import {
   ERROR,
   LOADING,
   STATUS,
-  FETCHTB
+  FETCHTB,
+  FETCHCB,
+  FETCHLB
 } from "../constants";
 
 //Action creators
@@ -71,12 +74,11 @@ export const makeBid = (body) => async (dispatch) => {
     logError(error, dispatch);
   }
 };
-export const fetchTopBidder = () => async (dispatch) => {
+export const fetchTopBidder = (body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch top bidder
-    const { data } = await api.fetchTopBidder();
-
+    const { data } = await api.fetchTopBidder(body);
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: FETCHTB, payload: { bidder: data } });
@@ -85,16 +87,31 @@ export const fetchTopBidder = () => async (dispatch) => {
     logError(error, dispatch);
   }
 };
-//get last bidder
-export const fetchLastBidder = () => async (dispatch) => {
+//fetchCurrentBidder
+export const fetchCurrentBidder = (body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch top bidder
-    const { data } = await api.fetchLastBidder();
+    const { data } = await api.fetchCurrentBidder(body);
+    
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: FETCHCB, payload: { bidder: data } });
+    });
+  } catch (error) {
+    logError(error, dispatch);
+  }
+};
+//get last bidder
+export const fetchLastBidder = (body) => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //fetch top bidder
+    const { data } = await api.fetchLastBidder(body);
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: FETCHTB, payload: { bidder: data } });
+      dispatch({ type: FETCHLB, payload: { bidder: data } });
     });
   } catch (error) {
     logError(error, dispatch);

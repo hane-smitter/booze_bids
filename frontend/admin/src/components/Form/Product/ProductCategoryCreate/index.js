@@ -15,6 +15,8 @@ import {
 
 import { createProductCategory } from "src/actions/products";
 import { unsetErr } from "src/actions/errors";
+import ShowFeedback from "src/utils/ShowFeedback";
+import useShowFeedback from "src/utils/ShowFeedback/useShowFeedback";
 
 const ProductCategoryCreate = () => {
   const dispatch = useDispatch();
@@ -44,6 +46,10 @@ const ProductCategoryCreate = () => {
     description: Yup.string(),
   });
 
+  const { alertOpen, msg, errAlertOpen, errMsg, severity, close } =
+    useShowFeedback();
+  let count = 0;
+
   const Input = ({
       form,
       field: { value, name },
@@ -69,9 +75,25 @@ const ProductCategoryCreate = () => {
   return (
     <React.Fragment>
       <Helmet>
-        <title>Create Product Category | Booze Bids</title>
+        <title>Create Product Category | Bidspesa</title>
       </Helmet>
       <Container maxWidth="sm">
+      <ShowFeedback
+        alertOpen={alertOpen}
+        close={close}
+        severity={severity}
+        msg={msg}
+      />
+      {errMsg.map((error) => (
+        <ShowFeedback
+          key={++count}
+          alertOpen={errAlertOpen}
+          close={close}
+          severity={severity}
+          msg={error.msg}
+          title="Ooops!"
+        />
+      ))}
         <Formik
           initialValues={{
             name: "",

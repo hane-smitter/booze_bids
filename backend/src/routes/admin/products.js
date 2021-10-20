@@ -16,12 +16,12 @@ import {
 
 const router = express.Router();
 
+// router.use(adminCheck);
 
 router
   .route("/")
-  .get(adminCheck, getProducts)
+  .get(getProducts)
   .post(
-    adminCheck,
     upload.single("productimg"),
     validate("createProduct"),
     createProduct
@@ -29,16 +29,14 @@ router
 
 router.post(
   "/bid/create",
-  adminCheck,
   validate("createProductBid"),
   createProductBidDetails
 );
-router.get("/bids/all", adminCheck, getBidProducts);
+router.get("/bids/all", getBidProducts);
 router.get("/bids", getBiddableProducts);
-router.delete("/mod", adminCheck, validate("deleteProduct"), deleteProduct);
+router.delete("/mod", validate("deleteProduct"), deleteProduct);
 router.patch(
   "/mod/update/:id",
-  adminCheck,
   upload.single("productimg"),
   validate("updateProduct"),
   updateProduct

@@ -53,6 +53,7 @@ app.all("*", (req, res, next) => {
 // Schedule tasks to be run on the server.
 cron.schedule('* * * * *', function() {
   const ups = updateBidabbles();
+  console.log("Shc running..")
 });
 //.cron
 // var httpServer = http.createServer(app);

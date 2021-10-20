@@ -50,7 +50,7 @@ const Home = () => {
                     <Banner />
                 </Grid> */}
                 <Products/>
-                <Box style={{ borderLeft:'solid 2px #2b5681',borderRight:'solid 2px #2b5681',marginTop:'-20px'}}>
+                <Box style={{ borderLeft:'solid 2px #2b5681',borderRight:'solid 2px #2b5681',marginTop:'-20px',marginBottom:'20px'}}>
                 <Grid container justifyContent="center" alignItems="stretch" spacing="3">
                     <Grid item xs={12} sm={6} md={3}>
                             <Pagination page={page}/>

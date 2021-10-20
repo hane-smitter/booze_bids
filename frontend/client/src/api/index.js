@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const url = 'http://127.0.0.1:5000';
+const url = 'https://api.bidspesa.com:5000';
+
 const API = axios.create({ baseURL: url });
 API.interceptors.request.use((req) => {
     if (localStorage.getItem('profile')) {
@@ -18,8 +19,10 @@ export const createProduct = (body) => API.post(`${url}/products`, body, {
         }
 });
 export const makeBid = body => API.post(`${url}/bids`, body);
-export const fetchTopBidder = () => API.get(`${url}/bids/amount/high`);
-export const fetchLastBidder = () => API.get(`${url}/bids/last`);
+export const fetchTopBidder = (body) => API.get(`${url}/bids/amount/high?productId=${body.productId}`);
+export const fetchLastBidder = (body) => API.get(`${url}/bids/last?productId=${body.productId}`);
+export const fetchCurrentBidder = (body) => API.get(`${url}/bids/current-bidders?productId=${body.productId}`);
 
 export const createUser = (body) => API.post(`${url}/users/create`, body);
 export const signIn = (body) => API.post(`${url}/users/login`, body);
+export const sendOtp = (body) => API.post(`${url}/users/generate-otp`, body);

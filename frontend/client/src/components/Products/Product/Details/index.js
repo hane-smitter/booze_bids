@@ -9,6 +9,7 @@ import useStyles from "./styles.js";
 import { getProducts } from "../../../../actions/products";
 import LightBox from "./LightBox";
 import DarkBox from "./DarkBox";
+import BiddersBox from "./BiddersBox";
 import ShowFeedback from "../../../utils/ShowFeedback";
 import { unsetErr, unsetStatus } from "../../../../actions/errors";
 import Footer from "../../../Footer";
@@ -93,15 +94,24 @@ const Detail = () => {
             <Grid
               item
               xs={12}
-              md={6}
+              md={3}
               className={classes.flex}
             >
               <LightBox product={product} />
             </Grid>
+            
             <Grid
               item
               xs={12}
-              md={6}
+              md={5}
+              className={classes.flex}
+            >
+              <BiddersBox product={product} />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              md={4}
               className={classes.flex}
             >
               <DarkBox updateProducts={rehydrateProducts} product={product} />

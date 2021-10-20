@@ -18,7 +18,7 @@ import { motion } from "framer-motion"
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { makeBid, fetchTopBidder } from "../../../../actions/products";
+import { makeBid, fetchLastBidder } from "../../../../actions/products";
 import { unsetErr } from "../../../../actions/errors";
 import useStyles from "../styles";
 import defaultImg from "../../../../images/products/defaultImg.jpeg";
@@ -29,6 +29,13 @@ const ProductDetail = ({product}) => {
     const [ cardBlinking, setCardBlinking ] = useState(!Boolean(product.slots));
     const classes = useStyles();
 
+    const {
+      err,
+      loading,
+      status,
+      lastBidder
+    } = useSelector((state) => state.app);
+    
     const location = {
         pathname: "/detail",
         state: { product },
@@ -44,7 +51,10 @@ const ProductDetail = ({product}) => {
     const [countDownTime, setCountDownTime] = useState(defaultRemainingTime);
 
     const dispatch = useDispatch();
-    
+    useEffect(() => {
+      dispatch(fetchLastBidder({"productId": product.product._id}));
+    }, []);
+    let lb = lastBidder?.bidder?.user?.surname ?? 'Be One';
     function updateTime() {
         setCountDownTime(FutureTimeCalc(product.startTime, product.endTime));
     }
@@ -113,7 +123,7 @@ const ProductDetail = ({product}) => {
               RRP@ {MoneyFormat(product.product.cost)} | Lots {product.totalslots ?? 0}
             </Typography>
             <Typography  style={{ fontSize:'11px'}}  component="l">
-              Last Bidder: Anthony
+              Last Bidder: {lb}
             </Typography>
             <Typography style={{ fontSize:'16px'}} className={classes.success} variant="caption" component="p">
               Bid starts @ {MoneyFormat(product.bidPrice)}

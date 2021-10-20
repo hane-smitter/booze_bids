@@ -104,7 +104,7 @@ const Login = () => {
           justifyContent: "center",
         }}
       >
-        <Container maxWidth="sm">
+        <Container maxWidth="sm"  style={{ marginTop:'80px' }}>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -128,6 +128,10 @@ const Login = () => {
             }) => (
               <form onSubmit={handleSubmit}>
                 <Box sx={{ mb: 3 }}>
+                  
+                  <Typography color="textPrimary" gutterBottom variant="h1" style={{ textShadow: '0 0 24px #222',fontWeight:900, textTransform: 'uppercase', padding:'5px' }}>
+                    Welcome to Bidspesa
+                  </Typography>
                   <Typography color="textPrimary" gutterBottom variant="h2">
                     Sign in
                   </Typography>
@@ -277,7 +281,7 @@ const Login = () => {
                     )}
                   </Button>
                 </Box>
-                <Typography color="textSecondary" variant="body1">
+                {/* <Typography color="textSecondary" variant="body1">
                   Don&apos;t have an account?{" "}
                   <Link
                     component={RouterLink}
@@ -287,7 +291,7 @@ const Login = () => {
                   >
                     Sign up
                   </Link>
-                </Typography>
+                </Typography> */}
               </form>
             )}
           </Formik>

@@ -26,13 +26,13 @@ const BiddableProductCard = ({ product, ...rest }) => {
         />
         <CardActionArea>
             <CardMedia
-                image={product.product.image ?? imgDefault}
+                image={product?.product?.image ?? imgDefault}
                 className={classes.media}
-                title={product.product.name}
+                title={product?.product?.name}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="h2" color="primary">
-                {product.product.name}
+                {product?.product?.name}
                 </Typography>
                 <Typography  variant="h5" component="h2">
                     RRP: KSH {product.product.cost}

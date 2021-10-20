@@ -86,22 +86,29 @@ export const deleteCategory = async (req, res, next) => {
     if (!errors.isEmpty()) {
       throw new ErrorResponse(undefined, 422, errors.array());
     }
-    if (!req.body.catId)
+    if (!req.body.catIds)
       throw new ErrorResponse("Must provide id of the category", 422);
-    const categoryId = req.body.catId;
-    const category = await Category.findById(categoryId);
-    if (!category) throw new ErrorResponse("category not found", 404);
-    const catInUse = await Product.findOne({ category: category._id });
-    if (catInUse)
-      throw new ErrorResponse(
-        "Consider deleting the items registered under this category first",
-        400
-      );
+    
+    const catIdsLength = req.body.catIds.length;
+    const catIds = req.body.catIds;
+    const i = 0;
+    for(i == 0; i < catIdsLength; i++){
+      const categoryId = catIds[i];
+      const category = await Category.findById(catIds[i]);
+      if (!category) throw new ErrorResponse("category not found", 404);
+      const catInUse = await Product.findOne({ category: category._id });
+      if (catInUse)
+        throw new ErrorResponse(
+          "Consider deleting the items registered under this category first",
+          400
+        );
 
-    await Category.findByIdAndDelete(categoryId);
+      await Category.findByIdAndDelete(catIds[i]);
+    }
+
     res.json({
       info: {
-        message: "Category has been deleted successfully",
+        message: "Categories has been deleted successfully",
         code: "destroycategory",
       },
     });
