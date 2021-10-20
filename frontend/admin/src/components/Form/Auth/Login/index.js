@@ -101,7 +101,7 @@ const Login = () => {
           justifyContent: "center",
         }}
       >
-        <Container maxWidth="sm"  style={{ marginTop:'50px', borderRadius:'1%', border:'1px solid grey' }}>
+        <Container maxWidth="sm"  style={{ marginTop:'80px' }}>
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
@@ -125,6 +125,10 @@ const Login = () => {
             }) => (
               <form onSubmit={handleSubmit}>
                 <Box sx={{ mb: 3 }}>
+                  
+                  <Typography color="textPrimary" gutterBottom variant="h1" style={{ textShadow: '0 0 24px #222',fontWeight:900, textTransform: 'uppercase', padding:'5px' }}>
+                    Welcome to Bidspesa
+                  </Typography>
                   <Typography color="textPrimary" gutterBottom variant="h2">
                     Sign in
                   </Typography>

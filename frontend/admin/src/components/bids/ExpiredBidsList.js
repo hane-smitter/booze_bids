@@ -179,7 +179,7 @@ import ActionsToolBar from './ActionsToolBar';
                               }}
                             >
                               <Typography color="textPrimary" variant="body1">
-                                {decode(bid.product.name)}
+                                {decode(bid.product?.name)}
                               </Typography>
                             </Box>
                           </TableCell>
@@ -192,7 +192,7 @@ import ActionsToolBar from './ActionsToolBar';
                               }}
                             >
                               <Typography color="textPrimary" variant="body1">
-                                {bid.product.cost}
+                                {bid.product?.cost}
                               </Typography>
                             </Box>
                           </TableCell>

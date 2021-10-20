@@ -168,6 +168,22 @@ export const updateProductCategory = (param, body) => async (dispatch) => {
     logError(error, dispatch);
   }
 };
+// deleteCategories
+export const deleteProductCategory = (body) => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //update product category
+    const { data:status } = await api.deleteProductCategory(body);
+    await api.fetchProductCategories();
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: STATUS, payload: { status } })
+    });
+  } catch (error) {
+    logError(error, dispatch);
+  }
+};
 
 export const getBids = () => async (dispatch) => {
   try {

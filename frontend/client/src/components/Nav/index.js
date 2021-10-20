@@ -55,6 +55,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import HistoryIcon from '@mui/icons-material/History';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import LockIcon from '@mui/icons-material/Lock';
+import { Timer } from "./Timer";
 
 const Nav = () => {
     const [anchor, setAnchor] = React.useState(null);
@@ -453,17 +454,7 @@ const Nav = () => {
                 <Grid item xs={12} sm={3}></Grid>
               <Grid item xs={12} sm={3}></Grid>
               <Grid item xs={12} sm={6} style={{paddingTop:'4px'}}>
-                <span className={classes.time} style={{ fontFamily:'ticking-time-bomb'}}> 
-                  { new Date().toLocaleString('en-US', {
-                                                      weekday: 'short', // long, short, narrow
-                                                      day: 'numeric', // numeric, 2-digit
-                                                      year: 'numeric', // numeric, 2-digit
-                                                      month: 'short', // numeric, 2-digit, long, short, narrow
-                                                      hour: 'numeric', // numeric, 2-digit
-                                                      minute: 'numeric', // numeric, 2-digit
-                                                      second: 'numeric', // numeric, 2-digit
-                                                  }) } 
-                </span>
+                <Timer/>
               </Grid>
             </Grid>
           </form>
