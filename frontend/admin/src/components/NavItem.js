@@ -9,6 +9,7 @@ import { Button, ListItem } from '@mui/material';
 const NavItem = ({
   href,
   icon: Icon,
+  btn: Btn,
   title,
   ...rest
 }) => {
@@ -28,16 +29,16 @@ const NavItem = ({
       }}
       {...rest}
     >
-      <Button
+      <Btn
         component={RouterLink}
         sx={{
-          color: 'text.secondary',
+          /* color: 'text.secondary',
           fontWeight: 'medium',
           justifyContent: 'flex-start',
           letterSpacing: 0,
           py: 1.25,
           textTransform: 'none',
-          width: '100%',
+          width: '100%', */
           ...(active && {
             color: 'primary.main'
           }),
@@ -53,7 +54,7 @@ const NavItem = ({
         <span>
           {title}
         </span>
-      </Button>
+      </Btn>
     </ListItem>
   );
 };

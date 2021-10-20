@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Autocomplete,
@@ -25,29 +25,45 @@ const Form = () => {
   const { categories, err, loading, status } = useSelector(
     (state) => state.app
   );
-  const initialValues = {
+  const normalizedCats = useMemo(() => categories, [categories]);
+  /* const initialValues = {
     name: "",
     brand: "",
     cost: "",
-    category: null,
+    category: normalizedCats[0]._id, 
     productimg: "",
-  };
+  }; */
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const classes = useStyles();
   const [imgPrev, setImgPrev] = useState(null);
-  const [categoryVal, setCategoryVal] = useState(
-    categories.length > 0 ? categories[0] : null
-  );
+  const [initialValues, setInitialValues] = useState({
+    name: "",
+    brand: "",
+    cost: "",
+    category: "",
+    productimg: "",
+  });
   const [alertOpen, setAlertOpen] = useState(Boolean(status?.info));
   const [errAlertOpen, setErrAlertOpen] = useState(Boolean(err.length > 0));
   const categoriesIds =
-    categories.length > 0 ? categories.map((category) => category._id) : [];
+    normalizedCats.length > 0
+      ? normalizedCats.map((category) => category._id)
+      : [];
   let formFields = ["name", "brand", "cost", "category", "productimg"];
   let formErrors = [];
   let formErrorsNames = [];
   //hidden file input
   const hiddenInp = useRef(null);
+
+  useEffect(() => {
+    if (normalizedCats.length > 0) {
+      const finalVal = Object.assign({}, initialValues, {
+        category: normalizedCats[0]._id,
+      });
+      setInitialValues(finalVal);
+    }
+  }, [normalizedCats]);
 
   if (err.length > 0) {
     formErrors = err.filter((error) => formFields.includes(error.param));
@@ -96,13 +112,15 @@ const Form = () => {
     );
     return (
       <Autocomplete
-        value={categoryVal}
+        value={
+          categories.filter((category) => category._id === value)[0] ??
+          initialValues
+        }
         options={categories}
-        disableClearable
+        // disableClearable
         getOptionLabel={(option) => decode(option.name)}
         onChange={(event, newValue) => {
-          form.setFieldValue(name, newValue._id, false);
-          setCategoryVal(newValue);
+          if (newValue) form.setFieldValue(name, newValue._id, false);
         }}
         renderInput={(params) => (
           <TextField
@@ -248,10 +266,11 @@ const Form = () => {
           ))}
         <Formik
           initialValues={initialValues}
+          enableReinitialize={true}
           onSubmit={(values, actions) => {
             let formData = new FormData();
             for (let key in values) {
-              console.log(key);
+              // console.log(key);
               formData.append(key, values[key]);
             }
             actions.setSubmitting(loading);
@@ -314,7 +333,7 @@ const Form = () => {
               />
               <Field
                 name={"category"}
-                categories={categories}
+                categories={normalizedCats}
                 formErrorsNames={formErrorsNames}
                 formErrors={formErrors}
                 label={"choose category"}

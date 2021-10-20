@@ -1,54 +1,69 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-import crypto from 'crypto';
+import crypto from "crypto";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import ErrorResponse from "../_helpers/error/ErrorResponse.js";
 
-const AuthUserSchema = mongoose.Schema({
-  firstname: {
-    type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
-  },
-  lastname: {
-    type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
-  },
-  email: {
-    type: String,
-    required: [true, "email is required"],
-    trim: true,
-    lowercase: true,
-    unique: true,
-    validate(value) {
-      if (!validator.isEmail(value)) throw new ErrorResponse("Invalid Email", 422);
+const AuthUserSchema = mongoose.Schema(
+  {
+    firstname: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
     },
-  },
-  role: {
-    type: String,
-    enum: {
-      values: ["Admin", "User"],
-      message: "{VALUE} is not supported",
+    lastname: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
     },
-    default: "User",
-  },
-  password: {
-    type: String,
-    required: true,
-    minLength: 4,
-  },
-  tokens: [
-    {
-      token: { required: true, type: String },
+    email: {
+      type: String,
+      required: [true, "email is required"],
+      trim: true,
+      lowercase: true,
+      unique: true,
+      validate(value) {
+        if (!validator.isEmail(value))
+          throw new ErrorResponse("Invalid Email", 422);
+      },
     },
-  ],
-  resetpasswordtoken: String,
-  resetpasswordtokenexpire: Date
+    role: {
+      type: String,
+      enum: {
+        values: ["Admin", "User"],
+        message: "{VALUE} is not supported",
+      },
+      default: "User",
+    },
+    password: {
+      type: String,
+      required: true,
+      minLength: 4,
+    },
+    tokens: [
+      {
+        token: { required: true, type: String },
+      },
+    ],
+    resetpasswordtoken: String,
+    resetpasswordtokenexpire: Date,
+  },
+  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
+AuthUserSchema.virtual("fullname").get(function () {
+  return `${capitalize(this.firstname)} ${capitalize(this.lastname)}`;
 });
+AuthUserSchema.methods.toJSON = function () {
+  let user = this.toObject();
+  delete user.password;
+  delete user.resetpasswordtoken;
+  delete user.resetpasswordtokenexpire;
+  delete user.tokens;
+  return user;
+};
 AuthUserSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     let salt = await bcrypt.genSalt(10);
@@ -74,13 +89,23 @@ AuthUserSchema.methods.generateAuthToken = async function () {
   return token;
 };
 AuthUserSchema.methods.getResetPasswordToken = async function () {
-    const resetToken = crypto.randomBytes(20).toString("hex");
+  const resetToken = crypto.randomBytes(20).toString("hex");
 
-    //hash the reset token
-    this.resetpasswordtoken = crypto.createHash("sha256").update(resetToken).digest("hex");
-    this.resetpasswordtokenexpire = Date.now() + ((process.env.RESET_PASSWORD_TOKEN_EXPIRY_MINS || 5) * 60 * 1000);
-    await this.save();
-    return resetToken;
+  //hash the reset token
+  this.resetpasswordtoken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  this.resetpasswordtokenexpire =
+    Date.now() +
+    (process.env.RESET_PASSWORD_TOKEN_EXPIRY_MINS || 5) * 60 * 1000;
+  await this.save();
+  return resetToken;
+};
+
+function capitalize(val) {
+  if (typeof val !== "string") val = "";
+  return val.charAt(0).toUpperCase() + val.substring(1).toLowerCase();
 }
 
 const AuthUser = mongoose.model("AuthUser", AuthUserSchema);

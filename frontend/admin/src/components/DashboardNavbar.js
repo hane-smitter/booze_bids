@@ -14,22 +14,16 @@ import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/NotificationsOutlined";
 import InputIcon from "@mui/icons-material/Input";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
 
 import Logo from "./Logo";
-import { logout } from "src/actions/auth";
-import {AuthService} from 'src/api/AuthService';
+import { LOGOUT } from "src/constants";
 
 const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   const [notifications] = useState([]);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   function handleLogout() {
-    (async () => dispatch(logout()))().then(() => {
-      AuthService.deleteToken();
-      navigate("/login");
-    });
+    dispatch({ type: LOGOUT });
   }
   return (
     <AppBar elevation={0} {...rest}>

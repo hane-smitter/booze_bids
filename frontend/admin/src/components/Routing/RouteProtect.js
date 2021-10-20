@@ -18,6 +18,8 @@ const RouteProtect = ({ children }) => {
 
         if (tokenExpiration * 1000 < dateNow.getTime()) {
           AuthService.setIsAuthenticated(false);
+          AuthService.deleteToken();
+          AuthService.deleteAuthenticatedUser();
           forceUpdate();
         } else {
           AuthService.setIsAuthenticated(true);
@@ -25,10 +27,14 @@ const RouteProtect = ({ children }) => {
         }
       } else {
         AuthService.setIsAuthenticated(false);
+        AuthService.deleteToken();
+        AuthService.deleteAuthenticatedUser();
         forceUpdate();
       }
     } catch (err) {
       AuthService.setIsAuthenticated(false);
+      AuthService.deleteToken();
+      AuthService.deleteAuthenticatedUser();
       forceUpdate();
     }
   }, [authenticated]);

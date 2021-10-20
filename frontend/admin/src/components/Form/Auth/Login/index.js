@@ -46,7 +46,9 @@ const Login = () => {
     }
     if (status?.info?.code === "userlogin") {
       const token = status.payload.token;
+      const user = status.payload.user;
       AuthService.setToken(token);
+      AuthService.setAuthenticatedUser(user);
       timeout && clearTimeout();
       timeout = setTimeout(() => {
         navigate("/app/dashboard", { replace: true });
@@ -228,15 +230,17 @@ const Login = () => {
                   variant="outlined"
                 />
                 <Typography
-                  color="textSecondary"
                   variant="caption"
+                  sx={{
+                    display: 'grid',
+                    justifyItems: 'end',
+                    color: 'text.secondary',
+                  }}
                 >
                   <Link
                     component={RouterLink}
                     to="/forgotpassword"
-                    variant="body1"
                     underline="hover"
-                    style={{ marginBottom: -13 }}
                   >
                     Forgot password?
                   </Link>
@@ -247,6 +251,9 @@ const Login = () => {
                   helperText={touched.password && errors.password}
                   label="Password"
                   margin="normal"
+                  sx={{
+                    mt: 0
+                  }}
                   name="password"
                   onBlur={handleBlur}
                   onChange={handleChange}

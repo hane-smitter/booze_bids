@@ -16,7 +16,16 @@ const AuthService = {
     },
     deleteIsAuthenticated() {
         localStorage.removeItem('isAuthenticated');
-    }
+    },
+    getAuthenticatedUser() {
+        return JSON.parse(localStorage.getItem('userprofile'));
+    },
+    setAuthenticatedUser(user) {
+        localStorage.setItem('userprofile', JSON.stringify(user));
+    },
+    deleteAuthenticatedUser() {
+        localStorage.removeItem('userprofile');
+    },
 }
 
 export {AuthService};

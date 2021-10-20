@@ -78,7 +78,7 @@ export const login = async (req, res, next) => {
           severity: "success",
           code: "userlogin",
         },
-        payload: { token },
+        payload: { token, user },
       },
     });
   } catch (err) {

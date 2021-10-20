@@ -45,12 +45,11 @@ const DashboardLayout = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
-    console.log("DashBoardLayout ran", authenticated);
     if(authenticated === false) {
-      console.log("authenticted global is false ", authenticated);
       (async () => dispatch(logout()))().then(() => {
         AuthService.deleteToken();
-        navigate("/login");
+        AuthService.deleteAuthenticatedUser();
+        navigate("/login", { replace: true });
       });
     }
   }, [authenticated]);

@@ -40,7 +40,7 @@ export const login = body => async dispatch => {
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: STATUS, payload: status });
-      dispatch({ type: LOGIN });
+      dispatch({ type: LOGIN, payload: status }); 
     });
   } catch (error) {
     logError(error, dispatch);
