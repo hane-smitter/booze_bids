@@ -6,7 +6,7 @@ const useShowFeedback = () => {
   const [alertOpen, setAlertOpen] = React.useState(false);
   const [errAlertOpen, setErrAlertOpen] = React.useState(false);
   let initMsg = '';
-  let initSeverity = '';
+  let initSeverity = 'info';
   let initErrMsg = [{msg: ''}];
   const [msg, setMsg] = React.useState(initMsg);
   const [errMsg, setErrMsg] = React.useState(initErrMsg);

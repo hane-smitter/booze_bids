@@ -24,11 +24,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-// var options = {
-//   key: fs.readFileSync('certificates/private.key'),
-//   cert: fs.readFileSync('certificates/certificate.crt'),
-//   ca: fs.readFileSync('certificates/ca_bundle.crt')
-// };
+var options = {
+  // key: fs.readFileSync('certificates/private.key'),
+  // cert: fs.readFileSync('certificates/certificate.crt'),
+  // ca: fs.readFileSync('certificates/ca_bundle.crt')
+};
 
 const app = express();
 
@@ -55,7 +55,7 @@ cron.schedule('* * * * *', function() {
   const ups = updateBidabbles();
   console.log("Shc running..")
 });
-// //.cron
+//.cron
 // var httpServer = http.createServer(app);
 // var httpsServer = https.createServer(options, app);
 

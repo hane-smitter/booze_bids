@@ -30,8 +30,6 @@ export const adminCheck = async (req, res, next) => {
     if (adminUser.role !== "Admin") throw new ErrorResponse("Admin resource. Access denied.", 401);
     req.admin = adminUser;
     req.token = token;
-    console.log('adminUser');
-    console.log(adminUser);
     next();
   } catch (err) {
     next(err);
