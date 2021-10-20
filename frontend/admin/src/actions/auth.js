@@ -1,7 +1,7 @@
 import { batch } from "react-redux";
 
 import * as api from "../api";
-import { ERROR, LOADING, STATUS } from "../constants";
+import { ERROR, LOADING, LOGIN, LOGOUT, STATUS } from "../constants";
 
 export const register = (body) => async (dispatch) => {
   try {
@@ -40,6 +40,7 @@ export const login = body => async dispatch => {
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: STATUS, payload: status });
+      dispatch({ type: LOGIN });
     });
   } catch (error) {
     logError(error, dispatch);
@@ -77,7 +78,10 @@ export const logout = () => async dispatch => {
   try {
     const { data: status } = await api.logout();
     
-    dispatch({ type: STATUS, payload: status }); 
+    batch(() => {
+      dispatch({ type: STATUS, payload: status });
+      dispatch({ type: LOGOUT });
+    });
   } catch (error) {
     logError(error, dispatch);
   }
@@ -86,11 +90,15 @@ export const logout = () => async dispatch => {
 function logError(error, dispatch) {
   if (error.response) {
     const { err } = error.response.data;
+    if(error.response.status == 401) {
+      dispatch({ type: LOGOUT });
+    }
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: ERROR, payload: { err } });
     });
   } else if (error.request) {
+    console.log(error);
     let err = [
       {
         msg: "Could not contact remote address",

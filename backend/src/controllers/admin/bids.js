@@ -2,11 +2,11 @@ import { validationResult } from "express-validator";
 import mongoose from "mongoose";
 import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
 
-import Bid from "../models/Bid.js";
-import Mpesa from "../models/Mpesa.js";
-import Product from "../models/Product.js";
-import ProductBidDetail from "../models/ProductBidDetail.js";
-import User from "../models/User.js";
+import Bid from "../../models/Bid.js";
+import Mpesa from "../../models/Mpesa.js";
+import Product from "../../models/Product.js";
+import ProductBidDetail from "../../models/ProductBidDetail.js";
+import User from "../../models/User.js";
 import { stkPush } from "./mpesa.js";
 
 export const getBids = async (req, res, next) => {

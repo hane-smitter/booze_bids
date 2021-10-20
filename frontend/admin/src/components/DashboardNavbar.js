@@ -18,6 +18,7 @@ import { useNavigate } from "react-router";
 
 import Logo from "./Logo";
 import { logout } from "src/actions/auth";
+import {AuthService} from 'src/api/AuthService';
 
 const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
   const [notifications] = useState([]);
@@ -26,7 +27,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
 
   function handleLogout() {
     (async () => dispatch(logout()))().then(() => {
-      localStorage.removeItem("tokenize");
+      AuthService.deleteToken();
       navigate("/login");
     });
   }

@@ -1,9 +1,6 @@
 import axios from 'axios';
 import elevateAxios from './axiosConfig';
 
-const url = 'https://api.bidspesa.com:5000';
-axios.defaults.baseURL = url;
-
 export const fetchBidProducts = () => axios.get(`/products`);
 export const fetchBiddableProducts = () => axios.get(`/products/admin/bids`);
 export const createProduct = (body) => elevateAxios.post(`/products/admin`, body, {

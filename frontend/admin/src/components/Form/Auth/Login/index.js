@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import * as Yup from "yup";
@@ -20,6 +20,7 @@ import { unsetErr, unsetStatus } from "src/actions/errors";
 import { login } from "src/actions/auth";
 import ShowFeedback from "src/utils/ShowFeedback";
 import useShowFeedback from "src/utils/ShowFeedback/useShowFeedback";
+import { AuthService } from "src/api/AuthService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Login = () => {
     }
     if (status?.info?.code === "userlogin") {
       const token = status.payload.token;
-      localStorage.setItem("tokenize", token);
+      AuthService.setToken(token);
       timeout && clearTimeout();
       timeout = setTimeout(() => {
         navigate("/app/dashboard", { replace: true });
@@ -289,4 +290,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default memo(Login);

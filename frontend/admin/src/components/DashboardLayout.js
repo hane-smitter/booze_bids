@@ -1,8 +1,12 @@
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { styled } from "@mui/system";
 import DashboardNavbar from "./DashboardNavbar";
 import DashboardSidebar from "./DashboardSidebar";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from 'src/actions/auth';
+import {AuthService} from 'src/api/AuthService';
+
 
 const DashboardLayoutRoot = styled("div")(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
@@ -35,7 +39,21 @@ const DashboardLayoutContent = styled("div")({
 });
 
 const DashboardLayout = () => {
+  const authenticated = useSelector((state) => state.auth.authenticated);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
+
+  useEffect(() => {
+    console.log("DashBoardLayout ran", authenticated);
+    if(authenticated === false) {
+      console.log("authenticted global is false ", authenticated);
+      (async () => dispatch(logout()))().then(() => {
+        AuthService.deleteToken();
+        navigate("/login");
+      });
+    }
+  }, [authenticated]);
 
   return (
     <DashboardLayoutRoot>

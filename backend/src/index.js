@@ -18,16 +18,16 @@ import fs from "fs";
 import http from "http";
 import https from "https";
 import cron from "node-cron";
-import { updateBidabbles } from "./controllers/bids.js"
+import { updateBidabbles } from "./controllers/admin/bids.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
 var options = {
-  key: fs.readFileSync('certificates/private.key'),
-  cert: fs.readFileSync('certificates/certificate.crt'),
-  ca: fs.readFileSync('certificates/ca_bundle.crt')
+  // key: fs.readFileSync('certificates/private.key'),
+  // cert: fs.readFileSync('certificates/certificate.crt'),
+  // ca: fs.readFileSync('certificates/ca_bundle.crt')
 };
 
 const app = express();
@@ -55,14 +55,14 @@ cron.schedule('* * * * *', function() {
   const ups = updateBidabbles();
 });
 //.cron
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(options, app);
+// var httpServer = http.createServer(app);
+// var httpsServer = https.createServer(options, app);
 
 app.use(errorHandler);
 
 DB.on("connected", function () {
   console.log(chalk.rgb(208, 60, 240)("DB is connected"));
-  httpsServer.listen(PORT, () =>
+  app.listen(PORT, () =>
     console.log(chalk.rgb(208, 60, 240)(`Server listening on port: ${PORT}`))
   );
 });

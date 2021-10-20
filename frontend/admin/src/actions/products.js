@@ -12,7 +12,8 @@ import {
   LOADING,
   CREATEBID,
   STATUS,
-  READBIDS
+  READBIDS,
+  LOGOUT
 } from "../constants";
 
 //Action creators
@@ -170,11 +171,15 @@ export const getBids = () => async (dispatch) => {
 function logError(error, dispatch) {
   if (error.response) {
     const { err } = error.response.data;
+    if(error.response.status == 401) {
+      dispatch({ type: LOGOUT });
+    }
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: ERROR, payload: { err } });
     });
   } else if (error.request) {
+    console.log(error);
     let err = [
       {
         msg: "Could not contact remote address",

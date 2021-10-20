@@ -119,9 +119,9 @@ export const forgotPassword = async (req, res, next) => {
     if (!user) throw new ErrorResponse("Email not sent", 404);
 
     const resetToken = await user.getResetPasswordToken();
-
+    const origin = req.get('origin');
     const resetUrl = `${
-      process.env.FRONTEND_APP_URL || "http://localhost:3000"
+      process.env.FRONTEND_APP_URL || origin || "http://localhost:3000"
     }/passwordreset/${resetToken}`;
 
     const message = `
