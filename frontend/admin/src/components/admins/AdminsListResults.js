@@ -93,7 +93,7 @@ const ActionTableToolbar = (props) => {
 const AdminsListResults = ({ ...rest }) => {
   const dispatch = useDispatch();
   const { admins, loading, err, status } = useSelector(
-    (state) => state.app
+    (state) => state.auth
   );
 
   function fetchAdmins() {

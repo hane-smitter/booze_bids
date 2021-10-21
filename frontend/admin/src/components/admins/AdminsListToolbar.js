@@ -25,12 +25,12 @@ const AdminsListToolbar = (props) => {
         <Button
           color="primary"
           variant="contained"
-          onClick={() => navigate("createcat")}
+          onClick={() => navigate("create-admin")}
         >
           Add Admin
         </Button>
       </Box>
-      <Box sx={{ mt: 3 }}>
+      {/* <Box sx={{ mt: 3 }}>
         <Card>
           <CardContent>
             <Box sx={{ maxWidth: 500 }}>
@@ -51,7 +51,7 @@ const AdminsListToolbar = (props) => {
             </Box>
           </CardContent>
         </Card>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

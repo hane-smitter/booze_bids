@@ -1,8 +1,9 @@
-import { LOGIN, LOGOUT } from "src/constants";
+import { LOGIN, READADMIN, LOGOUT } from "src/constants";
 
 const initialState = {
   authenticated: null,
   user: null,
+  admins:[]
 };
 
 export default (auth = initialState, action) => {
@@ -12,6 +13,12 @@ export default (auth = initialState, action) => {
         ...auth,
         authenticated: true,
         user: action.payload.status.payload.user,
+      };
+    case READADMIN:
+      return {
+        ...auth,
+        authenticated: true,
+        admins: action.payload.admins,
       };
     case LOGOUT:
       return { ...auth, authenticated: false, user: null };

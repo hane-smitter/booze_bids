@@ -51,7 +51,7 @@ const routes = [
         element: <AdminsList />,
         children: [
           { path: "", element: <AdminsListResults /> },
-          { path: "create-admin", element: <AdminCreate /> },
+          { path: "create-admin", element: <Register /> },
         ],
       },
       { path: "dashboard", element: <Dashboard /> },

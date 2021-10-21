@@ -14,7 +14,7 @@ import {
   CREATEBID,
   STATUS,
   READBIDS,
-  READEXBIDS
+  READEXBIDS,
   LOGOUT
 } from "../constants";
 
