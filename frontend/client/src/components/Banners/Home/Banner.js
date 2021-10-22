@@ -4,7 +4,7 @@ import Carousel from "react-elastic-carousel";
 import Item from "./Item";
 import "./styles.css";
 import s1 from '../../../images/slider1.png';
-import s2 from '../../../images/HEAD MAST HOLIDAY FINAL.png';
+import s2 from '../../../images/slider2.png';
 import ms1 from '../../../images/mslider1.png';
 import ms2 from '../../../images/mslider2.png';
 import p1 from '../../../images/products/AustralianPassion.jpeg';
