@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { registerAdmin } from "src/actions/auth";
+import { register } from "src/actions/auth";
 import { unsetErr, unsetStatus } from "src/actions/errors";
 
 const Register = () => {
@@ -48,6 +48,7 @@ const Register = () => {
 
   //form control
   const initialValues = {
+    role: "Admin",
     email: "",
     firstname: "",
     lastname: "",
@@ -89,7 +90,7 @@ const Register = () => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values, actions) => {
-              dispatch(registerAdmin(values));
+              dispatch(register(values));
 
               let timeout;
               if (status?.info?.severity === "success") {

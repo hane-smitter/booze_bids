@@ -29,7 +29,7 @@ export const register = async (req, res, next) => {
       email,
       password,
     });
-    const token = await user.generateAuthToken();
+    // const token = await user.generateAuthToken();
     res.json({
       status: {
         info: {
@@ -37,7 +37,7 @@ export const register = async (req, res, next) => {
           severity: "success",
           code: "registeruser",
         },
-        payload: { token },
+        // payload: { token },
       },
     });
   } catch (err) {
@@ -46,7 +46,7 @@ export const register = async (req, res, next) => {
 };
 export const registerAdmin = async (req, res, next) => {
   try {
-    const { firstname, lastname, email, password } = req.body;
+    const { firstname, lastname, email, password, role } = req.body;
     if (!firstname || !lastname || !email || !password)
       throw new ErrorResponse(
         "firsname, lastname, email password are required",
@@ -57,17 +57,17 @@ export const registerAdmin = async (req, res, next) => {
       lastname,
       email,
       password,
-      role: "Admin",
+      role,
     });
-    const token = await user.generateAuthToken();
+    // const token = await user.generateAuthToken();
     res.json({
       status: {
         info: {
-          message: "Congratulations, Administrator account has been created",
+          message: "Administrator account has been created",
           severity: "success",
           code: "registeradmin",
         },
-        payload: { token },
+        // payload: { token },
       },
     });
   } catch (err) {

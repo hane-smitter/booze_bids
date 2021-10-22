@@ -89,14 +89,14 @@ const routes = [
           </RoutePublic>
         ),
       },
-      {
-        path: "register",
-        element: (
-          <RoutePublic>
-            <Register />
-          </RoutePublic>
-        ),
-      },
+      // {
+      //   path: "register",
+      //   element: (
+      //     <RoutePublic>
+      //       <Register />
+      //     </RoutePublic>
+      //   ),
+      // },
       { path: "forgotpassword", element: <ForgotPassword /> },
       { path: "passwordreset/:resetToken", element: <ResetPassword /> },
       { path: "404", element: <NotFound /> },

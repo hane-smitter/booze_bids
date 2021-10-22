@@ -42,11 +42,10 @@ export const getBiddableProducts = async (req, res, next) => {
     }
     if (req.query.search) {
       const search = new RegExp(req.query.search, "i");
-      match.name = req.query.search;
+      match.name = search;
       const biddableProducts = await ProductBidDetail.find({
         endTime: { $gt: new Date().toISOString() },
-        status: "Active",
-        product: { name: search}
+        status: "Active"
       })
         .populate({
           path: "product",
