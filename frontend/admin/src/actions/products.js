@@ -11,7 +11,7 @@ import {
   CREATECAT,
   ERROR,
   LOADING,
-  CREATEBID,
+  READBIDWINNERS,
   STATUS,
   READBIDS,
   READEXBIDS,
@@ -40,11 +40,25 @@ export const getProducts = () => async (dispatch) => {
     logError(error, dispatch);
   }
 };
+export const getProductBidWinners = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //fetch winners
+    const { data: winners } = await api.fetchProductBidWinners();
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: READBIDWINNERS, payload: { winners } });
+    });
+  } catch (error) {
+    logError(error, dispatch);
+  }
+};
 export const getBiddableProducts = () => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch data
-    const { data:products } = await api.fetchBiddableProducts();
+    const { data: products } = await api.fetchBiddableProducts();
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
@@ -53,7 +67,7 @@ export const getBiddableProducts = () => async (dispatch) => {
   } catch (error) {
     logError(error, dispatch);
   }
-}
+};
 export const getCategories = () => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
@@ -88,7 +102,7 @@ export const createProduct = (body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //create product
-    const { data:status } = await api.createProduct(body);
+    const { data: status } = await api.createProduct(body);
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
@@ -106,7 +120,7 @@ export const updateProduct = (param, body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //create product
-    const { data:status } = await api.updateProduct(param, body);
+    const { data: status } = await api.updateProduct(param, body);
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
@@ -118,13 +132,13 @@ export const updateProduct = (param, body) => async (dispatch) => {
   } catch (err) {
     logError(err, dispatch);
   }
-}
+};
 
 export const createProductBid = (body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //create product bid
-    const { data:status } = await api.createProductBid(body);
+    const { data: status } = await api.createProductBid(body);
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
@@ -144,7 +158,7 @@ export const createProductCategory = (body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //create product cat
-    const { data:status } = await api.createProductCategory(body);
+    const { data: status } = await api.createProductCategory(body);
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
@@ -160,12 +174,12 @@ export const updateProductCategory = (param, body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //update product category
-    const { data:status } = await api.updateProductCategory(param, body);
+    const { data: status } = await api.updateProductCategory(param, body);
     await api.fetchProductCategories();
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: STATUS, payload: { status } })
+      dispatch({ type: STATUS, payload: { status } });
     });
   } catch (error) {
     logError(error, dispatch);
@@ -176,12 +190,12 @@ export const deleteProductCategory = (body) => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //update product category
-    const { data:status } = await api.deleteProductCategory(body);
+    const { data: status } = await api.deleteProductCategory(body);
     await api.fetchProductCategories();
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: STATUS, payload: { status } })
+      dispatch({ type: STATUS, payload: { status } });
     });
   } catch (error) {
     logError(error, dispatch);
@@ -192,7 +206,7 @@ export const getBids = () => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch bids made by customers
-    const { data:bids } = await api.fetchBids();
+    const { data: bids } = await api.fetchBids();
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
@@ -201,13 +215,13 @@ export const getBids = () => async (dispatch) => {
   } catch (error) {
     logError(error, dispatch);
   }
-}
+};
 //expired bids
 export const getExpiredBids = () => async (dispatch) => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch bids made by customers
-    const { data:bids } = await api.fetchExpiredBids();
+    const { data: bids } = await api.fetchExpiredBids();
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
@@ -216,7 +230,7 @@ export const getExpiredBids = () => async (dispatch) => {
   } catch (error) {
     logError(error, dispatch);
   }
-}
+};
 
 //expired bids
 export const getDashboardData = () => async (dispatch) => {
@@ -237,7 +251,7 @@ export const getDashboardData = () => async (dispatch) => {
 function logError(error, dispatch) {
   if (error.response) {
     const { err } = error.response.data;
-    if(error.response.status == 401) {
+    if (error.response.status == 401) {
       dispatch({ type: LOGOUT });
     }
     batch(() => {
@@ -249,7 +263,7 @@ function logError(error, dispatch) {
     let err = [
       {
         msg: "Could not contact remote address",
-        hint: "Try checking your internet connection and try again"
+        hint: "Try checking your internet connection and try again",
       },
     ];
 

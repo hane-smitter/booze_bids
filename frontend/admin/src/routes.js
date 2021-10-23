@@ -13,7 +13,7 @@ import ResetPassword from "./components/Form/Auth/ResetPassword";
 import NotFound from "./pages/NotFound";
 import ProductList from "./pages/ProductList";
 import Register from "./components/Form/Auth/Register";
-import Settings from "./pages/Settings";
+import WinnersListResults from "./components/Wins/WinnersListResults";
 import ProductBidCreate from "./components/Form/Product/ProductBidCreate";
 import ProductCategoryCreate from "./components/Form/Product/ProductCategoryCreate";
 import ProductCreate from "./components/Form/Product/ProductCreate";
@@ -33,11 +33,7 @@ const routes = [
       </RouteProtect>
     ),
     children: [
-      { path: "account", element: (
-        <RouteProtect>
-          <Account />
-        </RouteProtect>
-      ) },
+      { path: "account", element: <Account />},
       {
         path: "categories",
         element: <CategoriesList />,
@@ -72,7 +68,7 @@ const routes = [
         path: "expired-bids",
         element: <ExpiredBidsList />,
       },
-      { path: "settings", element: <Settings /> },
+      { path: "wins", element: <WinnersListResults /> },
       { path: "", element: <Navigate to="/app/dashboard" /> },
       { path: "*", element: <Navigate to="/404" /> },
     ],

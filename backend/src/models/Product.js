@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import ProductBidDetail from './ProductBidDetail.js';
 import Bid from './Bid.js';
 import Category from './Category.js';
+import ErrorResponse from '../_helpers/error/ErrorResponse.js';
 
 const ProductSchema = mongoose.Schema({
     name: {
@@ -58,36 +59,24 @@ ProductSchema.virtual('productbidscount',{
 ProductSchema.pre('validate', async function(next) {
     if(this.isModified('name')) {
         const product = await Product.findOne({name: this.name});
-        if (product) throw new Error("Product with this name already exists");
+        if (product) throw new ErrorResponse("Product with this name already exists", 400);
     }
     next();
 });
 
 ProductSchema.pre('save', async function(next) {
-    try {
-        if(this.isModified('category')) {
-            const category = await Category.findById(this.category);
-            if (!category) throw new Error("Category not found");
-            this.category_slug = category.category_slug;
-        }
-    } catch (err) {
-        throw new Error(err.message);
+    if(this.isModified('category')) {
+        const category = await Category.findById(this.category);
+        if (!category) throw new ErrorResponse("Category not found", 404);
+        this.category_slug = category.category_slug;
     }
     next();
 });
 
 ProductSchema.post('findOneAndDelete', async function(doc, next) {
-    try {
-        if(!doc) throw new Error("No product has been fond");
-        const bidDetail = await ProductBidDetail.deleteOne({ product: doc._id });
-        console.log("prod details deleted successfully");
-        console.log(bidDetail);
-        const bids = await Bid.deleteMany({ product: doc._id });
-        console.log("bids for the product deleted successfully");
-        console.log(bids);
-    } catch (err) {
-        throw new Error(err.message);
-    }
+    if(!doc) throw new ErrorResponse("No product has been found", 404);
+    const bidDetail = await ProductBidDetail.deleteOne({ product: doc._id });
+    const bids = await Bid.deleteMany({ product: doc._id });
     next();
 });
 
