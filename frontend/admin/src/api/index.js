@@ -18,6 +18,7 @@ export const fetchProductCategories = () => axios.get(`/categories`);
 export const createProductCategory = body => elevateAxios.post(`/categories/admin`, body);//elevateAxios to be returned
 export const updateProductCategory = (param, body) => elevateAxios.patch(`/categories/admin/mod/update/${param}`, body);//elevateAxios to be returned
 export const deleteProductCategory = (body) => elevateAxios.delete(`/categories/admin/mod`, body);//elevateAxios to be returned
+export const fetchProductBidWinners = () => elevateAxios.get(`/bids/admin/winners`);
 
 export const fetchBids = () => elevateAxios.get(`/bids/admin`);
 export const fetchExpiredBids = () => elevateAxios.get(`/bids/admin/expired`);

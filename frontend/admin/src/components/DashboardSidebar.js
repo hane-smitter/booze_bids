@@ -19,6 +19,7 @@ import {
   ShoppingBag as ShoppingBagIcon,
   Users as UsersIcon,
   LogOut as LogOutIcon,
+  Star as StarIcon
   /* AlertCircle as AlertCircleIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
@@ -62,8 +63,8 @@ const items = [
     title: "Expired Bids"
   },
   {
-    href: '/app/settings',
-    icon: ShoppingBagIcon,
+    href: '/app/wins',
+    icon: StarIcon,
     title: "Winnings",
   },
   {

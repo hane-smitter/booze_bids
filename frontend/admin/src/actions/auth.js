@@ -35,7 +35,7 @@ export const login = body => async dispatch => {
   try {
     dispatch({ type: LOADING, payload: { status: 1 } });
 
-    const { data, data: status } = await api.login(body);
+    const { data: status } = await api.login(body);
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
@@ -98,7 +98,6 @@ function logError(error, dispatch) {
       dispatch({ type: ERROR, payload: { err } });
     });
   } else if (error.request) {
-    console.log(error);
     let err = [
       {
         msg: "Could not contact remote address",

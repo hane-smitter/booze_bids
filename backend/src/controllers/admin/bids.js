@@ -17,7 +17,9 @@ export const getBids = async (req, res, next) => {
         path: 'product'
       }
     }).populate('user').sort([["createdAt", -1]]); */
-    const bids = await ProductBidDetail.find({"status":"Active"}).populate('product').populate('prodbids');
+    const bids = await ProductBidDetail.find({ status: "Active" })
+      .populate("product")
+      .populate("prodbids");
 
     res.json(bids);
   } catch (err) {
@@ -27,13 +29,9 @@ export const getBids = async (req, res, next) => {
 //getExpiredBids
 export const getExpiredBids = async (req, res, next) => {
   try {
-    /* const bids = await Bid.find({}).populate({
-      path: 'prodbiddetails',
-      populate: {
-        path: 'product'
-      }
-    }).populate('user').sort([["createdAt", -1]]); */
-    const bids = await ProductBidDetail.find({"status":"Not Active"}).populate('product').populate('prodbids');
+    const bids = await ProductBidDetail.find({ status: "Inactive" })
+      .populate("product")
+      .populate("prodbids");
 
     res.json(bids);
   } catch (err) {
@@ -43,7 +41,7 @@ export const getExpiredBids = async (req, res, next) => {
 //customer bidding for a product
 export const createBid = async (req, res, next) => {
   const errors = validationResult(req);
-  
+
   try {
     if (!errors.isEmpty()) {
       throw new ErrorResponse(undefined, 422, errors.array());
@@ -51,53 +49,77 @@ export const createBid = async (req, res, next) => {
 
     let { bidder, productId, bidPrice, bidAmount } = req.body;
     let user = await User.findOrCreate(bidder);
-    if(user === "NEW") {
-      return res.status(202).json({ info: { message: "Welcome, get registered with us", severity: "info", code: "newbiddinguser"} });
+    if (user === "NEW") {
+      return res.status(202).json({
+        info: {
+          message: "Welcome, get registered with us",
+          severity: "info",
+          code: "newbiddinguser",
+        },
+      });
     }
 
-    let productBidInfo = await ProductBidDetail.findOne({product: mongoose.Types.ObjectId(productId)}).lean();
-    if(!productBidInfo) {
+    let productBidInfo = await ProductBidDetail.findOne({
+      product: mongoose.Types.ObjectId(productId),
+    }).lean();
+    if (!productBidInfo) {
       throw new ErrorResponse("Sorry this product is not found", 404);
     }
     bidPrice = productBidInfo.bidPrice;
 
     //generate slot figure
-    if(bidAmount < bidPrice) {
-      throw new ErrorResponse("Amount bidding is way low", 422)
+    if (bidAmount < bidPrice) {
+      throw new ErrorResponse("Amount bidding is way low", 422);
     }
     // let dbSlot;
-    let slotField = 'slots';
+    let slotField = "slots";
     let updateSlot = {};
-    if( bidAmount < 1 || bidPrice < 1 || isNaN(bidAmount) || isNaN(bidPrice) ) throw new Error("Indivisible numbers");
+    if (bidAmount < 1 || bidPrice < 1 || isNaN(bidAmount) || isNaN(bidPrice))
+      throw new Error("Indivisible numbers");
     let slot = Math.floor(bidAmount / bidPrice);
-    if(slot > productBidInfo.slots && slotField == 'slots') {
-      slotField = 'extraSlots';
+    if (slot > productBidInfo.slots && slotField == "slots") {
+      slotField = "extraSlots";
       let exSlot = slot - productBidInfo.slots;
       slot = exSlot;
 
-      if(slot > productBidInfo.extraSlots) {
-        await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $set: {extraSlots: 0, slots: 0, status: 'Inactive'} }, { new: true, runValidators: true });
+      if (slot > productBidInfo.extraSlots) {
+        await ProductBidDetail.updateOne(
+          { _id: productBidInfo._id },
+          { $set: { extraSlots: 0, slots: 0, status: "Inactive" } },
+          { new: true, runValidators: true }
+        );
         let exSlot = slot - productBidInfo.extraSlots;
         throw new ErrorResponse("Sorry! Item not available for bidding", 403);
       } else {
         updateSlot[slotField] = -slot;
-        await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $inc: updateSlot, $set: {slots: 0} }, { new: true, runValidators: true });
+        await ProductBidDetail.updateOne(
+          { _id: productBidInfo._id },
+          { $inc: updateSlot, $set: { slots: 0 } },
+          { new: true, runValidators: true }
+        );
       }
     } else {
       updateSlot[slotField] = -slot;
-      await ProductBidDetail.updateOne({ _id: productBidInfo._id }, { $inc: updateSlot }, { new: true, runValidators: true });
+      await ProductBidDetail.updateOne(
+        { _id: productBidInfo._id },
+        { $inc: updateSlot },
+        { new: true, runValidators: true }
+      );
     }
-    
+
     let successMsg = {
       info: {
-      message: "Success! Your Bid has been placed." ,
-      severity: "success",
-      code: "makebid"
-      }
-    }
+        message: "Success! Your Bid has been placed.",
+        severity: "success",
+        code: "makebid",
+      },
+    };
     const userId = user._id;
-    let bidExists = await Bid.findOne({ user: mongoose.Types.ObjectId(userId), product: mongoose.Types.ObjectId(productId) });
-    if(bidExists) {
+    let bidExists = await Bid.findOne({
+      user: mongoose.Types.ObjectId(userId),
+      product: mongoose.Types.ObjectId(productId),
+    });
+    if (bidExists) {
       bidExists.bidAmount.push(bidAmount);
       bidExists.bidsCount += 1;
       const bid = await bidExists.save();
@@ -112,7 +134,7 @@ export const createBid = async (req, res, next) => {
 
     await bid.save();
     //trigger mpesa
-    let mpesa = stkPush(bidAmount, phone ? phone : bidder.phone)
+    let mpesa = stkPush(bidAmount, phone ? phone : bidder.phone);
     //store mpesa
     let mpesaResponse = new Mpesa({
       mechant: mpesa.JSON.stringify(),
@@ -120,10 +142,10 @@ export const createBid = async (req, res, next) => {
       amount: bidAmount,
       bid: bid._id,
       mpesaRef: "",
-      name: "", 
-      status: "", 
-      description: ""
-    })
+      name: "",
+      status: "",
+      description: "",
+    });
     await mpesaResponse.save();
     res.json(successMsg);
   } catch (err) {
@@ -133,22 +155,48 @@ export const createBid = async (req, res, next) => {
 
 export const getHighestAmountBidder = async (req, res, next) => {
   try {
-    const undoneBid = await ProductBidDetail.find({"extraslots":0}).populate('user').sort('-bidAmountTotal');
+    const undoneBid = await ProductBidDetail.find({ extraslots: 0 })
+      .populate("user")
+      .sort("-bidAmountTotal");
 
     res.json({ bidder });
-  } catch{
+  } catch {
     next(err);
   }
-}
+};
 export const getLastBidder = async (req, res, next) => {
   try {
-    const bidder = await Bid.findOne({}).populate('user').sort('-bidsCount');
+    const bidder = await Bid.findOne({}).populate("user").sort("-bidsCount");
 
     res.json({ bidder });
-  } catch{
+  } catch {
     next(err);
   }
-}
+};
+export const getWinners = async (req, res, next) => {
+  try {
+    const winners = await ProductBidDetail.find({
+      slots: 0,
+      extraSlots: 0,
+      status: "Inactive",
+    }).populate({
+      path: "prodbids",
+      options: { sort: { bidAmountTotal: -1 }, limit: 1 },
+      populate: [
+        {
+          path: "product",
+          select: "-category -category_slug"
+        },
+        {
+          path: "user",
+        },
+      ],
+    });
+    res.json(winners);
+  } catch (err) {
+    next(err);
+  }
+};
 //auto update +24hrs if slots still there
 export const updateBidabbles = async (req, res) => {
   try {
@@ -156,13 +204,18 @@ export const updateBidabbles = async (req, res) => {
     //   endTime: { $lt: new Date().toISOString() },
     //   status: "Active",
     // });
-    const biddableProducts = await ProductBidDetail.updateMany({"endTime": { '$lt': new Date().toISOString() }, "status": "Active"},
-    {'$set':{"endTime": new Date(new Date().getTime() + 60 * 60 * 24 * 1000)}}, {'multi':true})
+    const biddableProducts = await ProductBidDetail.updateMany(
+      { endTime: { $lt: new Date().toISOString() }, status: "Active" },
+      {
+        $set: { endTime: new Date(new Date().getTime() + 60 * 60 * 24 * 1000) },
+      },
+      { multi: true }
+    );
     // biddableProducts['endTime'] = new Date(new Date().getTime() + 60 * 60 * 24 * 1000);
     // await biddableProducts.save();
-    console.log(biddableProducts)
-    return 'success';
-} catch (error) {
-    return error.message;//"Something went wrong";
-}
-}
+    console.log(biddableProducts);
+    return "success";
+  } catch (error) {
+    return error.message; //"Something went wrong";
+  }
+};
