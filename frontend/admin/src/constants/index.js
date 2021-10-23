@@ -15,3 +15,4 @@ export const READEXBIDS = 'FETCH_EXPIRED_BIDS';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const READADMIN = 'FETCH_ADMINS';
+export const READDASHDATA = 'FETCH_DASHBOARD_DATA';

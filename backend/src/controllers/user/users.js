@@ -73,7 +73,16 @@ export const generateOtp = async (req, res, next) => {
         //     'Content-Type' : 'application/json',
         //     }        
         // }
-        getToken(phone,id).then((body) => res.status(201).json( body )).catch((error) => 
+        let data = req.body;
+        let successMsg = {
+          info: {
+          message: "Verification code sent." ,
+          severity: "success",
+          code: "genotp"
+          },
+          payload: {data}
+        }
+        getToken(phone,id).then((body) => res.status(201).json( req.body )).catch((error) => 
         res.status(500).json( 'Error occured.' ))
         // res.status(201).json({ ca });
     } catch (error) {

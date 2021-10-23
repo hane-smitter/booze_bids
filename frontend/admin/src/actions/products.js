@@ -15,6 +15,7 @@ import {
   STATUS,
   READBIDS,
   READEXBIDS,
+  READDASHDATA,
   LOGOUT
 } from "../constants";
 
@@ -211,6 +212,22 @@ export const getExpiredBids = () => async (dispatch) => {
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: READEXBIDS, payload: { bids } });
+    });
+  } catch (error) {
+    logError(error, dispatch);
+  }
+}
+
+//expired bids
+export const getDashboardData = () => async (dispatch) => {
+  try {
+    dispatch({ type: LOADING, payload: { status: 1 } });
+    //fetch bids made by customers
+    const { data:dashData } = await api.getDashboardData();
+
+    batch(() => {
+      dispatch({ type: LOADING, payload: { status: 0 } });
+      dispatch({ type: READDASHDATA, payload: { dashData } });
     });
   } catch (error) {
     logError(error, dispatch);

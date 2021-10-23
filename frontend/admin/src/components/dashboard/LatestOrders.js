@@ -14,7 +14,8 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  Tooltip
+  Tooltip,
+  Typography
 } from '@mui/material';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
@@ -87,6 +88,7 @@ const LatestOrders = (props) => (
     <Divider />
     <PerfectScrollbar>
       <Box sx={{ minWidth: 800 }}>
+        {props.bids?.length ?
         <Table>
           <TableHead>
             <TableRow>
@@ -95,6 +97,9 @@ const LatestOrders = (props) => (
               </TableCell>
               <TableCell>
                 Customer
+              </TableCell>
+              <TableCell>
+                Product
               </TableCell>
               <TableCell sortDirection="desc">
                 <Tooltip
@@ -112,16 +117,19 @@ const LatestOrders = (props) => (
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => (
+            {props.bids.map((order) => (
               <TableRow
                 hover
                 key={order.id}
               >
                 <TableCell>
-                  {order.ref}
+                  {order._id}
                 </TableCell>
                 <TableCell>
-                  {order.customer.name}
+                  {order.user?.fullname}
+                </TableCell>
+                <TableCell>
+                  {order.product.name}
                 </TableCell>
                 <TableCell>
                   {moment(order.createdAt).format('DD/MM/YYYY')}
@@ -130,9 +138,16 @@ const LatestOrders = (props) => (
             ))}
           </TableBody>
         </Table>
+        :
+        <Box>
+          <Typography>
+            No Latest bids
+          </Typography>
+        </Box>
+        }
       </Box>
     </PerfectScrollbar>
-    <Box
+    {/* <Box
       sx={{
         display: 'flex',
         justifyContent: 'flex-end',
@@ -147,7 +162,7 @@ const LatestOrders = (props) => (
       >
         View all
       </Button>
-    </Box>
+    </Box> */}
   </Card>
 );
 

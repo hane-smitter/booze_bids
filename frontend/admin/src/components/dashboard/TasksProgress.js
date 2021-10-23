@@ -33,7 +33,7 @@ const TasksProgress = (props) => (
             color="textPrimary"
             variant="h3"
           >
-            7
+            {props.bids}
           </Typography>
         </Grid>
         <Grid item>

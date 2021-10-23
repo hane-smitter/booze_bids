@@ -31,6 +31,11 @@ BidSchema.post('validate', function(bid, next) {
     bid.bidAmountTotal = bidAmountArr.reduce((prev, curr) => prev + curr);
     next();
 });
+BidSchema.virtual('bidsinbid',{
+    ref: 'bidPayment',
+    localField: '_id',
+    foreignField: 'bid'
+});
 
 
 

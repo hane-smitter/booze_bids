@@ -213,6 +213,22 @@ const Form = () => {
   }, [status, dispatch]);
   return (
     <Box >
+      <ShowFeedback
+          alertOpen={alertOpen}
+          setAlertOpen={setAlertOpen}
+          severity={status?.info?.severity}
+          msg={status?.info?.message}
+        />
+        {err.length > 0 &&
+          err.map((error) => (
+            <ShowFeedback
+              alertOpen={errAlertOpen}
+              setAlertOpen={setErrAlertOpen}
+              severity={"error"}
+              msg={error.msg}
+              title="Ooops!"
+            />
+          ))}
         <Typography 
         className={classes.title}
           align="center"
@@ -401,7 +417,7 @@ const Form = () => {
                   </Button>
                   </span>
                   <span hidden={showBtn}>
-                  <Button onClick={genId} type="submit" variant="contained" color="primary" fullWidth>
+                  <Button type="submit" variant="contained" color="primary" fullWidth>
                     {loading ? (
                       <CircularProgress style={{ color: "white" }} />
                     ) : (

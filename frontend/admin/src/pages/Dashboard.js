@@ -8,8 +8,29 @@ import TasksProgress from '../components/dashboard/TasksProgress';
 import TotalCustomers from '../components/dashboard/TotalCustomers';
 import TotalProfit from '../components/dashboard/TotalProfit';
 import TrafficByDevice from '../components/dashboard/TrafficByDevice';
+import { getDashboardData } from "../actions/products";
+import { useDispatch, useSelector } from 'react-redux';
+import { unsetErr, unsetStatus } from "../actions/errors";
+import { useEffect } from 'react';
 
-const Dashboard = () => (
+const Dashboard = () => {
+  const dispatch = useDispatch();
+  const { dashData, loading, err, status } = useSelector(
+    (state) => state.app
+  );
+
+  function fetchData() {
+    dispatch(getDashboardData());
+  }
+  
+  useEffect(() => {
+    fetchData();
+    return () => {
+      dispatch(unsetErr());
+      dispatch(unsetStatus());
+    };
+  }, []);
+  return (
   <>
     <Helmet>
       <title>Dashboard | BidsPesa</title>
@@ -33,7 +54,7 @@ const Dashboard = () => (
             xl={3}
             xs={12}
           >
-            <Budget />
+            <Budget prods={dashData?.products_count ?? 0}/>
           </Grid>
           <Grid
             item
@@ -42,7 +63,7 @@ const Dashboard = () => (
             xl={3}
             xs={12}
           >
-            <TotalCustomers />
+            <TotalCustomers custs={dashData?.customers_count ?? 0}/>
           </Grid>
           <Grid
             item
@@ -51,7 +72,7 @@ const Dashboard = () => (
             xl={3}
             xs={12}
           >
-            <TasksProgress />
+            <TasksProgress bids={dashData?.active_bids_count ?? 0}/>
           </Grid>
           <Grid
             item
@@ -60,7 +81,7 @@ const Dashboard = () => (
             xl={3}
             xs={12}
           >
-            <TotalProfit sx={{ height: '100%' }} />
+            <TotalProfit profits={dashData?.profit ?? 0}  sx={{ height: '100%' }} />
           </Grid>
           <Grid
             item
@@ -87,7 +108,7 @@ const Dashboard = () => (
             xl={3}
             xs={12}
           >
-            <LatestProducts sx={{ height: '100%' }} />
+            <LatestProducts products={dashData?.latest_products} sx={{ height: '100%' }} />
           </Grid>
           <Grid
             item
@@ -96,12 +117,12 @@ const Dashboard = () => (
             xl={9}
             xs={12}
           >
-            <LatestOrders />
+            <LatestOrders bids={dashData?.latest_bids} />
           </Grid>
         </Grid>
       </Container>
     </Box>
-  </>
-);
+  </>)
+};
 
 export default Dashboard;

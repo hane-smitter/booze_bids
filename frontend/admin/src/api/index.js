@@ -29,3 +29,5 @@ export const login = body => axios.post(`/auth/admin/signin`, body);
 export const logout = body => elevateAxios.post(`/auth/admin/logout`, body);
 export const forgotPassword = body => axios.post(`/auth/admin/forgotpassword`, body);
 export const resetPassword = (param, body) => axios.patch(`/auth/admin/resetpassword/${param}`, body);
+
+export const getDashboardData = () => elevateAxios.get(`/auth/admin/dashboard-data`);

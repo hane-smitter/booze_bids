@@ -3,7 +3,7 @@ import { Snackbar, Alert, AlertTitle } from "@mui/material";
 
 const ShowFeedback = ({
   alertOpen,
-  autoHideDuration = 6000,
+  autoHideDuration = 3000,
   close,
   severity = "error",
   msg,

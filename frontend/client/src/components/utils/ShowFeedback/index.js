@@ -4,7 +4,7 @@ import { Snackbar } from "@material-ui/core";
 
 const ShowFeedback = ({
   alertOpen,
-  autoHideDuration = 6000, 
+  autoHideDuration = 4000, 
   setAlertOpen,
   severity = "info",
   msg,
