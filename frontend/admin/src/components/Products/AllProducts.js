@@ -1,19 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   CircularProgress,
   Grid,
   Pagination,
   Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
   Typography,
-  Box
+  Box,
+  CardMedia,
+  Avatar,
+  Card
 } from "@mui/material";
 import { useSelector } from "react-redux";
 
 import ProductCard from "./Product/ProductCard";
 import { getProducts } from "src/actions/products";
+import imgDefault from "src/images/products/default.jpeg";
+import FutureTimeCalc from "src/utils/FutureTimeCalc";
+import moment from "moment";
 
 const AllProducts = ({ setImgObj, setImgPrev, setProduct, toggle, dispatch}) => {
   const { products: { allprod:products }, loading } = useSelector((state) => state.app); 
+  const [time, setTime] = useState("00 Days 00 Hours 00 Mins 00 Secs");
+
 
   React.useEffect(() => {
     dispatch(getProducts());
@@ -42,13 +56,24 @@ const AllProducts = ({ setImgObj, setImgPrev, setProduct, toggle, dispatch}) => 
           </Typography>
         </Paper>
       ) : (
-        <Grid container spacing={3}>
-          {products.map((product) => (
-            <Grid item key={product.id} lg={4} md={6} xs={12}>
-              <ProductCard product={product} setProduct={setProduct} setImgPrev={setImgPrev} setImgObj={setImgObj} toggle={toggle} />
-            </Grid>
-          ))}
-        </Grid>
+        <Card container spacing={3}>
+          <Table>
+            <TableHead>
+                <TableRow>
+                <TableCell>Product</TableCell>
+                <TableCell>RRP</TableCell>
+                <TableCell>Category</TableCell>
+                <TableCell>Bid status</TableCell>
+                <TableCell>Created On</TableCell>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+            {products.map((product) => (
+                <ProductCard product={product} setProduct={setProduct} setImgPrev={setImgPrev} setImgObj={setImgObj} toggle={toggle} />
+            ))}
+            </TableBody>
+            </Table>
+        </Card>
       )}
       {products.length < 1 ? null : (
         <Box

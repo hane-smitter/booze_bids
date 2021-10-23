@@ -14,7 +14,8 @@ import {
   READBIDWINNERS,
   STATUS,
   READBIDS,
-  LOGOUT,
+  READEXBIDS,
+  LOGOUT
 } from "../constants";
 
 //Action creators
@@ -223,7 +224,7 @@ export const getExpiredBids = () => async (dispatch) => {
 
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
-      dispatch({ type: READBIDS, payload: { bids } });
+      dispatch({ type: READEXBIDS, payload: { bids } });
     });
   } catch (error) {
     logError(error, dispatch);

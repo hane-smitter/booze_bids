@@ -47,7 +47,7 @@ const routes = [
         element: <AdminsList />,
         children: [
           { path: "", element: <AdminsListResults /> },
-          { path: "create-admin", element: <AdminCreate /> },
+          { path: "create-admin", element: <Register /> },
         ],
       },
       { path: "dashboard", element: <Dashboard /> },
@@ -85,14 +85,14 @@ const routes = [
           </RoutePublic>
         ),
       },
-      {
-        path: "register",
-        element: (
-          <RoutePublic>
-            <Register />
-          </RoutePublic>
-        ),
-      },
+      // {
+      //   path: "register",
+      //   element: (
+      //     <RoutePublic>
+      //       <Register />
+      //     </RoutePublic>
+      //   ),
+      // },
       { path: "forgotpassword", element: <ForgotPassword /> },
       { path: "passwordreset/:resetToken", element: <ResetPassword /> },
       { path: "404", element: <NotFound /> },

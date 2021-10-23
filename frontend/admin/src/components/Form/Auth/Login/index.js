@@ -129,18 +129,11 @@ const Login = () => {
               <form onSubmit={handleSubmit}>
                 <Box sx={{ mb: 3 }}>
                   
-                  <Typography color="textPrimary" gutterBottom variant="h1" style={{ textShadow: '0 0 24px #222',fontWeight:900, textTransform: 'uppercase', padding:'5px' }}>
+                  <Typography align="center" color="textPrimary" gutterBottom variant="h1" style={{ textShadow: '0 0 24px #222',fontSize: '40px',fontWeight:900, textTransform: 'uppercase', padding:'5px' }}>
                     Welcome to Bidspesa
                   </Typography>
-                  <Typography color="textPrimary" gutterBottom variant="h2">
+                  <Typography align="center" color="textPrimary" gutterBottom variant="h2">
                     Sign in
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    variant="body2"
-                  >
-                    Sign in on the internal platform
                   </Typography>
                 </Box>
                 {/*

@@ -18,7 +18,7 @@ function errorHandler(err, req, res, next) {
     // jwt expred error
     const message = "You are unauthorized";
     const hint = "Try to sign in again";
-    error = new ErrorResponse(err, 401, undefined, hint);
+    error = new ErrorResponse(message, 401, undefined, hint);
   }
 
   if (err.name === "JsonWebTokenError") {

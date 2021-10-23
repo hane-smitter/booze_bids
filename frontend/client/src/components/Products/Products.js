@@ -119,7 +119,16 @@ const Products = () => {
                     getProducts(`search=${value}`)
                   );
                 }}
-                onRequestSearch={() => console.log("onRequestSearch")}
+                onRequestSearch={(value) => {
+                  dispatch(
+                    getProducts(`search=${value}`)
+                  );
+                }}
+                onCancelSearch={(value) => {
+                  dispatch(
+                    getProducts()
+                  );
+                }}
                 style={{
                   maxWidth: 400,
                   margin: 9,

@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { registerAdmin } from "src/actions/auth";
+import { register } from "src/actions/auth";
 import { unsetErr, unsetStatus } from "src/actions/errors";
 
 const Register = () => {
@@ -48,12 +48,13 @@ const Register = () => {
 
   //form control
   const initialValues = {
+    role: "Admin",
     email: "",
     firstname: "",
     lastname: "",
     password: "",
     passwordConfirmation: "",
-    policy: false,
+    policy: true,
   };
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -67,7 +68,7 @@ const Register = () => {
       [Yup.ref("password"), null],
       "Passwords must match"
     ),
-    policy: Yup.boolean().oneOf([true], "This field must be checked"),
+    // policy: Yup.boolean().oneOf([true], "This field must be checked"),
   });
 
   return (
@@ -89,7 +90,7 @@ const Register = () => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values, actions) => {
-              dispatch(registerAdmin(values));
+              dispatch(register(values));
 
               let timeout;
               if (status?.info?.severity === "success") {
@@ -111,16 +112,23 @@ const Register = () => {
               values,
             }) => (
               <form onSubmit={handleSubmit}>
-                <Box sx={{ mb: 3 }}>
+                <Box sx={{
+                      my: 3,
+                      display: "grid",
+                      gridAutoFlow: "column", }}>
+                    <Box
+                      component="span"
+                      sx={{
+                        
+                        justifySelf: "start",
+                      }}
+                    >
+                    <Button variant="outlined" onClick={() => navigate(-1)}>
+                      Go Back
+                    </Button>
+                  </Box>
                   <Typography color="textPrimary" variant="h2">
-                    Create new account
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    variant="body2"
-                  >
-                    Use your email to create new account
+                    Create Admin account
                   </Typography>
                 </Box>
                 {(Boolean(status?.info?.message) && formAlert) && (
@@ -207,7 +215,7 @@ const Register = () => {
                   value={values.passwordConfirmation}
                   variant="outlined"
                 />
-                <Box
+                {/* <Box
                   sx={{
                     alignItems: "center",
                     display: "flex",
@@ -231,7 +239,7 @@ const Register = () => {
                       Terms and Conditions
                     </Link>
                   </Typography>
-                </Box>
+                </Box> */}
                 {Boolean(touched.policy && errors.policy) && (
                   <FormHelperText error>{errors.policy}</FormHelperText>
                 )}
@@ -247,7 +255,7 @@ const Register = () => {
                     Sign up now
                   </Button>
                 </Box>
-                <Typography color="textSecondary" variant="body1">
+                {/* <Typography color="textSecondary" variant="body1">
                   Have an account?{" "}
                   <Link
                     component={RouterLink}
@@ -257,7 +265,7 @@ const Register = () => {
                   >
                     Sign in
                   </Link>
-                </Typography>
+                </Typography> */}
               </form>
             )}
           </Formik>

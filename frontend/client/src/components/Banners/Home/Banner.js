@@ -71,16 +71,12 @@ const BannerFile = () => {
           }}>
           {items.map((item) => (
            
-                <CardMedia
-                    style={{
-                      backgroundSize: isMobile ? '' : 'contain',
-                      width:'100%',
-                      height: '200px'
-                   }}
-                    image={item.Image}
-                    title={item.Name}
-                >
-                </CardMedia>
+           <img src={item.Image}  className="rec-slider-container" style={{
+            objectFit: isMobile ? 'cover' : 'fill',
+            width:'100%',
+            height: '200px'
+           }}
+           />
           ))}
         </Carousel>
       {/* </div> */}

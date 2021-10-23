@@ -1,14 +1,11 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import {
-  Button,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   CardHeader,
   CardMedia,
-  Divider,
   Typography
 } from '@mui/material';
 import { format, parseISO } from 'date-fns';
@@ -35,7 +32,7 @@ const BiddableProductCard = ({ product, ...rest }) => {
                 {product?.product?.name}
                 </Typography>
                 <Typography  variant="h5" component="h2">
-                    RRP: KSH {product.product.cost}
+                    RRP: KSH {product.product?.cost}
                 </Typography>
                 <Typography  variant="caption" component="p">
                     Bid price: KSH {product.bidPrice}

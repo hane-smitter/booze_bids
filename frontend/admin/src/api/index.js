@@ -25,7 +25,7 @@ export const fetchExpiredBids = () => elevateAxios.get(`/bids/admin/expired`);
 
 export const register = body => axios.post(`/auth/admin/signup`, body);
 export const fetchAdmins = () => elevateAxios.get(`/auth/admin/`);
-export const registerAdmin = body => elevateAxios.post(`/auth/admin/create`, body);
+export const registerAdmin = (body) => elevateAxios.post(`/auth/admin/create`, body);
 export const login = body => axios.post(`/auth/admin/signin`, body);
 export const logout = body => elevateAxios.post(`/auth/admin/logout`, body);
 export const forgotPassword = body => axios.post(`/auth/admin/forgotpassword`, body);

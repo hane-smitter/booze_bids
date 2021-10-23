@@ -56,6 +56,7 @@ import HistoryIcon from '@mui/icons-material/History';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import LockIcon from '@mui/icons-material/Lock';
 import { Timer } from "./Timer";
+import { getProducts } from "../../actions/products";
 
 const Nav = () => {
     const [anchor, setAnchor] = React.useState(null);
@@ -326,7 +327,21 @@ const Nav = () => {
           value={searchItem}
           style={{backgroundColor:'#fff',
           color:'#222'}}
-          onRequestSearch={() => console.log("onRequestSearch")}
+          onChange={(value) => {
+                  dispatch(
+                    getProducts(`search=${value}`)
+                  );
+                }}
+          onRequestSearch={(value) => {
+            dispatch(
+              getProducts(`search=${value}`)
+            );
+          }}
+          onCancelSearch={(value) => {
+            dispatch(
+              getProducts()
+            );
+          }}
         /> 
         <SwipeableDrawer
             anchor={'left'}

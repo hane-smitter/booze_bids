@@ -8,8 +8,16 @@ import {
   CardContent,
   CardMedia,
   Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
   Typography,
   IconButton,
+  Box,
+  Avatar
 } from "@mui/material";
 
 import useStyles from "../styles";
@@ -17,6 +25,7 @@ import imgDefault from "src/images/products/default.jpeg";
 import FutureTimeCalc from "src/utils/FutureTimeCalc";
 import { Edit } from "react-feather";
 import EditModal from "./modals/Edit";
+import moment from "moment";
 
 const urlToFileObj = (url, name) => {
   let data = fetch(url)
@@ -67,39 +76,50 @@ const ProductCard = ({ product, setProduct, setImgPrev, setImgObj, toggle, ...re
     });
   }, [product]);
   return (
-    <Card className={classes.root}>
+    <TableRow>
+      <TableCell> 
+          <Box
+            sx={{
+              alignItems: 'center',
+              display: 'flex'
+            }}
+          >
+            <Avatar
+              src={product.image ?? imgDefault}
+              sx={{ mr: 2 }}
+            >
+              {/* {getInitials(product.name)} */}
+            </Avatar>
+            <Typography
+              color="textPrimary"
+              variant="body1"
+            >
+              {product.name}
+            </Typography>
+          </Box> 
+      </TableCell>
+      <TableCell>{product.cost}</TableCell>
+      <TableCell>{product.category.name}</TableCell>
+      <TableCell>
       {product.productbids[0]?.startTime && (
         <Typography
           variant="body2"
           color="text.secondary"
-        >{`Ends in: ${time}`}</Typography>
-      )}
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          image={product.image ?? imgDefault}
-          className={classes.media}
-          title={product.name}
-        />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2" color="primary">
-            {product.name}
-          </Typography>
-          <Typography variant="h5" component="h2">
-            RRP: KSH {product.cost}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <Divider />
-      <CardActions className={classes.flexWrap} style={{ minHeight: "50px" }}>
-        {product.productbidscount ? null : (
-          <Chip label="No bid details created" color="warning" />
+        >{`Ends on: ${
+          moment(product.productbids[0].endTime).format("DD/MM/YYYY HH:mm")
+        }`}</Typography>
         )}
+        {product.productbidscount ? null : (
+          <Chip label="No active bid" color="warning" />
+        )}
+      </TableCell>
+      <TableCell>{moment(product.createdAt).format("DD/MM/YYYY  HH:mm")}</TableCell>
+      <TableCell>
         <IconButton onClick={handleEdit}>
           <Edit />
         </IconButton>
-      </CardActions>
-    </Card>
+      </TableCell>
+    </TableRow>
   );
 };
 

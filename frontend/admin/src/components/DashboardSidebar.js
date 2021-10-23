@@ -31,7 +31,7 @@ import { LOGOUT } from "src/constants";
 import { AuthService } from "src/api/AuthService";
 
 const usertmp = {
-  avatar: "/static/images/avatars/avatar_1.png",
+  avatar: "/static/images/avatars/profile.png",
   jobTitle: "Admin",
   name: "Mr John Doe",
 };
