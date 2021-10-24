@@ -48,6 +48,11 @@ const items = [
     title: "Categories",
   },
   {
+    href: "/app/stores",
+    icon: ShoppingBagIcon,
+    title: "Stores",
+  },
+  {
     href: "/app/products",
     icon: ShoppingBagIcon,
     title: "Products",

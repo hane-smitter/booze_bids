@@ -7,6 +7,7 @@ import Mpesa from "../../models/Mpesa.js";
 import Product from "../../models/Product.js";
 import ProductBidDetail from "../../models/ProductBidDetail.js";
 import User from "../../models/User.js";
+import Winner from "../../models/winner.js";
 import { stkPush } from "./mpesa.js";
 
 export const getBids = async (req, res, next) => {
@@ -175,23 +176,7 @@ export const getLastBidder = async (req, res, next) => {
 };
 export const getWinners = async (req, res, next) => {
   try {
-    const winners = await ProductBidDetail.find({
-      slots: 0,
-      extraSlots: 0,
-      status: "Inactive",
-    }).populate({
-      path: "prodbids",
-      options: { sort: { bidAmountTotal: -1 }, limit: 1 },
-      populate: [
-        {
-          path: "product",
-          select: "-category -category_slug"
-        },
-        {
-          path: "user",
-        },
-      ],
-    });
+    const winners = await Winner.find({});
     res.json(winners);
   } catch (err) {
     next(err);
