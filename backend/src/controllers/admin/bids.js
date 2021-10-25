@@ -4,6 +4,7 @@ import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
 
 import Bid from "../../models/Bid.js";
 import Mpesa from "../../models/Mpesa.js";
+import Winner from "../../models/Winner.js";
 import Product from "../../models/Product.js";
 import ProductBidDetail from "../../models/ProductBidDetail.js";
 import User from "../../models/User.js";
@@ -175,12 +176,26 @@ export const getLastBidder = async (req, res, next) => {
 };
 export const getWinners = async (req, res, next) => {
   try {
-    const winners = await ProductBidDetail.find({
+    const selectedWinners = await ProductBidDetail.find({
       slots: 0,
       extraSlots: 0,
       status: "Inactive",
     }).populate({
       path: "prodbids",
+      options: { sort: { bidAmountTotal: -1 }, limit: 1 },
+    });
+    const savedSelectedWinners = selectedWinners.map(async(selectedWinner) => {
+      let winner = { bid: selectedWinner.prodbids[0]._id };
+      let valWinner;
+      valWinner = await Winner.findOne({bid: mongoose.Types.ObjectId(winner.bid)}).lean();
+      if(!Object.keys(valWinner ?? {}).length) {
+        valWinner = await new Winner(winner).save();
+      }
+      return valWinner;
+    });
+
+    const winners = await Winner.find({}).populate({
+      path: "bid",
       options: { sort: { bidAmountTotal: -1 }, limit: 1 },
       populate: [
         {
