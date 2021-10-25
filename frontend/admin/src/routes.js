@@ -3,6 +3,7 @@ import DashboardLayout from "./components/DashboardLayout";
 import MainLayout from "./components/MainLayout";
 import Account from "./pages/Account";
 import CategoriesList from "./pages/CategoriesList";
+import StoresList from "./pages/StoresList";
 import AdminsList from "./pages/AdminsList";
 import AdminsListResults from "./components/admins/AdminsListResults";
 import AdminCreate from "./components/admins/modals/Edit/index";
@@ -16,9 +17,11 @@ import Register from "./components/Form/Auth/Register";
 import WinnersListResults from "./components/Wins/WinnersListResults";
 import ProductBidCreate from "./components/Form/Product/ProductBidCreate";
 import ProductCategoryCreate from "./components/Form/Product/ProductCategoryCreate";
+import StoreCreate from "./components/Form/Product/StoreCreate";
 import ProductCreate from "./components/Form/Product/ProductCreate";
 import Products from "./components/Products/Products";
 import CategoriesListResults from "./components/categories/CategoriesListResults";
+import StoreListResults from "./components/stores/StoreListResults";
 import BidsList from "./components/bids/BidsList";
 import RouteProtect from "./components/Routing/RouteProtect";
 import RoutePublic from "./components/Routing/RoutePublic";
@@ -42,6 +45,15 @@ const routes = [
           { path: "createcat", element: <ProductCategoryCreate /> },
         ],
       },
+      {
+        path: "stores",
+        element: <StoresList />,
+        children: [
+          { path: "", element: <StoreListResults /> },
+          { path: "create-store", element: <StoreCreate /> },
+        ],
+      },
+
       {
         path: "admins",
         element: <AdminsList />,

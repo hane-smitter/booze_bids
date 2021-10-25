@@ -45,7 +45,6 @@ export const getProductBidWinners = () => async (dispatch) => {
     dispatch({ type: LOADING, payload: { status: 1 } });
     //fetch winners
     const { data: winners } = await api.fetchProductBidWinners();
-
     batch(() => {
       dispatch({ type: LOADING, payload: { status: 0 } });
       dispatch({ type: READBIDWINNERS, payload: { winners } });

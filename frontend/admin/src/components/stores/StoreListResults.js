@@ -1,0 +1,351 @@
+import { useEffect, useState } from "react";
+import { useStateWithCallbackLazy } from "use-state-with-callback";
+import moment from "moment";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import { useDispatch, useSelector } from "react-redux";
+import { decode } from "html-entities";
+import { alpha } from "@mui/material/styles";
+import {
+  Tooltip,
+  Toolbar,
+  Box,
+  Card,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Typography,
+  CircularProgress,
+  IconButton,
+  TextField,
+  Button,
+  Paper,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+/* import getInitials from '../../utils/getInitials'; */
+import customers from "src/__mocks__/customers";
+import { getStores } from "src/actions/stores";
+import { unsetErr, unsetStatus } from "src/actions/errors";
+import Modal from "src/utils/modal";
+import EditModal from "./modals/Edit";
+import ShowFeedback from "src/utils/ShowFeedback";
+import useModal from "src/utils/modal/useModal";
+import useShowFeedback from "src/utils/ShowFeedback/useShowFeedback";
+import { deleteProductCategory } from "src/actions/products";
+
+const ActionTableToolbar = (props) => {
+  const { selectedCategoryIdsLength, handleEditModal, handleDelete } = props;
+  const dispatch = useDispatch();
+
+  return (
+    <Toolbar
+      sx={{
+        pl: { sm: 2 },
+        pr: { xs: 1, sm: 1 },
+        ...(selectedCategoryIdsLength > 0 && {
+          bgcolor: (theme) =>
+            alpha(
+              theme.palette.primary.main,
+              theme.palette.action.activatedOpacity
+            ),
+        }),
+      }}
+    >
+      {selectedCategoryIdsLength > 0 ? (
+        <Typography
+          sx={{ flex: "1 1 100%" }}
+          color="inherit"
+          variant="subtitle1"
+          component="div"
+        >
+          {selectedCategoryIdsLength} selected
+        </Typography>
+      ) : (
+        <Typography
+          sx={{ flex: "1 1 100%" }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        >
+          stores
+        </Typography>
+      )}
+
+      {selectedCategoryIdsLength == 1 ? (
+        <Tooltip title="Edit">
+          <IconButton onClick={handleEditModal}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+      ) : null}
+      {selectedCategoryIdsLength > 0 ? (
+        <Tooltip title="Delete">
+          <IconButton onClick={handleDelete}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      ) : null}
+    </Toolbar>
+  );
+};
+
+const StoresListResults = ({ ...rest }) => {
+  const dispatch = useDispatch();
+  const { stores, loading, err, status } = useSelector(
+    (state) => state.app
+  );
+
+  function fetchStores() {
+    dispatch(getStores());
+  }
+
+  useEffect(() => {
+    fetchStores();
+    return () => {
+      dispatch(unsetErr());
+      dispatch(unsetStatus());
+    };
+  }, []);
+
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
+  const { alertOpen, msg, errAlertOpen, errMsg, severity, close } =
+    useShowFeedback();
+  const { showModal, toggle } = useModal();
+  // const [showModal, setShowModal] = useState(false);
+  const [currentCatIdSelected, setCurrentCatIdSelected] =
+    useStateWithCallbackLazy("");
+  // const [modalComponent, setModalComponent] = useState(null);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(0);
+  let count = 0;
+
+  const handleSelectAll = (event) => {
+    let newSelectedCategoryIds;
+
+    if (event.target.checked) {
+      newSelectedCategoryIds = stores.map((category) => category._id);
+    } else {
+      newSelectedCategoryIds = [];
+    }
+
+    setSelectedCategoryIds(newSelectedCategoryIds);
+  };
+
+  const handleSelectOne = (event, id) => {
+    const selectedIndex = selectedCategoryIds.indexOf(id);
+    /* setCurrentCatIdSelected(id, (current) => {
+    }); */
+    console.log("Current selected Category id from HANDLE SELECT ONE");
+    console.log(id);
+    let newSelectedCategoryIds = [];
+
+    if (selectedIndex === -1) {
+      newSelectedCategoryIds = newSelectedCategoryIds.concat(
+        selectedCategoryIds,
+        id
+      );
+      setCurrentCatIdSelected(id, (current) => {
+        console.log(
+          "Current Category index from HANDLE SELECT ONE state callback func"
+        );
+        console.log(current);
+      });
+    } else if (selectedIndex === 0) {
+      newSelectedCategoryIds = newSelectedCategoryIds.concat(
+        selectedCategoryIds.slice(1)
+      );
+    } else if (selectedIndex === selectedCategoryIds.length - 1) {
+      newSelectedCategoryIds = newSelectedCategoryIds.concat(
+        selectedCategoryIds.slice(0, -1)
+      );
+    } else if (selectedIndex > 0) {
+      newSelectedCategoryIds = newSelectedCategoryIds.concat(
+        selectedCategoryIds.slice(0, selectedIndex),
+        selectedCategoryIds.slice(selectedIndex + 1)
+      );
+    }
+
+    setSelectedCategoryIds(newSelectedCategoryIds);
+    /* 
+    setCount(count + 1, (currentCount) => {
+      if (currentCount > 1) {
+        console.log('Threshold of over 1 reached.');
+      } else {
+        console.log('No threshold reached.');
+      }
+    }); */
+  };
+
+  const handleLimitChange = (event) => {
+    setLimit(event.target.value);
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleDelete = () => {
+    dispatch(deleteProductCategory({"catIds": selectedCategoryIds}))
+  }
+  /* const handleEditModal = () => {
+  setShowModal(true);
+  setModalComponent(<EditModal stores={stores} currentCatIdSelected={currentCatIdSelected} setShowModal={setShowModal} fetchStores={fetchStores} />);
+} */
+
+  return (
+    <Card {...rest}>
+      {loading && <CircularProgress />}
+      {/* <Modal isVisible={showModal} toggler={setShowModal} component={modalComponent}/>
+      <ShowFeedback alertOpen={alertOpen} setAlertOpen={setAlertOpen} severity={status?.info?.severity} msg={status?.info?.message} />
+      {err.length > 0 && (
+        err.map((error) => <ShowFeedback alertOpen={errAlertOpen} setAlertOpen={setErrAlertOpen} severity={"error"} msg={error.msg} title="Ooops!" />)
+      )} */}
+      <Modal title="Edit Category" isVisible={showModal} close={toggle}>
+        {/* <EditModal  toggle={toggle} dispatch={dispatch} /> */}
+        <EditModal
+          stores={stores}
+          currentCatIdSelected={currentCatIdSelected}
+          toggle={toggle}
+          dispatch={dispatch}
+        />
+      </Modal>
+      <ShowFeedback
+        alertOpen={alertOpen}
+        close={close}
+        severity={severity}
+        msg={msg}
+      />
+      {errMsg.map((error) => (
+        <ShowFeedback
+          key={++count}
+          alertOpen={errAlertOpen}
+          close={close}
+          severity={severity}
+          msg={error.msg}
+          title="Ooops!"
+        />
+      ))}
+      {stores.length > 0 ? (
+        <>
+          <PerfectScrollbar>
+            <Box sx={{ minWidth: 1050 }}>
+              <ActionTableToolbar
+                selectedCategoryIdsLength={selectedCategoryIds.length}
+                handleEditModal={toggle}
+                handleDelete={handleDelete}
+              />
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={
+                          selectedCategoryIds.length === stores.length
+                        }
+                        color="primary"
+                        indeterminate={
+                          selectedCategoryIds.length > 0 &&
+                          selectedCategoryIds.length < stores.length
+                        }
+                        onChange={handleSelectAll}
+                      />
+                    </TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Registration date</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {stores
+                    .slice(page * limit, page * limit + limit)
+                    .map((category, index) => {
+                      const isItemSelected =
+                        selectedCategoryIds.indexOf(category._id) !== -1;
+                      const labelId = `cat-table-check-${index}`;
+
+                      return (
+                        <TableRow
+                          hover
+                          key={category._id}
+                          selected={isItemSelected}
+                          onClick={(event) =>
+                            handleSelectOne(event, category._id)
+                          }
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              checked={isItemSelected}
+                              value="true"
+                              inputProps={{
+                                "aria-labelledby": labelId,
+                              }}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Box
+                              sx={{
+                                alignItems: "center",
+                                display: "flex",
+                              }}
+                            >
+                              <Typography color="textPrimary" variant="body1">
+                                {decode(category.name)}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell>{decode(category.description)}</TableCell>
+                          <TableCell>
+                          <Box
+                              sx={{
+                                alignItems: "center",
+                                display: "flex",
+                              }}
+                            > 
+                            {moment(category.createdAt).format("DD/MM/YYYY")}
+                            </Box>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
+            </Box>
+          </PerfectScrollbar>
+          <TablePagination
+            component="div"
+            count={stores.length}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleLimitChange}
+            page={page}
+            rowsPerPage={limit}
+            rowsPerPageOptions={[5, 10, 25]}
+          />
+        </>
+      )
+      :
+      (<Paper variant="outlined">
+      <Typography
+        variant="h5"
+        color="textSecondary"
+        padding={3}
+        align="center"
+      >
+        Sorry! No stores found!
+      </Typography>
+    </Paper>)
+    }
+    </Card>
+  );
+};
+
+/* StoresListResults.propTypes = {
+  stores: PropTypes.array.isRequired
+}; */
+
+export default StoresListResults;

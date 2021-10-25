@@ -13,6 +13,7 @@ import {
   READEXBIDS,
   READDASHDATA,
   READBIDWINNERS,
+  READSTORES
 } from "../constants";
 
 const initState = {
@@ -25,10 +26,11 @@ const initState = {
   bidproducts: [],
   bids: {
     allbids: [],
-    bidwinners: [],
     exbids: []
   },
+  bidwinners: [],
   dashData: {},
+  stores:[],
   status: {},
   err: [],
   loading: false,
@@ -95,7 +97,12 @@ export default (app = initState, action) => {
     case READBIDWINNERS:
       return {
         ...app,
-        bids: { ...app.bids, bidwinners: action.payload.winners },
+        bidWinners:action.payload.winners,
+      };
+    case READSTORES:
+      return {
+        ...app,
+        stores:action.payload.stores,
       };
     case ERROR:
       return {

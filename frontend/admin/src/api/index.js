@@ -32,3 +32,8 @@ export const forgotPassword = body => axios.post(`/auth/admin/forgotpassword`, b
 export const resetPassword = (param, body) => axios.patch(`/auth/admin/resetpassword/${param}`, body);
 
 export const getDashboardData = () => elevateAxios.get(`/auth/admin/dashboard-data`);
+//store
+export const fetchStores = () => elevateAxios.get(`/stores/admin`);
+export const createStore = (body) => elevateAxios.post(`/stores/admin/create`, body);
+export const updateStore = (param, body) => elevateAxios.patch(`/stores/admin/update/${param}`, body);
+export const deleteStore = (param, body) => elevateAxios.patch(`/stores/admin/delete/${param}`, body);

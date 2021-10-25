@@ -8,6 +8,7 @@ import Winner from "../../models/Winner.js";
 import Product from "../../models/Product.js";
 import ProductBidDetail from "../../models/ProductBidDetail.js";
 import User from "../../models/User.js";
+import Winner from "../../models/winner.js";
 import { stkPush } from "./mpesa.js";
 
 export const getBids = async (req, res, next) => {
