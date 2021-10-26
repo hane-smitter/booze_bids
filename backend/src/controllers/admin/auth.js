@@ -1,6 +1,5 @@
 import crypto from "crypto";
 import ErrorResponse from "../../_helpers/error/ErrorResponse.js";
-import jwt from "jsonwebtoken";
 import AuthUser from "../../models/AuthUser.js";
 import { sendEmail } from "../utils/sendMail/sendMail.js";
 
@@ -50,7 +49,7 @@ export const registerAdmin = async (req, res, next) => {
     if (!firstname || !lastname || !email || !password)
       throw new ErrorResponse(
         "firsname, lastname, email password are required",
-        400
+        422
       );
     const user = await AuthUser.create({
       firstname,
@@ -80,8 +79,7 @@ export const login = async (req, res, next) => {
     if (!email || !password)
       throw new ErrorResponse("email and password are required", 400);
     const user = await AuthUser.findByCredentials(email, password);
-    // const token = await user.generateAuthToken();
-    const token = jwt.sign({ firstname: user.firstname, lastname: user.lastname, role: user.role, email: user.email, id: user._id }, 'test', { expiresIn: "1h" });
+    const token = await user.generateAuthToken();
 
     res.json({
       status: {

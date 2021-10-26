@@ -8,7 +8,6 @@ import Winner from "../../models/Winner.js";
 import Product from "../../models/Product.js";
 import ProductBidDetail from "../../models/ProductBidDetail.js";
 import User from "../../models/User.js";
-import Winner from "../../models/winner.js";
 import { stkPush } from "./mpesa.js";
 
 export const getBids = async (req, res, next) => {
@@ -31,7 +30,7 @@ export const getBids = async (req, res, next) => {
 //getExpiredBids
 export const getExpiredBids = async (req, res, next) => {
   try {
-    const bids = await ProductBidDetail.find({ status: "Inactive" })
+    const bids = await ProductBidDetail.find({ status: "Inactive", slots: { $ne: 0 }, extraSlots: { $ne: 0 } })
       .populate("product")
       .populate("prodbids");
 

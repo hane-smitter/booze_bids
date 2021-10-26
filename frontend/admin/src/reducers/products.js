@@ -97,7 +97,7 @@ export default (app = initState, action) => {
     case READBIDWINNERS:
       return {
         ...app,
-        bidWinners:action.payload.winners,
+        bidwinners: action.payload.winners,
       };
     case READSTORES:
       return {
